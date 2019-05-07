@@ -2,6 +2,7 @@ package com.liuzw.blog.utils;
 
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public class CopyDataUtil {
 
     public static <T, V> List<V> copyList(List<T> list, Class<V> clazz) {
         List<V> data = Lists.newArrayList();
-        if (list != null) {
+        if (CollectionUtils.isNotEmpty(list)) {
             try {
                 for (T obj : list) {
                     V dto = clazz.newInstance();

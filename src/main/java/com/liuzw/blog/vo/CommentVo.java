@@ -23,7 +23,6 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 public class CommentVo implements Serializable {
 
 

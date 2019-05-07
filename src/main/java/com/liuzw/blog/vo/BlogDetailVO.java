@@ -39,10 +39,4 @@ public class BlogDetailVO implements Serializable {
     @ApiModelProperty(value = "当前用户的点赞收藏")
     private LikeVO like;
 
-    /**
-     * blog统计
-     */
-    @ApiModelProperty(value = "blog统计")
-    private BlogCountVo blogCount;
-
 }

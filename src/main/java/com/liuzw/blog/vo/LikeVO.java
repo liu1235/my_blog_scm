@@ -16,7 +16,6 @@ import io.swagger.annotations.ApiModelProperty;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 public class LikeVO {
 
     /**

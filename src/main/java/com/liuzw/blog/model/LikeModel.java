@@ -11,7 +11,7 @@ import javax.persistence.*;
 /**
  * TABLE_NAME:(t_like)
  *
- *  @liuzw
+ *  @author liuzw
  */
 
 @Data
@@ -48,7 +48,7 @@ public class LikeModel {
     private Integer likeStatus;
 
     /**
-     * 点赞状态(1:有效赞；0：取消赞)
+     * 收藏状态(1:已收藏；0：未收藏)
      */
     @Column(name = "collect_status")
     private Integer collectStatus;

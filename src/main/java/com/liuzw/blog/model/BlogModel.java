@@ -48,8 +48,8 @@ public class BlogModel {
     /**
      * 博客类别
      */
-    @Column(name = "tag_id")
-    private Long tagId;
+    @Column(name = "class_id")
+    private Long classId;
 
     /**
      * 是否发布(1:是, 0:否)

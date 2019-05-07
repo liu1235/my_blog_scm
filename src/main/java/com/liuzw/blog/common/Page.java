@@ -1,6 +1,7 @@
 
 package com.liuzw.blog.common;
 
+import com.liuzw.blog.utils.CopyDataUtil;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -84,6 +85,31 @@ public class Page<T> {
     public static <E> Page<E> createPageBean(List<E> list) {
         return new Page<>(list);
     }
+
+
+    /**
+     * 创建 Page
+     *
+     * @param data 分页查询结果集
+     * @param clazz 转换类型
+     * @return PageBean
+     */
+    public static <V, E> Page<V> createPageBean(List<E> data, Class<V> clazz) {
+        Page<V> p = new Page<>();
+        if (data instanceof com.github.pagehelper.Page) {
+            com.github.pagehelper.Page page = (com.github.pagehelper.Page) data;
+            p.pageNum = page.getPageNum();
+            p.pageSize = page.getPageSize();
+            p.total = page.getTotal();
+        } else {
+            p.pageNum = 1;
+            p.pageSize = 10;
+            p.total = (long) data.size();
+        }
+        p.data = CopyDataUtil.copyList(data, clazz);
+        return p;
+    }
+
 
     /**
      * 创建 Page

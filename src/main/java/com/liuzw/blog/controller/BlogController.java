@@ -2,11 +2,11 @@
 package com.liuzw.blog.controller;
 
 
-import com.github.pagehelper.PageInfo;
 import com.liuzw.blog.common.Id;
+import com.liuzw.blog.common.Page;
 import com.liuzw.blog.common.ResultData;
+import com.liuzw.blog.dto.BlogQueryDto;
 import com.liuzw.blog.service.BlogService;
-import com.liuzw.blog.utils.CopyDataUtil;
 import com.liuzw.blog.vo.BlogDetailVO;
 import com.liuzw.blog.vo.BlogVO;
 import io.swagger.annotations.Api;
@@ -33,13 +33,13 @@ public class BlogController {
     /**
      * 获取所有博客数据
      *
-     * @param bean BlogBean
-     * @return ResultData<PageInfo       <       BlogBean>>
+     * @param dto 查询参数
+     * @return ResultData<Page < BlogBean>>
      */
     @ApiOperation(value = "获取所有博客数据", notes = "获取所有博客数据")
     @PostMapping(value = "/list")
-    public ResultData<PageInfo<BlogVO>> getList(@RequestBody BlogQueryBean bean) {
-        return ResultData.createSelectResult(blogService.getList(bean));
+    public ResultData<Page<BlogVO>> getList(@RequestBody BlogQueryDto dto) {
+        return ResultData.createSelectResult(blogService.getList(dto));
     }
 
     /**
@@ -51,7 +51,7 @@ public class BlogController {
     @ApiOperation(value = "根据id获取数据", notes = "根据id获取数据")
     @PostMapping(value = "/query")
     public ResultData<BlogDetailVO> query(@RequestBody Id<Long> idDto) {
-        return ResultData.createSelectResult();
+        return ResultData.createSelectResult(blogService.getById(idDto.getId()));
     }
 
 }

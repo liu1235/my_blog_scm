@@ -24,5 +24,5 @@ public class Id<T> implements Serializable {
      */
     @NotNull(message = "id不能为空")
     @ApiModelProperty(value = "id", required = true)
-    public T id;
+    private T id;
 }

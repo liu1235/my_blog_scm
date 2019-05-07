@@ -41,13 +41,13 @@ public class BlogVO implements Serializable {
      * 博客类别id
      */
     @ApiModelProperty(value = "博客类别id")
-    private Long tagId;
+    private Long classId;
 
     /**
      * 博客类别
      */
     @ApiModelProperty(value = "博客类别")
-    private String tagName;
+    private String className;
 
     /**
      * 发布日期
@@ -58,7 +58,25 @@ public class BlogVO implements Serializable {
     /**
      * 阅读次数
      */
-    @ApiModelProperty(value = "阅读次数", hidden = true)
+    @ApiModelProperty(value = "阅读次数")
     private Integer readCount;
+
+    /**
+     * 点赞数
+     */
+    @ApiModelProperty(value = "点赞数")
+    private Integer likeCount;
+
+    /**
+     * 收藏数
+     */
+    @ApiModelProperty(value = "收藏数")
+    private Integer collectCount;
+
+    /**
+     * 评论数
+     */
+    @ApiModelProperty(value = "评论数")
+    private Integer commentCount;
 
 }
