@@ -119,8 +119,10 @@ public class Page<T> {
      * @param total    总页数
      * @return Page
      */
-    public static <E> Page<E> createPageBean(Integer pageNum, Integer pageSize, Long total) {
-        return new Page<>(pageNum, pageSize, total);
+    public static <E> Page<E> createPageBean(Integer pageNum, Integer pageSize, Long total, List<E> data) {
+        Page<E> page = new Page<>(pageNum, pageSize, total);
+        page.data = data;
+        return page;
     }
 
 }

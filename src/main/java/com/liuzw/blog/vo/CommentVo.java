@@ -1,7 +1,3 @@
-/**
- * Copyright (c) 2018 ABC.Co.Ltd. All rights reserved.
- */
-
 package com.liuzw.blog.vo;
 
 
@@ -27,6 +23,13 @@ public class CommentVo implements Serializable {
 
 
     private static final long serialVersionUID = 5161646451164295560L;
+
+    /**
+     * 评论id
+     */
+    @ApiModelProperty(value = "评论id")
+    private Long id;
+
     /**
      * 评论内容
      */
@@ -59,6 +62,6 @@ public class CommentVo implements Serializable {
     private Date createTime;
 
 
-    private List<CommentVo> child;
+    private List<ReplyVo> child;
 
 }

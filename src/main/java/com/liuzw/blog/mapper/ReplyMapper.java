@@ -11,6 +11,6 @@ import tk.mybatis.mapper.common.MySqlMapper;
  * @author liuzw
  */
 public interface ReplyMapper extends Mapper<ReplyModel>, MySqlMapper<ReplyModel> {
-		
+
 
 }

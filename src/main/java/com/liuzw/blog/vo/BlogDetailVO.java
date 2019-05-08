@@ -28,12 +28,6 @@ public class BlogDetailVO implements Serializable {
     private BlogVO blog;
 
     /**
-     * 评论
-     */
-    @ApiModelProperty(value = "评论")
-    private CommentVo comment;
-
-    /**
      * 当前用户的点赞收藏
      */
     @ApiModelProperty(value = "当前用户的点赞收藏")

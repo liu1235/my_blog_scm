@@ -1,56 +1,32 @@
 package com.liuzw.blog.service;
 
 
-import com.liuzw.blog.model.CommentModel;
-
-import java.util.List;
+import com.liuzw.blog.common.Page;
+import com.liuzw.blog.dto.CommentDto;
+import com.liuzw.blog.dto.CommentQueryDto;
+import com.liuzw.blog.vo.CommentVo;
 
 /**
  * interface Comment
  *
- * @liuzw
+ * @author liuzw
  */
 public interface CommentService {
 
-
-   /**
-    * 返回分页列表信息
-    *
-    * @param comment   数据
-    * @return       list<Comment>
-    */
-    List<Comment> getList(CommentQueryBean commentQueryBean);
-
     /**
-     * 根据id返回信息
-     * @param id     id
-     * @return       CommentModel
-     */
-    CommentModel getById(Long id);
-
-
-    /**
-     * 根据ID删除
+     * 获取评论内容
      *
-     * @param id     id
-     * @return       Boolean
+     * @param dto 查询条件
+     * @return list<CommentVo>
      */
-    Boolean delete(Long id);
+    Page<CommentVo> getList(CommentQueryDto dto);
 
     /**
-     *增加
+     * 新增评论
      *
-     * @param commentBean   数据
-     * @return      Boolean
+     * @param dto 数据
+     * @return Boolean
      */
-    Boolean insert(CommentBean commentBean);
+    Boolean insert(CommentDto dto);
 
-    /**
-     *更新
-     *
-     * @param commentBean  数据
-     * @return     Boolean
-     */
-    Boolean update(CommentBean commentBean);
-	
 }

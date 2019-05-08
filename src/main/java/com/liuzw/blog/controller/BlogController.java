@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @RestController
 @RequestMapping("/blog")
-@Api(description = "博客列表")
+@Api(tags = "博客列表")
 public class BlogController {
 
     @Autowired

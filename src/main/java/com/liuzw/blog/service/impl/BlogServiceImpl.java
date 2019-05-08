@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  *
  * @author liuzw
  */
-@Service("blogService")
+@Service
 public class BlogServiceImpl implements BlogService {
 
 
@@ -129,7 +129,7 @@ public class BlogServiceImpl implements BlogService {
      * 统计各个博客文章的收藏数和点赞数
      *
      * @param blogIdList 博客id集合
-     * @return Map<blogId               ,                               LikeCountVO>
+     * @return Map<blogId, LikeCountVO>
      */
     private Map<Long, LikeCountVO> getLikeCountMap(List<Long> blogIdList) {
         if (CollectionUtils.isEmpty(blogIdList)) {
