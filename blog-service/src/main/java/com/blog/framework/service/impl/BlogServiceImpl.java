@@ -1,19 +1,22 @@
-package com.liuzw.blog.service.impl;
+package com.blog.framework.service.impl;
 
 
+import com.blog.framework.common.PageBean;
+import com.blog.framework.common.enums.StatusEnum;
+import com.blog.framework.dao.CommentDao;
+import com.blog.framework.model.BlogModel;
+import com.blog.framework.model.LikeModel;
+import com.blog.framework.common.utils.CopyDataUtil;
+import com.blog.framework.service.BlogDao;
+import com.blog.framework.vo.blog.BlogDetailVO;
+import com.blog.framework.vo.blog.BlogVO;
+import com.blog.framework.vo.CommentCountVo;
+import com.blog.framework.vo.LikeCountVO;
+import com.blog.framework.vo.LikeVO;
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Lists;
-import com.liuzw.blog.common.Page;
-import com.liuzw.blog.dto.BlogQueryDto;
-import com.liuzw.blog.enums.StatuEnum;
-import com.liuzw.blog.mapper.BlogMapper;
-import com.liuzw.blog.mapper.CommentMapper;
-import com.liuzw.blog.mapper.LikeMapper;
-import com.liuzw.blog.model.BlogModel;
-import com.liuzw.blog.model.LikeModel;
-import com.liuzw.blog.service.BlogService;
-import com.liuzw.blog.utils.CopyDataUtil;
-import com.liuzw.blog.vo.*;
+import com.blog.framework.dto.blog.BlogQueryDto;
+import com.blog.framework.service.BlogService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,22 +36,22 @@ public class BlogServiceImpl implements BlogService {
 
 
     @Autowired
-    private BlogMapper blogMapper;
+    private BlogDao blogDao;
 
     @Autowired
     private LikeMapper likeMapper;
 
     @Autowired
-    private CommentMapper commentMapper;
+    private CommentDao commentDao;
 
 
     @Override
-    public Page<BlogVO> getList(BlogQueryDto dto) {
+    public PageBean<BlogVO> list(BlogQueryDto dto) {
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
         //获取数据
-        List<BlogVO> list = blogMapper.getList(dto);
+        List<BlogVO> list = blogDao.list(dto);
         if (CollectionUtils.isEmpty(list)) {
-            return new Page<>();
+            return new PageBean<>();
         }
         //获取博客id集合
         List<Long> blogIdList = list.stream().map(BlogVO::getId).distinct().collect(Collectors.toList());
@@ -70,12 +73,13 @@ public class BlogServiceImpl implements BlogService {
                 vo.setCommentCount(commentCountVo.getCommentCount());
             }
         }
-        return Page.createPageBean(list);
+        return PageBean.createPageBean(list);
     }
 
     @Override
-    public BlogDetailVO getById(Long id) {
-        BlogModel blogModel = blogMapper.selectByPrimaryKey(id);
+    public BlogDetailVO detail(Long id) {
+        //获取详情
+        BlogModel blogModel = blogDao.detail(id);
 
         BlogVO blogVO = CopyDataUtil.copyObject(blogModel, BlogVO.class);
         //博客id
@@ -104,21 +108,17 @@ public class BlogServiceImpl implements BlogService {
         } else {
             blogVO.setCommentCount(commentCountVo.getCommentCount());
         }
-
         //获取当前阅读人的点赞和收藏状态
         LikeModel likeModel = likeMapper.selectOne(LikeModel.builder().blogId(blogId).userId(null).build());
-
         LikeVO likeVO;
-
         if (likeModel == null) {
             likeVO = LikeVO.builder()
-                    .collectStatus(StatuEnum.INVALID.getCode())
-                    .likeStatus(StatuEnum.INVALID.getCode())
+                    .collectStatus(StatusEnum.INVALID.getCode())
+                    .likeStatus(StatusEnum.INVALID.getCode())
                     .build();
         } else {
             likeVO = CopyDataUtil.copyObject(likeModel, LikeVO.class);
         }
-
         return BlogDetailVO.builder()
                 .like(likeVO)
                 .blog(blogVO)

@@ -1,20 +1,22 @@
-package com.liuzw.blog.service.impl;
+package com.blog.framework.service.impl;
 
 
+import com.blog.framework.common.PageBean;
+import com.blog.framework.common.utils.CopyDataUtil;
+import com.blog.framework.dao.CommentDao;
+import com.blog.framework.dao.ReplyDao;
+import com.blog.framework.dto.comment.CommentDto;
+import com.blog.framework.dto.comment.CommentQueryDto;
+import com.blog.framework.mapper.CommentMapper;
+import com.blog.framework.mapper.ReplyMapper;
+import com.blog.framework.mapper.UserMapper;
+import com.blog.framework.model.CommentModel;
+import com.blog.framework.model.ReplyModel;
+import com.blog.framework.model.UserModel;
+import com.blog.framework.service.CommentService;
+import com.blog.framework.vo.CommentVo;
+import com.blog.framework.vo.ReplyVo;
 import com.github.pagehelper.PageHelper;
-import com.liuzw.blog.common.Page;
-import com.liuzw.blog.dto.CommentDto;
-import com.liuzw.blog.dto.CommentQueryDto;
-import com.liuzw.blog.mapper.CommentMapper;
-import com.liuzw.blog.mapper.ReplyMapper;
-import com.liuzw.blog.mapper.UserMapper;
-import com.liuzw.blog.model.CommentModel;
-import com.liuzw.blog.model.ReplyModel;
-import com.liuzw.blog.model.UserModel;
-import com.liuzw.blog.service.CommentService;
-import com.liuzw.blog.utils.CopyDataUtil;
-import com.liuzw.blog.vo.CommentVo;
-import com.liuzw.blog.vo.ReplyVo;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,31 +38,24 @@ import java.util.stream.Collectors;
 @Service
 public class CommentServiceImpl implements CommentService {
 
+    @Autowired
+    private CommentDao commentDao;
 
     @Autowired
-    private CommentMapper commentMapper;
-
-    @Autowired
-    private ReplyMapper replyMapper;
+    private ReplyDao replyDao;
 
     @Autowired
     private UserMapper userMapper;
 
     @Override
-    public Page<CommentVo> getList(CommentQueryDto dto) {
+    public PageBean<CommentVo> list(CommentQueryDto dto) {
         com.github.pagehelper.Page<Object> page = PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
         //获取对博客的评论
-        List<CommentModel> commentList = commentMapper.select(CommentModel.builder()
-                .blogId(dto.getBlogId())
-                .commentType(dto.getType())
-                .build());
-
+        List<CommentModel> commentList = commentDao.list(dto);
         if (CollectionUtils.isEmpty(commentList)) {
-            return new Page<>();
+            return new PageBean<>();
         }
-
         List<CommentVo> list = CopyDataUtil.copyList(commentList, CommentVo.class);
-
         //获取评论id
         List<Long> commentIds = commentList.stream().map(CommentModel::getId).distinct().collect(Collectors.toList());
         //获取用户信息
@@ -75,21 +70,15 @@ public class CommentServiceImpl implements CommentService {
             vo.setChild(replyMap.get(vo.getId()));
         }
 
-        return Page.createPageBean(page.getPageNum(),page.getPageSize(), page.getTotal(), list);
+        return PageBean.createPageBean(page.getPageNum(), page.getPageSize(), page.getTotal(), list);
     }
 
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED,
             rollbackFor = {RuntimeException.class, Exception.class})
-    public Boolean insert(CommentDto dto) {
-        CommentModel model = CommentModel.builder()
-                .commentType(dto.getCommentType())
-                .content(dto.getContent())
-                .userId(dto.getUserId())
-                .blogId(dto.getBlogId())
-                .build();
-        return commentMapper.insertSelective(model) > 0;
+    public Boolean add(CommentDto dto) {
+       return commentDao.add(dto);
     }
 
 
@@ -98,13 +87,10 @@ public class CommentServiceImpl implements CommentService {
      *
      * @param commentIds 评论id
      * @param map        用户信息
-     * @return Map<Long ,   List < ReplyVo>>
+     * @return Map<Long, List < ReplyVo>>
      */
     private Map<Long, List<ReplyVo>> handleReply(List<Long> commentIds, Map<Long, UserModel> map) {
-        Example example = new Example(ReplyModel.class);
-        Example.Criteria criteria = example.createCriteria();
-        criteria.andIn("commentId", commentIds);
-        List<ReplyModel> replyList = replyMapper.selectByExample(example);
+        List<ReplyModel> replyList = replyDao.getReplyByCommentId(commentIds);
 
         if (CollectionUtils.isEmpty(replyList)) {
             return Collections.emptyMap();
@@ -139,13 +125,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
 
-
     /**
      * 递归设置回复内容
      *
-     * @param id        当前回复id
-     * @param rootList  要查找的列表
-     * @return          List<ReplyVo>
+     * @param id       当前回复id
+     * @param rootList 要查找的列表
+     * @return List<ReplyVo>
      */
     private List<ReplyVo> getChild(Long id, List<ReplyVo> rootList) {
         List<ReplyVo> childList = new ArrayList<>();
@@ -168,7 +153,7 @@ public class CommentServiceImpl implements CommentService {
     /**
      * 获取所有用户信息
      *
-     * @return Map<userId , UserModel>
+     * @return Map<userId, UserModel>
      */
     private Map<Long, UserModel> getUserInfo() {
         //获取所有用户信息

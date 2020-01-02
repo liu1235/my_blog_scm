@@ -1,16 +1,16 @@
-package com.liuzw.blog.service.impl;
+package com.blog.framework.service.impl;
 
-import com.liuzw.blog.dto.MailDto;
-import com.liuzw.blog.dto.UserActivationDto;
-import com.liuzw.blog.dto.UserRegisterDto;
-import com.liuzw.blog.enums.ResultDataEnum;
-import com.liuzw.blog.enums.UserStatusEnum;
-import com.liuzw.blog.exception.ServiceException;
-import com.liuzw.blog.mapper.UserMapper;
-import com.liuzw.blog.model.UserModel;
-import com.liuzw.blog.service.MailService;
-import com.liuzw.blog.service.UserService;
-import com.liuzw.blog.utils.EncryptMd5Util;
+import com.blog.framework.common.enums.ResultDataEnum;
+import com.blog.framework.common.enums.UserStatusEnum;
+import com.blog.framework.common.exception.ServiceException;
+import com.blog.framework.common.utils.EncryptMd5Util;
+import com.blog.framework.dto.MailDto;
+import com.blog.framework.dto.user.UserActivationDto;
+import com.blog.framework.dto.user.UserRegisterDto;
+import com.blog.framework.mapper.UserMapper;
+import com.blog.framework.model.UserModel;
+import com.blog.framework.service.MailService;
+import com.blog.framework.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -62,16 +62,18 @@ public class UserServiceImpl implements UserService {
                 .password(EncryptMd5Util.getMD5(dto.getPassword()))
                 .activationCode(activationCode)
                 .build();
-
+        //注册
         boolean flag = userMapper.insertSelective(build) > 0;
 
-        //发送邮件
-        MailDto mailDto = MailDto.builder()
-                .userName(dto.getUserName())
-                .url(activationAddress.replace("{1}", activationCode + "_" + build.getId()))
-                .build();
-        mailService.sendTemplateMail(dto.getEmail(), mailDto);
-        //注册
+        if (flag) {
+            //发送邮件
+            MailDto mailDto = MailDto.builder()
+                    .userName(dto.getUserName())
+                    .url(activationAddress.replace("{1}", activationCode + "_" + build.getId()))
+                    .build();
+            mailService.sendTemplateMail(dto.getEmail(), mailDto);
+        }
+
         return flag;
     }
 

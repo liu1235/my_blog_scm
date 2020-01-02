@@ -1,4 +1,4 @@
-package com.liuzw.blog.utils;
+package com.blog.framework.common.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.logging.Log;

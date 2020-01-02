@@ -1,4 +1,4 @@
-package com.liuzw.blog.enums;
+package com.blog.framework.common.enums;
 
 /**
  * 返回内容

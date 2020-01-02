@@ -1,9 +1,9 @@
-package com.liuzw.blog.controller;
+package com.blog.framework.web.controller;
 
-import com.liuzw.blog.common.ResultData;
-import com.liuzw.blog.dto.UserActivationDto;
-import com.liuzw.blog.dto.UserRegisterDto;
-import com.liuzw.blog.service.UserService;
+import com.blog.framework.common.ResultData;
+import com.blog.framework.dto.user.UserActivationDto;
+import com.blog.framework.dto.user.UserRegisterDto;
+import com.blog.framework.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

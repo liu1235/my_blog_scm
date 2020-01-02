@@ -1,10 +1,13 @@
 /** * Copyright (c) 2018 ABC.Co.Ltd. All rights reserved. */
 
-package com.liuzw.blog.vo;
+package com.blog.framework.vo;
 
 
-import lombok.*;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * TABLE_NAME:(t_like)

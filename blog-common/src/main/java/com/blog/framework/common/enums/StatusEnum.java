@@ -1,12 +1,11 @@
-package com.liuzw.blog.enums;
+package com.blog.framework.common.enums;
 
 /**
  * 通用状态
  *
  * @author liuzw
- * @date 2019-05-07
  **/
-public enum StatuEnum {
+public enum StatusEnum {
 
 
     /**
@@ -20,7 +19,7 @@ public enum StatuEnum {
     INVALID(0),
     ;
 
-    StatuEnum(Integer code) {
+    StatusEnum(Integer code) {
         this.code = code;
     }
 
