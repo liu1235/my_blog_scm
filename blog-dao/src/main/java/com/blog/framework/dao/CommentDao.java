@@ -3,6 +3,7 @@ package com.blog.framework.dao;
 import com.blog.framework.dto.comment.CommentDto;
 import com.blog.framework.dto.comment.CommentQueryDto;
 import com.blog.framework.model.CommentModel;
+import com.blog.framework.vo.CommentCountVo;
 
 import java.util.List;
 
@@ -30,4 +31,12 @@ public interface CommentDao {
      * @return Boolean
      */
     Boolean add(CommentDto dto);
+
+    /**
+     * 统计各个博客的评论数
+     *
+     * @param blogIds 博客id集合
+     * @return List<CommentCountVo>
+     */
+    List<CommentCountVo> getCommentCountByBlogId(List<Long> blogIds);
 }

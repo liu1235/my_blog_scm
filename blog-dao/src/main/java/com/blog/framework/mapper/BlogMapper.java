@@ -1,8 +1,8 @@
 package com.blog.framework.mapper;
 
 
-import com.blog.framework.model.BlogModel;
 import com.blog.framework.dto.blog.BlogQueryDto;
+import com.blog.framework.model.BlogModel;
 import com.blog.framework.vo.blog.BlogVO;
 import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
@@ -30,6 +30,12 @@ public interface BlogMapper extends Mapper<BlogModel>, MySqlMapper<BlogModel> {
             " <where> ",
             " <if test = \" title != null and title != '' \"> and t.title like concat(#{title}, '%') </if>",
             " <if test = \" classId != null \"> and t.class_id = #{classId} </if>",
+            " <if test = \" blogIds != null blogIds.size() > 0 \"> ",
+            " and t.id in ",
+            "   <foreach collection = 'blogIds' item = 'blogId' separator = ',' open = '(' close = ')' > ",
+            "    #{blogId}",
+            "   </foreach>",
+            " </if>",
             " </where> ",
             " order by t.create_date desc",
             "</script>"

@@ -1,6 +1,6 @@
 package com.blog.framework.common;
 
-import com.blog.framework.enums.ResultDataEnum;
+import com.blog.framework.common.enums.ResultDataEnum;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;

@@ -15,17 +15,31 @@ public interface BlogService {
 
 
     /**
-     * 返回分页列表信息
+     * 获取博客列表数据
      *
-     * @param dto   数据
+     * @param dto 数据
      * @return list<Blog>
      */
     PageBean<BlogVO> list(BlogQueryDto dto);
 
     /**
+     * 获取喜欢的博客列表数据
+     *
+     * @return list<Blog>
+     */
+    PageBean<BlogVO> likeBlogList();
+
+    /**
+     * 获取收藏的博客列表数据
+     *
+     * @return list<Blog>
+     */
+    PageBean<BlogVO> collectBlogList();
+
+    /**
      * 根据id返回信息
      *
-     * @param id     id
+     * @param id id
      * @return BlogModel
      */
     BlogDetailVO detail(Long id);

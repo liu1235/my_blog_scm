@@ -1,6 +1,8 @@
 package com.blog.framework.service;
 
 
+import com.blog.framework.dto.like.LikeDto;
+
 /**
  * interface Like
  *
@@ -8,14 +10,21 @@ package com.blog.framework.service;
  */
 public interface LikeService {
 
-
     /**
-     *增加
+     * 喜欢
      *
-     * @param id   数据
+     * @param dto 博客id
      * @return Boolean
      */
-    Boolean collect(Long id);
+    Boolean like(LikeDto dto);
+
+    /**
+     * 收藏
+     *
+     * @param dto 博客id
+     * @return Boolean
+     */
+    Boolean collect(LikeDto dto);
 
 
 }

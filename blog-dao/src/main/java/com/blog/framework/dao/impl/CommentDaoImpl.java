@@ -5,8 +5,10 @@ import com.blog.framework.dto.comment.CommentDto;
 import com.blog.framework.dto.comment.CommentQueryDto;
 import com.blog.framework.mapper.CommentMapper;
 import com.blog.framework.model.CommentModel;
+import com.blog.framework.vo.CommentCountVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
@@ -24,10 +26,12 @@ public class CommentDaoImpl implements CommentDao {
 
     @Override
     public List<CommentModel> list(CommentQueryDto dto) {
-        return commentMapper.select(CommentModel.builder()
-                .blogId(dto.getBlogId())
-                .commentType(dto.getType())
-                .build());
+        Example example = new Example(CommentModel.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("blogId", dto.getBlogId());
+        criteria.andEqualTo("commentType", dto.getType());
+        example.setOrderByClause(" create_time desc");
+        return commentMapper.selectByExample(example);
     }
 
     @Override
@@ -39,5 +43,10 @@ public class CommentDaoImpl implements CommentDao {
                 .blogId(dto.getBlogId())
                 .build();
         return commentMapper.insertSelective(model) > 0;
+    }
+
+    @Override
+    public List<CommentCountVo> getCommentCountByBlogId(List<Long> blogIds) {
+        return commentMapper.getCommentCountByBlogId(blogIds);
     }
 }

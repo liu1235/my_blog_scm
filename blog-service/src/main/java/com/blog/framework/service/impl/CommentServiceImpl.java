@@ -24,10 +24,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -113,6 +110,7 @@ public class CommentServiceImpl implements CommentService {
         List<ReplyVo> rootList = list.stream()
                 //根据回复类型获取最上级评论 回复类型(1:对评论的回复，2: 对回复的回复)
                 .filter(vo -> vo.getReplyType() == 1)
+                .sorted(Comparator.comparing(ReplyVo::getCreateTime))
                 .collect(Collectors.toList());
 
         // 为对评论的回复设置 对回复的回复，getChild是递归调用的
@@ -143,6 +141,8 @@ public class CommentServiceImpl implements CommentService {
         if (childList.isEmpty()) {
             return Collections.emptyList();
         }
+        //排序
+        childList.sort(Comparator.comparing(ReplyVo::getCreateTime));
         for (ReplyVo vo : childList) {
             vo.setChild(getChild(vo.getId(), rootList));
         }

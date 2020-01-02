@@ -21,12 +21,9 @@ public interface LoginService {
      */
     UserLoginVo login(UserLoginDto dto);
 
-
     /**
-     * 发送激活邮件
-     *
-     * @param dto 邮箱
+     * 登出
      */
-    void sendMail(UserActivationDto dto);
+    void logout();
 
 }

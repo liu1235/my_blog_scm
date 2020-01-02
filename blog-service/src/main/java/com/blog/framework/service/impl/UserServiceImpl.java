@@ -4,10 +4,10 @@ import com.blog.framework.common.enums.ResultDataEnum;
 import com.blog.framework.common.enums.UserStatusEnum;
 import com.blog.framework.common.exception.ServiceException;
 import com.blog.framework.common.utils.EncryptMd5Util;
+import com.blog.framework.dao.UserDao;
 import com.blog.framework.dto.MailDto;
 import com.blog.framework.dto.user.UserActivationDto;
 import com.blog.framework.dto.user.UserRegisterDto;
-import com.blog.framework.mapper.UserMapper;
 import com.blog.framework.model.UserModel;
 import com.blog.framework.service.MailService;
 import com.blog.framework.service.UserService;
@@ -34,7 +34,7 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserMapper userMapper;
+    private UserDao userDao;
 
     @Autowired
     private MailService mailService;
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackFor = Exception.class)
     public Boolean register(UserRegisterDto dto) {
         //根据邮箱获取用户信息
-        UserModel userModel = userMapper.selectOne(UserModel.builder().email(dto.getEmail()).build());
+        UserModel userModel = userDao.selectByEmail(dto.getEmail());
         //判断用户是否存在
         if (userModel != null) {
             throw new ServiceException(ResultDataEnum.ACCOUNT_EXISTS.getCode(),
@@ -55,7 +55,6 @@ public class UserServiceImpl implements UserService {
 
         String activationCode = UUID.randomUUID().toString().replace("-", "");
 
-
         UserModel build = UserModel.builder()
                 .userName(dto.getUserName())
                 .email(dto.getEmail())
@@ -63,7 +62,7 @@ public class UserServiceImpl implements UserService {
                 .activationCode(activationCode)
                 .build();
         //注册
-        boolean flag = userMapper.insertSelective(build) > 0;
+        boolean flag = userDao.add(build);
 
         if (flag) {
             //发送邮件
@@ -87,7 +86,7 @@ public class UserServiceImpl implements UserService {
         Long id = Long.valueOf(split[1]);
 
         //根据邮箱获取用户信息
-        UserModel userModel = userMapper.selectByPrimaryKey(id);
+        UserModel userModel = userDao.selectByPrimaryKey(id);
         if (userModel == null) {
             throw new ServiceException(ResultDataEnum.MAIL_ERROR.getCode(),
                     ResultDataEnum.MAIL_ERROR.getMsg());
@@ -100,7 +99,7 @@ public class UserServiceImpl implements UserService {
         }
 
         //创建时间
-        Date createTime = userModel.getUpdateTime();
+        Date createTime = userModel.getCreateTime();
         //当前时间
         LocalDateTime today = LocalDateTime.now();
         LocalDateTime localDateTime = today.minusDays(1);
@@ -117,17 +116,15 @@ public class UserServiceImpl implements UserService {
                 .status(UserStatusEnum.ACTIVATED.getCode())
                 .updateTime(new Date())
                 .build();
-        return userMapper.updateByPrimaryKeySelective(build) > 0;
+        return userDao.updateById(build);
     }
 
     @Override
     public void sendMail(UserActivationDto dto) {
         String[] split = getParams(dto.getParam());
-
         Long id = Long.valueOf(split[1]);
-
         //根据邮箱获取用户信息
-        UserModel userModel = userMapper.selectByPrimaryKey(id);
+        UserModel userModel = userDao.selectByPrimaryKey(id);
         if (userModel == null) {
             return;
         }
@@ -146,8 +143,7 @@ public class UserServiceImpl implements UserService {
                 .activationCode(activationCode)
                 .updateTime(new Date())
                 .build();
-        userMapper.updateByPrimaryKeySelective(build);
-
+        userDao.updateById(build);
     }
 
 

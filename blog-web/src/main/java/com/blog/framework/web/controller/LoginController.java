@@ -41,17 +41,16 @@ public class LoginController {
         return ResultData.createSelectResult(loginService.login(dto));
     }
 
-
     /**
-     * 发送激活邮件
+     * 登出
      *
-     * @param dto 邮箱
      * @return ResultData<String>
      */
-    @PostMapping("/sendMail")
-    @ApiOperation(value = "发送激活邮件")
-    public ResultData<String> sendMail(@Validated @RequestBody UserActivationDto dto) {
-        loginService.sendMail(dto);
+    @PostMapping("/logout")
+    @ApiOperation(value = "登出")
+    public ResultData<Void> logout() {
+        loginService.logout();
         return ResultData.createSuccessResult();
     }
+
 }

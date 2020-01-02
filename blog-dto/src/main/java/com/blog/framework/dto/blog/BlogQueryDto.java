@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
 /**
  * my_blog_scm
  *
@@ -26,5 +28,11 @@ public class BlogQueryDto extends BasePage {
      */
     @ApiModelProperty(value = "分类id")
     private Integer classId;
+
+    /**
+     * 博客id
+     */
+    @ApiModelProperty(hidden = true)
+    private List<Long> blogIds;
 
 }

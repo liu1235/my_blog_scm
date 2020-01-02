@@ -3,11 +3,11 @@ package com.blog.framework.service.impl;
 import com.blog.framework.common.enums.ResultDataEnum;
 import com.blog.framework.common.enums.UserStatusEnum;
 import com.blog.framework.common.exception.ServiceException;
-import com.blog.framework.model.UserModel;
-import com.blog.framework.dto.user.UserActivationDto;
+import com.blog.framework.common.utils.EncryptMd5Util;
+import com.blog.framework.dao.UserDao;
 import com.blog.framework.dto.user.UserLoginDto;
+import com.blog.framework.model.UserModel;
 import com.blog.framework.service.LoginService;
-import com.blog.framework.service.UserService;
 import com.blog.framework.vo.user.UserLoginVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,16 +24,12 @@ import java.util.UUID;
 public class LoginServiceImpl implements LoginService {
 
     @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private UserService userService;
-
+    private UserDao userDao;
 
     @Override
     public UserLoginVo login(UserLoginDto dto) {
         //根据邮箱获取用户信息
-        UserModel userModel = userMapper.selectOne(UserModel.builder().email(dto.getEmail()).build());
+        UserModel userModel = userDao.selectByEmail(dto.getEmail());
         if (userModel == null) {
             throw new ServiceException(ResultDataEnum.USERNAME_OR_PASSWORD_IS_WRONG.getCode(),
                     ResultDataEnum.USERNAME_OR_PASSWORD_IS_WRONG.getMsg());
@@ -52,6 +48,7 @@ public class LoginServiceImpl implements LoginService {
         }
         String token = UUID.randomUUID().toString();
         token = token.replace("-", "").toLowerCase();
+        //todo 存放用户信息到redis？
         return UserLoginVo.builder()
                 .email(userModel.getEmail())
                 .userName(userModel.getUserName())
@@ -61,13 +58,8 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public void sendMail(UserActivationDto dto) {
-        //根据邮箱获取用户信息
-        UserModel userModel = userMapper.selectOne(UserModel.builder().email(dto.getParam()).build());
-        if (userModel != null) {
-            dto.setParam(userModel.getId() + "_" + userModel.getId());
-            userService.sendMail(dto);
-        }
+    public void logout() {
+        //todo 删除redis 用户数据
     }
 
 

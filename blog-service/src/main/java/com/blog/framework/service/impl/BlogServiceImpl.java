@@ -3,20 +3,21 @@ package com.blog.framework.service.impl;
 
 import com.blog.framework.common.PageBean;
 import com.blog.framework.common.enums.StatusEnum;
+import com.blog.framework.common.utils.CopyDataUtil;
 import com.blog.framework.dao.CommentDao;
+import com.blog.framework.dao.LikeDao;
+import com.blog.framework.dto.blog.BlogQueryDto;
 import com.blog.framework.model.BlogModel;
 import com.blog.framework.model.LikeModel;
-import com.blog.framework.common.utils.CopyDataUtil;
 import com.blog.framework.service.BlogDao;
-import com.blog.framework.vo.blog.BlogDetailVO;
-import com.blog.framework.vo.blog.BlogVO;
+import com.blog.framework.service.BlogService;
 import com.blog.framework.vo.CommentCountVo;
 import com.blog.framework.vo.LikeCountVO;
 import com.blog.framework.vo.LikeVO;
+import com.blog.framework.vo.blog.BlogDetailVO;
+import com.blog.framework.vo.blog.BlogVO;
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Lists;
-import com.blog.framework.dto.blog.BlogQueryDto;
-import com.blog.framework.service.BlogService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,7 +40,7 @@ public class BlogServiceImpl implements BlogService {
     private BlogDao blogDao;
 
     @Autowired
-    private LikeMapper likeMapper;
+    private LikeDao likeDao;
 
     @Autowired
     private CommentDao commentDao;
@@ -77,6 +78,20 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
+    public PageBean<BlogVO> likeBlogList() {
+        return getBlogList(LikeModel.builder()
+                .likeStatus(StatusEnum.EFFECTIVE.getCode())
+                .build());
+    }
+
+    @Override
+    public PageBean<BlogVO> collectBlogList() {
+        return getBlogList(LikeModel.builder()
+                .collectStatus(StatusEnum.EFFECTIVE.getCode())
+                .build());
+    }
+
+    @Override
     public BlogDetailVO detail(Long id) {
         //获取详情
         BlogModel blogModel = blogDao.detail(id);
@@ -108,16 +123,19 @@ public class BlogServiceImpl implements BlogService {
         } else {
             blogVO.setCommentCount(commentCountVo.getCommentCount());
         }
+
         //获取当前阅读人的点赞和收藏状态
-        LikeModel likeModel = likeMapper.selectOne(LikeModel.builder().blogId(blogId).userId(null).build());
-        LikeVO likeVO;
-        if (likeModel == null) {
-            likeVO = LikeVO.builder()
-                    .collectStatus(StatusEnum.INVALID.getCode())
-                    .likeStatus(StatusEnum.INVALID.getCode())
-                    .build();
-        } else {
-            likeVO = CopyDataUtil.copyObject(likeModel, LikeVO.class);
+        LikeVO likeVO = LikeVO.builder()
+                .collectStatus(StatusEnum.INVALID.getCode())
+                .likeStatus(StatusEnum.INVALID.getCode())
+                .build();
+        //todo 用户id获取
+        Long userId = null;
+        if (userId != null) {
+            LikeModel likeModel = likeDao.getLikeByUserIdAndBlogId(blogId, null);
+            if (likeModel != null) {
+                likeVO = CopyDataUtil.copyObject(likeModel, LikeVO.class);
+            }
         }
         return BlogDetailVO.builder()
                 .like(likeVO)
@@ -136,7 +154,7 @@ public class BlogServiceImpl implements BlogService {
             return Collections.emptyMap();
         }
         //统计各个博客文章的收藏数和点赞数
-        List<LikeCountVO> list = likeMapper.getCountByBlogId(blogIdList);
+        List<LikeCountVO> list = likeDao.getCountByBlogId(blogIdList);
         //将list转换成map<blogId, LikeCountVO>
         return list.stream().collect(Collectors.toMap(LikeCountVO::getBlogId, s -> s));
     }
@@ -153,9 +171,27 @@ public class BlogServiceImpl implements BlogService {
             return Collections.emptyMap();
         }
         //统计各个博客评论数
-        List<CommentCountVo> list = commentMapper.getCommentCountByBlogId(blogIdList);
+        List<CommentCountVo> list = commentDao.getCommentCountByBlogId(blogIdList);
         //将list转换成map<blogId, LikeCountVO>
         return list.stream().collect(Collectors.toMap(CommentCountVo::getBlogId, s -> s));
+    }
+
+    private PageBean<BlogVO> getBlogList(LikeModel model) {
+        //todo 获取当前登录人id
+        Long userId = null;
+        if (userId == null) {
+            return new PageBean<>();
+        }
+        model.setUserId(userId);
+        List<LikeModel> likeModels = likeDao.select(model);
+        if (CollectionUtils.isEmpty(likeModels)) {
+            return new PageBean<>();
+        }
+        //获取对应博客id
+        List<Long> blogIds = likeModels.stream().map(LikeModel::getBlogId).collect(Collectors.toList());
+        BlogQueryDto dto = new BlogQueryDto();
+        dto.setBlogIds(blogIds);
+        return list(dto);
     }
 
 }
