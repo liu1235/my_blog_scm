@@ -6,6 +6,8 @@ import com.blog.framework.dto.comment.CommentDto;
 import com.blog.framework.dto.comment.CommentQueryDto;
 import com.blog.framework.vo.CommentVo;
 
+import java.util.List;
+
 /**
  * interface Comment
  *
@@ -20,6 +22,13 @@ public interface CommentService {
      * @return PageBean<CommentVo>
      */
     PageBean<CommentVo> list(CommentQueryDto dto);
+
+    /**
+     * 获取最新的十条评论
+     *
+     * @return List<CommentVo>
+     */
+    List<CommentVo> topCommentList();
 
     /**
      * 新增评论

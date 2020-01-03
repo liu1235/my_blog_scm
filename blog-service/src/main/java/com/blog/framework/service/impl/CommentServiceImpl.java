@@ -5,6 +5,7 @@ import com.blog.framework.common.PageBean;
 import com.blog.framework.common.utils.CopyDataUtil;
 import com.blog.framework.dao.CommentDao;
 import com.blog.framework.dao.ReplyDao;
+import com.blog.framework.dao.UserDao;
 import com.blog.framework.dto.comment.CommentDto;
 import com.blog.framework.dto.comment.CommentQueryDto;
 import com.blog.framework.mapper.CommentMapper;
@@ -42,7 +43,7 @@ public class CommentServiceImpl implements CommentService {
     private ReplyDao replyDao;
 
     @Autowired
-    private UserMapper userMapper;
+    private UserDao userDao;
 
     @Override
     public PageBean<CommentVo> list(CommentQueryDto dto) {
@@ -56,7 +57,9 @@ public class CommentServiceImpl implements CommentService {
         //获取评论id
         List<Long> commentIds = commentList.stream().map(CommentModel::getId).distinct().collect(Collectors.toList());
         //获取用户信息
-        Map<Long, UserModel> map = getUserInfo();
+        List<Long> userIds = commentList.stream().map(CommentModel::getUserId).distinct().collect(Collectors.toList());
+
+        Map<Long, UserModel> map = getUserInfo(userIds);
 
         Map<Long, List<ReplyVo>> replyMap = handleReply(commentIds, map);
 
@@ -68,6 +71,15 @@ public class CommentServiceImpl implements CommentService {
         }
 
         return PageBean.createPageBean(page.getPageNum(), page.getPageSize(), page.getTotal(), list);
+    }
+
+    @Override
+    public List<CommentVo> topCommentList() {
+        List<CommentModel> commentModels = commentDao.topCommentList();
+        if (CollectionUtils.isNotEmpty(commentModels)) {
+            return CopyDataUtil.copyList(commentModels, CommentVo.class);
+        }
+        return null;
     }
 
 
@@ -155,9 +167,9 @@ public class CommentServiceImpl implements CommentService {
      *
      * @return Map<userId, UserModel>
      */
-    private Map<Long, UserModel> getUserInfo() {
+    private Map<Long, UserModel> getUserInfo(List<Long> userIds) {
         //获取所有用户信息
-        List<UserModel> list = userMapper.selectAll();
+        List<UserModel> list = userDao.selectByIds(userIds);
         if (CollectionUtils.isEmpty(list)) {
             return Collections.emptyMap();
         }

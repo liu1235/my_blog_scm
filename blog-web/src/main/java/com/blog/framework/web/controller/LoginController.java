@@ -1,7 +1,6 @@
 package com.blog.framework.web.controller;
 
 import com.blog.framework.common.ResultData;
-import com.blog.framework.dto.user.UserActivationDto;
 import com.blog.framework.dto.user.UserLoginDto;
 import com.blog.framework.service.LoginService;
 import com.blog.framework.vo.user.UserLoginVo;
@@ -48,9 +47,8 @@ public class LoginController {
      */
     @PostMapping("/logout")
     @ApiOperation(value = "登出")
-    public ResultData<Void> logout() {
-        loginService.logout();
-        return ResultData.createSuccessResult();
+    public ResultData<Boolean> logout() {
+        return ResultData.createSelectResult(loginService.logout());
     }
 
 }

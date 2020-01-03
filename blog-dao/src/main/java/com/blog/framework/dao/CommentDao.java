@@ -25,6 +25,13 @@ public interface CommentDao {
     List<CommentModel> list(CommentQueryDto dto);
 
     /**
+     * 获取最新的十条评论
+     *
+     * @return List<CommentModel>
+     */
+    List<CommentModel> topCommentList();
+
+    /**
      * 新增评论
      *
      * @param dto 数据

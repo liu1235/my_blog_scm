@@ -35,4 +35,12 @@ public interface CommentMapper extends Mapper<CommentModel>, MySqlMapper<Comment
             "</script>"
     })
     List<CommentCountVo> getCommentCountByBlogId(List<Long> blogIds);
+
+    /**
+     * 获取最新的十条评论
+     *
+     * @return List<CommentModel>
+     */
+    @Select("select * from t_comment order by create_time desc limit 10")
+    List<CommentModel> topCommentList();
 }

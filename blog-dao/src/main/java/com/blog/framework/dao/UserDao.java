@@ -2,6 +2,8 @@ package com.blog.framework.dao;
 
 import com.blog.framework.model.UserModel;
 
+import java.util.List;
+
 /**
  * my_blog_scm
  *
@@ -17,6 +19,14 @@ public interface UserDao {
      * @return UserModel
      */
     UserModel selectByEmail(String email);
+
+    /**
+     * 根据主键查询
+     *
+     * @param ids 主键
+     * @return UserModel
+     */
+    List<UserModel> selectByIds(List<Long> ids);
 
     /**
      * 根据主键查询

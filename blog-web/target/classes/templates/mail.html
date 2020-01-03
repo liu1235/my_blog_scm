@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>激活邮件</title>
+</head>
+<style>
+    .body {
+        padding: 22px 0 15px 0;
+        background: #f7f9fa;
+        width: 100%;
+        min-width: 800px;
+        min-height: 400px;
+    }
+    .content {
+        min-width: 550px;
+        width: 60%;
+        margin: 0 auto;
+        background: #fff;
+        border: 1px solid #dedede;
+        border-radius: 5px;
+        padding: 20px 40px;
+        color: #7b7b7b;
+        font-size: 14px;
+    }
+    img {
+        height: 40px;
+    }
+    h3 {
+        font-size: 17px;
+        line-height: 25px;
+    }
+    .link {
+        font-size: 20px;
+        color: #0087e7;
+        line-height: 25px;
+        font-weight: 300;
+    }
+    .btn {
+        display: block;
+        margin: 40px auto;
+        border-radius: 25px;
+        border: 1px solid #2695f3;
+        padding: 10px;
+        width: 107px;
+        color: #2695f3;
+        font-weight: bold;
+        outline: none;
+        font-size: 14px;
+        text-align: center;
+        text-decoration: none;
+    }
+    .ask {
+        color: #cecece;
+        font-size: 12px;
+    }
+</style>
+<body>
+<div class="body">
+    <div class="content">
+        <h3 th:text="'Hi,' + ${userName}"></h3>
+        <p>感谢您注册 liuzw的博客</p>
+        <p>请点击以下链接激活你的账户：</p>
+        <p><a class="link" th:href="${url}"><span th:text="${url}"></span></a></p>
+        <p>如果点击下面的链接无效，请尝试将链接复制到浏览器地址栏访问。</p>
+        <p>如果此链接已过期，请重发激活邮件</p>
+        <hr style="border:dashed 1px #ddd" />
+        <a class="btn" th:href="${url}">点击完成验证</a>
+        <p class="ask">本邮件为系统自动发送，请勿回复。</p>
+        <p class="ask">如果有疑问，请联系我们: 670115782@qq.com</p>
+        <p class="ask"> - liuzw</p>
+
+    </div>
+</div>
+</body>
+</html>

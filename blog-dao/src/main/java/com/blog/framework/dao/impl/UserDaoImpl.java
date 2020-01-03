@@ -3,9 +3,12 @@ package com.blog.framework.dao.impl;
 import com.blog.framework.dao.UserDao;
 import com.blog.framework.mapper.UserMapper;
 import com.blog.framework.model.UserModel;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import tk.mybatis.mapper.entity.Example;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -25,6 +28,17 @@ public class UserDaoImpl implements UserDao {
     @Override
     public UserModel selectByEmail(String email) {
         return userMapper.selectOne(UserModel.builder().email(email).build());
+    }
+
+    @Override
+    public List<UserModel> selectByIds(List<Long> ids) {
+        if (CollectionUtils.isEmpty(ids)) {
+            return Collections.emptyList();
+        }
+        Example example = new Example(UserModel.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andIn("id", ids);
+        return userMapper.selectByExample(example);
     }
 
     @Override

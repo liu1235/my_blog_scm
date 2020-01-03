@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 
 /**
  * @author liuzw
@@ -40,6 +42,17 @@ public class CommentController {
     @PostMapping(value = "/list")
     public ResultData<PageBean<CommentVo>> list(@Validated @RequestBody CommentQueryDto dto) {
         return ResultData.createSelectResult(commentService.list(dto));
+    }
+
+    /**
+     * 获取最新的十条评论
+     *
+     * @return ResultData<CommentVo>
+     */
+    @ApiOperation(value = "获取评论内容")
+    @PostMapping(value = "/top-comment-list")
+    public ResultData<List<CommentVo>> topCommentList() {
+        return ResultData.createSelectResult(commentService.topCommentList());
     }
 
     /**

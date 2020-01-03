@@ -11,6 +11,11 @@ public class BaseConstants {
     private BaseConstants(){}
 
     /**
+     *
+     */
+    public static final String ACCESS_TOKEN = "access_token";
+
+    /**
      * 用户名不能为空
      */
     public static final String USERNAME_NOT_EMPTY = "用户名不能为空";

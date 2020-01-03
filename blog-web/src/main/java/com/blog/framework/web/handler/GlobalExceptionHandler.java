@@ -1,8 +1,9 @@
 package com.blog.framework.web.handler;
 
 import com.blog.framework.common.ResultData;
-import com.blog.framework.enums.ResultDataEnum;
-import com.blog.framework.exception.ServiceException;
+import com.blog.framework.common.enums.ResultDataEnum;
+import com.blog.framework.common.exception.LoginException;
+import com.blog.framework.common.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailSendException;
 import org.springframework.validation.ObjectError;
@@ -37,6 +38,11 @@ public class GlobalExceptionHandler {
         return ResultData.createErrorResult(getCode(ex.getCode()), ex.getMessage());
     }
 
+    @ExceptionHandler({LoginException.class})
+    public ResultData<String> handleLoginException(final LoginException ex) {
+        log.error("---------> handleLoginException", ex);
+        return ResultData.createErrorResult(ResultDataEnum.UN_LOGIN.getCode(), ResultDataEnum.UN_LOGIN.getMsg());
+    }
 
     @ExceptionHandler({MailSendException.class})
     public ResultData<String> handleMailSendException(final MailSendException ex) {

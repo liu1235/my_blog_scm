@@ -35,6 +35,11 @@ public class CommentDaoImpl implements CommentDao {
     }
 
     @Override
+    public List<CommentModel> topCommentList() {
+        return commentMapper.topCommentList();
+    }
+
+    @Override
     public Boolean add(CommentDto dto) {
         CommentModel model = CommentModel.builder()
                 .commentType(dto.getCommentType())

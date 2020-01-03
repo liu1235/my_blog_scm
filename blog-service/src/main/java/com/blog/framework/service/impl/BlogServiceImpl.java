@@ -2,8 +2,12 @@ package com.blog.framework.service.impl;
 
 
 import com.blog.framework.common.PageBean;
+import com.blog.framework.common.constants.RedisConstants;
 import com.blog.framework.common.enums.StatusEnum;
+import com.blog.framework.common.exception.LoginException;
+import com.blog.framework.common.exception.ServiceException;
 import com.blog.framework.common.utils.CopyDataUtil;
+import com.blog.framework.common.utils.JsonUtil;
 import com.blog.framework.dao.CommentDao;
 import com.blog.framework.dao.LikeDao;
 import com.blog.framework.dto.blog.BlogQueryDto;
@@ -11,20 +15,25 @@ import com.blog.framework.model.BlogModel;
 import com.blog.framework.model.LikeModel;
 import com.blog.framework.service.BlogDao;
 import com.blog.framework.service.BlogService;
+import com.blog.framework.service.TokenService;
 import com.blog.framework.vo.CommentCountVo;
 import com.blog.framework.vo.LikeCountVO;
 import com.blog.framework.vo.LikeVO;
 import com.blog.framework.vo.blog.BlogDetailVO;
+import com.blog.framework.vo.blog.BlogTopVO;
 import com.blog.framework.vo.blog.BlogVO;
+import com.blog.framework.vo.user.UserLoginVo;
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -44,6 +53,12 @@ public class BlogServiceImpl implements BlogService {
 
     @Autowired
     private CommentDao commentDao;
+
+    @Autowired
+    private TokenService tokenService;
+
+    @Autowired
+    private RedisService redisService;
 
 
     @Override
@@ -78,7 +93,33 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
+    public List<BlogTopVO> topBlogList() {
+        //首先从redis中获取数据
+        String json = redisService.get(RedisConstants.REDIS_BLOG_LIST);
+        if (StringUtils.isNotBlank(json)) {
+            return JsonUtil.toList(json, BlogTopVO.class);
+        }
+        //从数据库获取
+        List<BlogTopVO> vos = blogDao.topBlogList();
+        if (CollectionUtils.isNotEmpty(vos)) {
+            //存到redis中
+            redisService.set(RedisConstants.REDIS_BLOG_LIST, JsonUtil.toJson(vos), 12, TimeUnit.HOURS);
+            return vos;
+        }
+        return null;
+    }
+
+    @Override
     public PageBean<BlogVO> likeBlogList() {
+        //获取当前登录信息
+        UserLoginVo userInfo = getUserInfo();
+        String key = RedisConstants.REDIS_BLOG_LIKE + userInfo.getUserId();
+        Boolean flag = redisService.hasKey(key);
+        if (flag) {
+            throw new ServiceException("亲, 你操作的太频繁了 (´⊙ω⊙`)！");
+        } else {
+            redisService.set(key, "", 5, TimeUnit.SECONDS);
+        }
         return getBlogList(LikeModel.builder()
                 .likeStatus(StatusEnum.EFFECTIVE.getCode())
                 .build());
@@ -129,14 +170,21 @@ public class BlogServiceImpl implements BlogService {
                 .collectStatus(StatusEnum.INVALID.getCode())
                 .likeStatus(StatusEnum.INVALID.getCode())
                 .build();
-        //todo 用户id获取
-        Long userId = null;
-        if (userId != null) {
-            LikeModel likeModel = likeDao.getLikeByUserIdAndBlogId(blogId, null);
+        // 用户id获取
+        UserLoginVo userInfo = tokenService.getUserInfo();
+        if (userInfo != null && userInfo.getUserId() != null) {
+            LikeModel likeModel = likeDao.getLikeByUserIdAndBlogId(blogId, userInfo.getUserId());
             if (likeModel != null) {
                 likeVO = CopyDataUtil.copyObject(likeModel, LikeVO.class);
             }
         }
+
+        //todo 更新博客阅读次数  这里需要优化 每次点击都对数据库操作  可以先存到redis 然后定时任务定时去更新
+        blogDao.update(BlogModel.builder()
+                .id(blogModel.getId())
+                .readCount(blogModel.getReadCount() + 1)
+                .build());
+
         return BlogDetailVO.builder()
                 .like(likeVO)
                 .blog(blogVO)
@@ -176,13 +224,11 @@ public class BlogServiceImpl implements BlogService {
         return list.stream().collect(Collectors.toMap(CommentCountVo::getBlogId, s -> s));
     }
 
+
+    /**
+     * 获取博客列表
+     */
     private PageBean<BlogVO> getBlogList(LikeModel model) {
-        //todo 获取当前登录人id
-        Long userId = null;
-        if (userId == null) {
-            return new PageBean<>();
-        }
-        model.setUserId(userId);
         List<LikeModel> likeModels = likeDao.select(model);
         if (CollectionUtils.isEmpty(likeModels)) {
             return new PageBean<>();
@@ -192,6 +238,18 @@ public class BlogServiceImpl implements BlogService {
         BlogQueryDto dto = new BlogQueryDto();
         dto.setBlogIds(blogIds);
         return list(dto);
+    }
+
+    /**
+     * 获取当前登录信息
+     */
+    private UserLoginVo getUserInfo() {
+        // 获取当前登录人id
+        UserLoginVo userInfo = tokenService.getUserInfo();
+        if (userInfo == null || userInfo.getUserId() == null) {
+            throw new LoginException();
+        }
+        return userInfo;
     }
 
 }

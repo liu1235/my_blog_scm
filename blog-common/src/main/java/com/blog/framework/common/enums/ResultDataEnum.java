@@ -23,6 +23,11 @@ public enum ResultDataEnum {
     ERROR(1, "操作失败"),
 
     /**
+     * 当前用户未登录
+     */
+    UN_LOGIN(3, "当前用户未登录"),
+
+    /**
      * 新增成功
      */
     INSERT_SUCCESS(0, "新增成功"),

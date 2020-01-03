@@ -4,6 +4,7 @@ import com.blog.framework.model.BlogModel;
 import com.blog.framework.dto.blog.BlogQueryDto;
 import com.blog.framework.mapper.BlogMapper;
 import com.blog.framework.service.BlogDao;
+import com.blog.framework.vo.blog.BlogTopVO;
 import com.blog.framework.vo.blog.BlogVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -29,7 +30,17 @@ public class BlogDaoImpl implements BlogDao {
     }
 
     @Override
+    public List<BlogTopVO> topBlogList() {
+        return blogMapper.topBlogList();
+    }
+
+    @Override
     public BlogModel detail(Long id) {
         return blogMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public Boolean update(BlogModel model) {
+        return blogMapper.updateByPrimaryKey(model) > 0;
     }
 }

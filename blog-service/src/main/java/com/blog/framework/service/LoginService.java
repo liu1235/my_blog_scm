@@ -23,7 +23,9 @@ public interface LoginService {
 
     /**
      * 登出
+     *
+     * @return Boolean
      */
-    void logout();
+    Boolean logout();
 
 }

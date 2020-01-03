@@ -8,6 +8,7 @@ import com.blog.framework.dao.UserDao;
 import com.blog.framework.dto.user.UserLoginDto;
 import com.blog.framework.model.UserModel;
 import com.blog.framework.service.LoginService;
+import com.blog.framework.service.TokenService;
 import com.blog.framework.vo.user.UserLoginVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,9 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private TokenService tokenService;
 
     @Override
     public UserLoginVo login(UserLoginDto dto) {
@@ -48,18 +52,22 @@ public class LoginServiceImpl implements LoginService {
         }
         String token = UUID.randomUUID().toString();
         token = token.replace("-", "").toLowerCase();
-        //todo 存放用户信息到redis？
-        return UserLoginVo.builder()
+        // 存放用户信息到redis
+        UserLoginVo vo = UserLoginVo.builder()
                 .email(userModel.getEmail())
                 .userName(userModel.getUserName())
                 .token(token)
                 .userId(userModel.getId())
                 .build();
+        tokenService.saveUserInfo(token, vo);
+        vo.setUserId(null);
+        return vo;
     }
 
     @Override
-    public void logout() {
-        //todo 删除redis 用户数据
+    public Boolean logout() {
+        // 删除redis 用户数据
+        return tokenService.deleteUserInfo();
     }
 
 

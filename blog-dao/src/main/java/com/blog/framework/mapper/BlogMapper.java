@@ -3,6 +3,7 @@ package com.blog.framework.mapper;
 
 import com.blog.framework.dto.blog.BlogQueryDto;
 import com.blog.framework.model.BlogModel;
+import com.blog.framework.vo.blog.BlogTopVO;
 import com.blog.framework.vo.blog.BlogVO;
 import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
@@ -41,6 +42,15 @@ public interface BlogMapper extends Mapper<BlogModel>, MySqlMapper<BlogModel> {
             "</script>"
     })
     List<BlogVO> list(BlogQueryDto dto);
+
+
+    /**
+     * 获取最热的十条博客
+     *
+     * @return List<BlogTopVO>
+     */
+    @Select("select id, read_count from t_blog order by read_count desc limit 10")
+    List<BlogTopVO> topBlogList();
 
 
 }
