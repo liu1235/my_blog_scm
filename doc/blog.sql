@@ -19,7 +19,8 @@ USE `blog`;
 -- 导出  表 blog.t_blog 结构
 CREATE TABLE IF NOT EXISTS `t_blog` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '博客id',
-  `title` varchar(200) NOT NULL COMMENT '博客标题',
+  `title` varchar(256) NOT NULL COMMENT '博客标题',
+  `description` varchar(512) NOT NULL COMMENT '博客描述',
   `content` text NOT NULL COMMENT '博客内容',
   `raw_data` text NOT NULL COMMENT '原始输入数据',
   `class_id` bigint(20) NOT NULL COMMENT '分类id',

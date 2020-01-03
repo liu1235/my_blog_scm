@@ -82,11 +82,16 @@ public class BlogServiceImpl implements BlogService {
             if (likeCountVO != null) {
                 vo.setCollectCount(likeCountVO.getCollectCount());
                 vo.setLikeCount(likeCountVO.getLikeCount());
+            } else {
+                vo.setCollectCount(0);
+                vo.setLikeCount(0);
             }
             //组装评论数
             CommentCountVo commentCountVo = commentCountMap.get(vo.getId());
             if (commentCountVo != null) {
                 vo.setCommentCount(commentCountVo.getCommentCount());
+            } else {
+                vo.setCommentCount(0);
             }
         }
         return PageBean.createPageBean(list);

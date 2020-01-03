@@ -45,6 +45,13 @@ public class BlogModel {
     private String content;
 
     /**
+     * 描述
+     */
+    @Column(name = "description")
+    private String description;
+
+
+    /**
      * 原始输入数据
      */
     @Column(name = "raw_data")

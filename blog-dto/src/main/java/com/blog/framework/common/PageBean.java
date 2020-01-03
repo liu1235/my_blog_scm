@@ -21,7 +21,7 @@ public class PageBean<T> {
      * 结果集
      */
     @ApiModelProperty(value = "结果集")
-    private List<T> data;
+    private List<T> list;
 
     /**
      * 页码
@@ -47,20 +47,20 @@ public class PageBean<T> {
     /**
      * 包装Page对象
      *
-     * @param data List<T>
+     * @param list List<T>
      */
-    private PageBean(List<T> data) {
-        if (data instanceof Page) {
-            Page page = (Page) data;
+    private PageBean(List<T> list) {
+        if (list instanceof Page) {
+            Page page = (Page) list;
             this.pageNum = page.getPageNum();
             this.pageSize = page.getPageSize();
             this.total = page.getTotal();
         } else {
             this.pageNum = 1;
             this.pageSize = 10;
-            this.total = (long) data.size();
+            this.total = (long) list.size();
         }
-        this.data = data;
+        this.list = list;
     }
 
     /**
@@ -91,23 +91,23 @@ public class PageBean<T> {
     /**
      * 创建 PageBean
      *
-     * @param data  分页查询结果集
+     * @param list  分页查询结果集
      * @param clazz 转换类型
      * @return PageBean
      */
-    public static <V, E> PageBean<V> createPageBean(List<E> data, Class<V> clazz) {
+    public static <V, E> PageBean<V> createPageBean(List<E> list, Class<V> clazz) {
         PageBean<V> p = new PageBean<>();
-        if (data instanceof Page) {
-            Page page = (Page) data;
+        if (list instanceof Page) {
+            Page page = (Page) list;
             p.pageNum = page.getPageNum();
             p.pageSize = page.getPageSize();
             p.total = page.getTotal();
         } else {
             p.pageNum = 1;
             p.pageSize = 10;
-            p.total = (long) data.size();
+            p.total = (long) list.size();
         }
-        p.data = CopyDataUtil.copyList(data, clazz);
+        p.list = CopyDataUtil.copyList(list, clazz);
         return p;
     }
 
@@ -120,9 +120,9 @@ public class PageBean<T> {
      * @param total    总页数
      * @return PageBean
      */
-    public static <E> PageBean<E> createPageBean(Integer pageNum, Integer pageSize, Long total, List<E> data) {
+    public static <E> PageBean<E> createPageBean(Integer pageNum, Integer pageSize, Long total, List<E> list) {
         PageBean<E> page = new PageBean<>(pageNum, pageSize, total);
-        page.data = data;
+        page.list = list;
         return page;
     }
 

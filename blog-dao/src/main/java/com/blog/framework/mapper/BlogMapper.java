@@ -26,12 +26,12 @@ public interface BlogMapper extends Mapper<BlogModel>, MySqlMapper<BlogModel> {
      */
     @Select({
             "<script>",
-            " select t.id, t.title, t.content,t.class_id, t.create_date, t.read_count,t1.class_name",
+            " select t.id, t.title, t.content,t.class_id classId, t.create_date createDate, t.read_count readCount,t1.class_name className",
             " from t_blog t left join t_blog_class t1 on t.class_id = t1.id ",
             " <where> ",
             " <if test = \" title != null and title != '' \"> and t.title like concat(#{title}, '%') </if>",
             " <if test = \" classId != null \"> and t.class_id = #{classId} </if>",
-            " <if test = \" blogIds != null blogIds.size() > 0 \"> ",
+            " <if test = \" blogIds != null and blogIds.size() > 0 \"> ",
             " and t.id in ",
             "   <foreach collection = 'blogIds' item = 'blogId' separator = ',' open = '(' close = ')' > ",
             "    #{blogId}",

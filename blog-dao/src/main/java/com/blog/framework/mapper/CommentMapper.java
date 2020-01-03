@@ -3,6 +3,7 @@ package com.blog.framework.mapper;
 
 import com.blog.framework.model.CommentModel;
 import com.blog.framework.vo.CommentCountVo;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
 import tk.mybatis.mapper.common.MySqlMapper;
@@ -34,7 +35,7 @@ public interface CommentMapper extends Mapper<CommentModel>, MySqlMapper<Comment
             " group by t.blog_id",
             "</script>"
     })
-    List<CommentCountVo> getCommentCountByBlogId(List<Long> blogIds);
+    List<CommentCountVo> getCommentCountByBlogId(@Param("blogIds") List<Long> blogIds);
 
     /**
      * 获取最新的十条评论

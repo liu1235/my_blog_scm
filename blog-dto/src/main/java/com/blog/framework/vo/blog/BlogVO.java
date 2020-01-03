@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author liuzw
@@ -34,10 +35,10 @@ public class BlogVO implements Serializable {
     private String title;
 
     /**
-     * 博客内容
+     * 博客内容描述
      */
-    @ApiModelProperty(value = "博客内容")
-    private String content;
+    @ApiModelProperty(value = "博客内容描述")
+    private String description;
 
     /**
      * 博客类别id
@@ -56,7 +57,7 @@ public class BlogVO implements Serializable {
      */
     @JsonFormat(pattern = DatePattern.NORM_DATE_PATTERN)
     @ApiModelProperty(value = "发布日期")
-    private String createDate;
+    private Date createDate;
 
     /**
      * 阅读次数
