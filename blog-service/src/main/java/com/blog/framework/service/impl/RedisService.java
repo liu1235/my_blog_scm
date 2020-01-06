@@ -61,6 +61,19 @@ public class RedisService {
         stringRedisTemplate.expire(key, expireTime, unit);
     }
 
+
+    /**
+     * key 对应value自增
+     *
+     * @param key key
+     * @param delta value
+     */
+    public void increment(String key, long delta) {
+        if (StringUtils.isNotEmpty(key)) {
+            getValueOperations().increment(key, delta);
+        }
+    }
+
     /**
      * 从redis中获取
      *

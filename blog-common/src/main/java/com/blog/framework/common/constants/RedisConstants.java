@@ -36,6 +36,11 @@ public class RedisConstants {
      */
     public static final String REDIS_BLOG_COLLECT = "redis:blog:operating:collect:";
 
+    /**
+     * redis like me key
+     */
+    public static final String REDIS_BLOG_LIKE_ME_COUNT = "redis:blog:like:count";
+
 
 
 

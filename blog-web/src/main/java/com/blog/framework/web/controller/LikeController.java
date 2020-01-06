@@ -1,6 +1,5 @@
 package com.blog.framework.web.controller;
 
-import com.blog.framework.common.Id;
 import com.blog.framework.common.ResultData;
 import com.blog.framework.dto.like.LikeDto;
 import com.blog.framework.service.LikeService;
@@ -50,5 +49,28 @@ public class LikeController {
         return ResultData.createInsertResult(likeService.collect(dto));
     }
 
+
+    /**
+     * 喜欢我的数据展示
+     *
+     * @return ResultData<Integer>
+     */
+    @ApiOperation(value = "喜欢我的数据展示")
+    @PostMapping(value = "/like-me")
+    public ResultData<Integer> likeMeData() {
+        return ResultData.createSelectResult(likeService.likeMeData());
+    }
+
+    /**
+     * 新增喜欢我的数据统计
+     *
+     * @return ResultData<Integer>
+     */
+    @ApiOperation(value = "新增喜欢我的数据统计")
+    @PostMapping(value = "/add-like-me")
+    public ResultData<Void> addLikeMeData() {
+        likeService.addLikeMeData();
+        return ResultData.createSuccessResult();
+    }
 
 }

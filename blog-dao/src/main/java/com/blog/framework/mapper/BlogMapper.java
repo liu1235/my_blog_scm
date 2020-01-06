@@ -49,7 +49,7 @@ public interface BlogMapper extends Mapper<BlogModel>, MySqlMapper<BlogModel> {
      *
      * @return List<BlogTopVO>
      */
-    @Select("select id, read_count from t_blog order by read_count desc limit 10")
+    @Select("select id, read_count readCount,title title from t_blog order by read_count desc limit 10")
     List<BlogTopVO> topBlogList();
 
 

@@ -108,7 +108,7 @@ public class BlogServiceImpl implements BlogService {
         List<BlogTopVO> vos = blogDao.topBlogList();
         if (CollectionUtils.isNotEmpty(vos)) {
             //存到redis中
-            redisService.set(RedisConstants.REDIS_BLOG_LIST, JsonUtil.toJson(vos), 12, TimeUnit.HOURS);
+            redisService.set(RedisConstants.REDIS_BLOG_LIST, vos, 12, TimeUnit.HOURS);
             return vos;
         }
         return null;
@@ -116,15 +116,6 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public PageBean<BlogVO> likeBlogList() {
-        //获取当前登录信息
-        UserLoginVo userInfo = getUserInfo();
-        String key = RedisConstants.REDIS_BLOG_LIKE + userInfo.getUserId();
-        Boolean flag = redisService.hasKey(key);
-        if (flag) {
-            throw new ServiceException("亲, 你操作的太频繁了 (´⊙ω⊙`)！");
-        } else {
-            redisService.set(key, "", 5, TimeUnit.SECONDS);
-        }
         return getBlogList(LikeModel.builder()
                 .likeStatus(StatusEnum.EFFECTIVE.getCode())
                 .build());

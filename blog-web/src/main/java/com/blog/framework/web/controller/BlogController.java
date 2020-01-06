@@ -2,6 +2,7 @@
 package com.blog.framework.web.controller;
 
 
+import com.blog.framework.common.Id;
 import com.blog.framework.common.PageBean;
 import com.blog.framework.common.ResultData;
 import com.blog.framework.dto.blog.BlogQueryDto;
@@ -12,11 +13,9 @@ import com.blog.framework.vo.blog.BlogVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -51,7 +50,7 @@ public class BlogController {
      *
      * @return ResultData
      */
-    @ApiOperation(value = "获取所有博客数据", notes = "获取所有博客数据")
+    @ApiOperation(value = "获取最热的十条博客", notes = "获取最热的十条博客")
     @PostMapping(value = "/top-blog-list")
     public ResultData<List<BlogTopVO>> topBlogList() {
         return ResultData.createSelectResult(blogService.topBlogList());
@@ -83,13 +82,13 @@ public class BlogController {
     /**
      * 博客详情
      *
-     * @param id 博客id
+     * @param idDto 博客id
      * @return ResultData<BlogBean>
      */
     @ApiOperation(value = "博客详情", notes = "博客详情")
-    @GetMapping(value = "/detail")
-    public ResultData<BlogDetailVO> detail(@RequestParam("bid") Long id) {
-        return ResultData.createSelectResult(blogService.detail(id));
+    @PostMapping(value = "/detail")
+    public ResultData<BlogDetailVO> detail(@RequestBody Id<Long> idDto) {
+        return ResultData.createSelectResult(blogService.detail(idDto.getId()));
     }
 
 }

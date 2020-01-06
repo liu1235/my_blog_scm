@@ -41,6 +41,6 @@ public class BlogDaoImpl implements BlogDao {
 
     @Override
     public Boolean update(BlogModel model) {
-        return blogMapper.updateByPrimaryKey(model) > 0;
+        return blogMapper.updateByPrimaryKeySelective(model) > 0;
     }
 }

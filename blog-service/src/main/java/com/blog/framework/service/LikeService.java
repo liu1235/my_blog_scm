@@ -26,5 +26,18 @@ public interface LikeService {
      */
     Boolean collect(LikeDto dto);
 
+    /**
+     * 展示like me的数据
+     *
+     * @return Integer
+     */
+    Integer likeMeData();
+
+    /**
+     * 新增喜欢我的数据
+     *
+     */
+    void addLikeMeData();
+
 
 }

@@ -1,4 +1,6 @@
-/** * Copyright (c) 2018 ABC.Co.Ltd. All rights reserved. */
+/**
+ * Copyright (c) 2018 ABC.Co.Ltd. All rights reserved.
+ */
 
 package com.blog.framework.vo;
 
@@ -20,18 +22,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LikeVO {
-
-    /**
-     * id
-     */
-    @ApiModelProperty(value = "id")
-    private Long id;
-
-    /**
-     * 用户id
-     */
-    @ApiModelProperty(value = "用户id")
-    private Long userId;
 
     /**
      * 点赞状态(1:有效赞；0：取消赞)
