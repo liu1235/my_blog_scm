@@ -34,8 +34,8 @@ CREATE TABLE IF NOT EXISTS `t_blog` (
 /*!40000 ALTER TABLE `t_blog` DISABLE KEYS */;
 /*!40000 ALTER TABLE `t_blog` ENABLE KEYS */;
 
--- 导出  表 blog.t_blog_class 结构
-CREATE TABLE IF NOT EXISTS `t_blog_class` (
+-- 导出  表 blog.t_class 结构
+CREATE TABLE IF NOT EXISTS `t_class` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '分类id',
   `class_name` varchar(200) NOT NULL COMMENT '分类名称',
   `create_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -43,9 +43,9 @@ CREATE TABLE IF NOT EXISTS `t_blog_class` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='博客分类表';
 
--- 正在导出表  blog.t_blog_class 的数据：~0 rows (大约)
-/*!40000 ALTER TABLE `t_blog_class` DISABLE KEYS */;
-/*!40000 ALTER TABLE `t_blog_class` ENABLE KEYS */;
+-- 正在导出表  blog.t_class 的数据：~0 rows (大约)
+/*!40000 ALTER TABLE `t_class` DISABLE KEYS */;
+/*!40000 ALTER TABLE `t_class` ENABLE KEYS */;
 
 -- 导出  表 blog.t_comment 结构
 CREATE TABLE IF NOT EXISTS `t_comment` (

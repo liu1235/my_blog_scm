@@ -5,7 +5,6 @@ import com.blog.framework.common.PageBean;
 import com.blog.framework.common.constants.RedisConstants;
 import com.blog.framework.common.enums.StatusEnum;
 import com.blog.framework.common.exception.LoginException;
-import com.blog.framework.common.exception.ServiceException;
 import com.blog.framework.common.utils.CopyDataUtil;
 import com.blog.framework.common.utils.JsonUtil;
 import com.blog.framework.dao.CommentDao;
@@ -175,7 +174,8 @@ public class BlogServiceImpl implements BlogService {
             }
         }
 
-        //todo 更新博客阅读次数  这里需要优化 每次点击都对数据库操作  可以先存到redis 然后定时任务定时去更新
+        //todo 更新博客阅读次数  这里需要优化 每次点击都对数据库操作  可以先存到redis 然后定时任务定时去更新 因为此数据不需要很高准确性
+
         blogDao.update(BlogModel.builder()
                 .id(blogModel.getId())
                 .readCount(blogModel.getReadCount() + 1)

@@ -14,7 +14,7 @@ import javax.persistence.Table;
 /**
  * TABLE_NAME:(t_blog)
  *
- *  @liuzw
+ *  @author liuzw
  */
 
 @Data

@@ -1,5 +1,6 @@
 package com.blog.framework.service.impl;
 
+import com.blog.framework.common.exception.ServiceException;
 import com.blog.framework.dto.MailDto;
 import com.blog.framework.service.MailService;
 import lombok.extern.slf4j.Slf4j;
@@ -65,12 +66,12 @@ public class MailServiceImpl implements MailService {
             helper.setText(content, true);
             mailSender.send(message);
             log.info("-------------->发送HTML邮件成功");
-        } catch (MessagingException e) {
+        } catch (Exception e) {
             log.error("-------------->发送HTML邮件失败：", e);
+            throw new ServiceException("发送邮件失败");
         }
     }
 
-    @Async
     @Override
     public void sendTemplateMail(String to, MailDto mailDto) {
         log.info("---------------->发送模板邮件开始：{},{}", to, mailDto);

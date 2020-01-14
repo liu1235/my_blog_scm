@@ -12,11 +12,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Date;
 
 /**
  * TABLE_NAME:(t_reply)
  *
- *  @liuzw
+ *  @author liuzw
  */
 
 @Data
@@ -74,12 +75,12 @@ public class ReplyModel {
      * 创建时间
      */
     @Column(name = "create_time")
-    private String createTime;
+    private Date createTime;
     /**
      * 更新时间
      */
     @Column(name = "update_time")
-    private String updateTime;
+    private Date updateTime;
 	
 
 }

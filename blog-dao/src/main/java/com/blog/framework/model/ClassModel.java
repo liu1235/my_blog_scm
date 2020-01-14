@@ -13,49 +13,43 @@ import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * TABLE_NAME:(t_comment)
+ * TABLE_NAME:(t_class)
  *
- *  @author liuzw
+ * @author liuzw
  */
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name ="t_comment")
-public class CommentModel {
+@Table(name = "t_class")
+public class ClassModel {
 
 
     /**
-     * id
+     * 博客id
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**
-     * 博客id
+     * 父分类id
      */
-    @Column(name = "blog_id")
-    private Long blogId;
+    @Column(name = "parent_id")
+    private Long parentId;
 
     /**
-     * 评论类型（1：博客评论 2：友情链接 3：留言板）
+     * 分类名称
      */
-    @Column(name = "comment_type")
-    private Integer commentType;
+    @Column(name = "class_name")
+    private String className;
 
     /**
-     * 评论内容
+     * 状态(1:启用，0:停用)
      */
-    @Column(name = "content")
-    private String content;
-
-    /**
-     * 评论用户id
-     */
-    @Column(name = "user_id")
-    private Long userId;
+    @Column(name = "status")
+    private Integer status;
 
     /**
      * 创建时间
@@ -68,6 +62,5 @@ public class CommentModel {
      */
     @Column(name = "update_time")
     private Date updateTime;
-	
 
 }

@@ -1,15 +1,20 @@
 package com.blog.framework.dao.impl;
 
-import com.blog.framework.model.BlogModel;
 import com.blog.framework.dto.blog.BlogQueryDto;
 import com.blog.framework.mapper.BlogMapper;
+import com.blog.framework.mapper.ClassMapper;
+import com.blog.framework.model.BlogModel;
+import com.blog.framework.model.ClassModel;
 import com.blog.framework.service.BlogDao;
 import com.blog.framework.vo.blog.BlogTopVO;
 import com.blog.framework.vo.blog.BlogVO;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * blog
@@ -23,10 +28,22 @@ public class BlogDaoImpl implements BlogDao {
     @Autowired
     private BlogMapper blogMapper;
 
+    @Autowired
+    private ClassMapper classMapper;
+
 
     @Override
     public List<BlogVO> list(BlogQueryDto dto) {
-        return blogMapper.list(dto);
+        List<Long> classIds = new ArrayList<>();
+        if (dto.getClassId() != null) {
+            classIds.add(dto.getClassId());
+            //获取该分类是否有下级分类
+            List<ClassModel> list = classMapper.select(ClassModel.builder().parentId(dto.getClassId()).build());
+            if (CollectionUtils.isNotEmpty(list)) {
+                classIds.addAll(list.stream().map(ClassModel::getId).collect(Collectors.toList()));
+            }
+        }
+        return blogMapper.list(dto, classIds);
     }
 
     @Override

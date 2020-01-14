@@ -27,7 +27,7 @@ public class BlogQueryDto extends BasePage {
      * 分类id
      */
     @ApiModelProperty(value = "分类id")
-    private Integer classId;
+    private Long classId;
 
     /**
      * 博客id
