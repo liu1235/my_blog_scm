@@ -40,10 +40,13 @@ public class LikeDaoImpl implements LikeDao {
 
     @Override
     public Boolean update(LikeModel model) {
-        Example example = new Example(LikeModel.class);
-        Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("blogId", model.getBlogId());
-        criteria.andEqualTo("userId", model.getUserId());
-        return likeMapper.updateByExampleSelective(model, example) > 0;
+        //判断是否存在数据
+        LikeModel likeModel = getLikeByUserIdAndBlogId(model.getBlogId(), model.getUserId());
+        if (likeModel != null) {
+            model.setId(likeModel.getId());
+            return likeMapper.updateByPrimaryKeySelective(model) > 0;
+        } else {
+            return likeMapper.insertSelective(model) > 0;
+        }
     }
 }

@@ -225,6 +225,8 @@ public class BlogServiceImpl implements BlogService {
      * 获取博客列表
      */
     private PageBean<BlogVO> getBlogList(LikeModel model) {
+        UserLoginVo userInfo = getUserInfo();
+        model.setUserId(userInfo.getUserId());
         List<LikeModel> likeModels = likeDao.select(model);
         if (CollectionUtils.isEmpty(likeModels)) {
             return new PageBean<>();

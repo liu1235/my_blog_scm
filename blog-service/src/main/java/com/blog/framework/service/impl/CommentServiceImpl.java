@@ -2,30 +2,36 @@ package com.blog.framework.service.impl;
 
 
 import com.blog.framework.common.PageBean;
+import com.blog.framework.common.exception.LoginException;
 import com.blog.framework.common.utils.CopyDataUtil;
 import com.blog.framework.dao.CommentDao;
 import com.blog.framework.dao.ReplyDao;
 import com.blog.framework.dao.UserDao;
 import com.blog.framework.dto.comment.CommentDto;
 import com.blog.framework.dto.comment.CommentQueryDto;
-import com.blog.framework.mapper.CommentMapper;
-import com.blog.framework.mapper.ReplyMapper;
-import com.blog.framework.mapper.UserMapper;
 import com.blog.framework.model.CommentModel;
 import com.blog.framework.model.ReplyModel;
 import com.blog.framework.model.UserModel;
 import com.blog.framework.service.CommentService;
+import com.blog.framework.service.TokenService;
 import com.blog.framework.vo.CommentVo;
 import com.blog.framework.vo.ReplyVo;
+import com.blog.framework.vo.user.UserLoginVo;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import tk.mybatis.mapper.entity.Example;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -45,9 +51,12 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private TokenService tokenService;
+
     @Override
     public PageBean<CommentVo> list(CommentQueryDto dto) {
-        com.github.pagehelper.Page<Object> page = PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
+        Page<Object> page = PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
         //获取对博客的评论
         List<CommentModel> commentList = commentDao.list(dto);
         if (CollectionUtils.isEmpty(commentList)) {
@@ -67,6 +76,9 @@ public class CommentServiceImpl implements CommentService {
             UserModel userModel = map.get(vo.getUserId());
             vo.setUserName(userModel.getUserName());
             vo.setHeadPhoto(userModel.getHeadPhoto());
+            if (StringUtils.isNotBlank(userModel.getTags())) {
+                vo.setLabels(Arrays.asList(userModel.getTags().split(",")));
+            }
             vo.setChild(replyMap.get(vo.getId()));
         }
 
@@ -87,7 +99,13 @@ public class CommentServiceImpl implements CommentService {
     @Transactional(propagation = Propagation.REQUIRED,
             rollbackFor = {RuntimeException.class, Exception.class})
     public Boolean add(CommentDto dto) {
-       return commentDao.add(dto);
+        // 获取当前登录人id
+        UserLoginVo userInfo = tokenService.getUserInfo();
+        if (userInfo == null || userInfo.getUserId() == null) {
+            throw new LoginException();
+        }
+        dto.setUserId(userInfo.getUserId());
+        return commentDao.add(dto);
     }
 
 

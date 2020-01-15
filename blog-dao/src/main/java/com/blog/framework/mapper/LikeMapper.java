@@ -25,7 +25,7 @@ public interface LikeMapper extends Mapper<LikeModel>, MySqlMapper<LikeModel> {
      */
     @Select({
             "<script>",
-            " select t.blog_id, sum(t.like_status) likeCount, sum(t.collect_status) collectCount",
+            " select t.blog_id blogId, sum(t.like_status) likeCount, sum(t.collect_status) collectCount",
             " from t_like t",
             " where t.blog_id in",
             " <foreach collection = 'blogIds' item = 'blogId' separator = ',' open = '(' close = ')' > ",

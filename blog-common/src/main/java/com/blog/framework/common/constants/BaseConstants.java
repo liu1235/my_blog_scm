@@ -13,7 +13,7 @@ public class BaseConstants {
     /**
      *
      */
-    public static final String ACCESS_TOKEN = "access_token";
+    public static final String ACCESS_TOKEN = "x-access-token";
 
     /**
      * 用户名不能为空

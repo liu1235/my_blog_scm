@@ -52,6 +52,12 @@ public class CommentVo implements Serializable {
     private String userName;
 
     /**
+     * 标签
+     */
+    @ApiModelProperty(value = "标签")
+    private List<String> labels;
+
+    /**
      * 头像
      */
     @ApiModelProperty(value = "头像")

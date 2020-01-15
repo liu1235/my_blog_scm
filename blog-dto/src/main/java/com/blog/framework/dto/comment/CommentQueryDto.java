@@ -27,7 +27,6 @@ public class CommentQueryDto extends BasePage {
     /**
      * 博客id
      */
-    @NotNull(message = "博客id不能为空")
     @ApiModelProperty(value = "博客id")
     private Long blogId;
 

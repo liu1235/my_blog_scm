@@ -28,7 +28,9 @@ public class CommentDaoImpl implements CommentDao {
     public List<CommentModel> list(CommentQueryDto dto) {
         Example example = new Example(CommentModel.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("blogId", dto.getBlogId());
+        if (dto.getBlogId() != null) {
+            criteria.andEqualTo("blogId", dto.getBlogId());
+        }
         criteria.andEqualTo("commentType", dto.getType());
         example.setOrderByClause(" create_time desc");
         return commentMapper.selectByExample(example);
