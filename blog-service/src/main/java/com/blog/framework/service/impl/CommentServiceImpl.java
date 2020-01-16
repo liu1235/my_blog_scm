@@ -67,9 +67,15 @@ public class CommentServiceImpl implements CommentService {
         }
         List<CommentVo.Detail> list = CopyDataUtil.copyList(commentList, CommentVo.Detail.class);
         //获取评论id
-        List<Long> commentIds = commentList.stream().map(CommentModel::getId).distinct().collect(Collectors.toList());
+        List<Long> commentIds = commentList.stream()
+                .map(CommentModel::getId)
+                .distinct()
+                .collect(Collectors.toList());
         //获取用户信息
-        List<Long> userIds = commentList.stream().map(CommentModel::getUserId).distinct().collect(Collectors.toList());
+        List<Long> userIds = commentList.stream()
+                .map(CommentModel::getUserId)
+                .distinct()
+                .collect(Collectors.toList());
 
         Map<Long, UserModel> map = getUserInfo(userIds);
 
