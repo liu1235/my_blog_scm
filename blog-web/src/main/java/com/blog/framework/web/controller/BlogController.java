@@ -87,7 +87,7 @@ public class BlogController {
      * @return ResultData
      */
     @ApiOperation(value = "获取收藏的博客列表数据", notes = "获取收藏的博客列表数据")
-    @PostMapping(value = "/collect-blog-List")
+    @PostMapping(value = "/collect-blog-list")
     public ResultData<PageBean<BlogVO>> collectBlogList() {
         return ResultData.createSelectResult(blogService.collectBlogList());
     }
