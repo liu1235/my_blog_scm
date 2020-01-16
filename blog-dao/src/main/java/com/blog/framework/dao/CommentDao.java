@@ -3,7 +3,7 @@ package com.blog.framework.dao;
 import com.blog.framework.dto.comment.CommentDto;
 import com.blog.framework.dto.comment.CommentQueryDto;
 import com.blog.framework.model.CommentModel;
-import com.blog.framework.vo.CommentCountVo;
+import com.blog.framework.vo.comment.CommentCountVo;
 
 import java.util.List;
 

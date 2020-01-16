@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class TokenServiceImpl implements TokenService {
 
-    @Value("${expire_time:30}")
+    @Value("${expire_time:90}")
     private Long expireTime;
 
     @Autowired

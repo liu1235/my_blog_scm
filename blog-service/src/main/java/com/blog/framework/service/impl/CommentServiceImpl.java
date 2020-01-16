@@ -9,13 +9,14 @@ import com.blog.framework.dao.ReplyDao;
 import com.blog.framework.dao.UserDao;
 import com.blog.framework.dto.comment.CommentDto;
 import com.blog.framework.dto.comment.CommentQueryDto;
+import com.blog.framework.dto.comment.ReplyDto;
 import com.blog.framework.model.CommentModel;
 import com.blog.framework.model.ReplyModel;
 import com.blog.framework.model.UserModel;
 import com.blog.framework.service.CommentService;
 import com.blog.framework.service.TokenService;
-import com.blog.framework.vo.CommentVo;
-import com.blog.framework.vo.ReplyVo;
+import com.blog.framework.vo.comment.CommentVo;
+import com.blog.framework.vo.comment.ReplyVo;
 import com.blog.framework.vo.user.UserLoginVo;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -55,14 +56,16 @@ public class CommentServiceImpl implements CommentService {
     private TokenService tokenService;
 
     @Override
-    public PageBean<CommentVo> list(CommentQueryDto dto) {
-        Page<Object> page = PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
+    public CommentVo list(CommentQueryDto dto) {
+        Page<CommentModel> page = PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
         //获取对博客的评论
         List<CommentModel> commentList = commentDao.list(dto);
         if (CollectionUtils.isEmpty(commentList)) {
-            return new PageBean<>();
+            return CommentVo.builder().count(0L)
+                    .detail(new PageBean<>())
+                    .build();
         }
-        List<CommentVo> list = CopyDataUtil.copyList(commentList, CommentVo.class);
+        List<CommentVo.Detail> list = CopyDataUtil.copyList(commentList, CommentVo.Detail.class);
         //获取评论id
         List<Long> commentIds = commentList.stream().map(CommentModel::getId).distinct().collect(Collectors.toList());
         //获取用户信息
@@ -70,30 +73,32 @@ public class CommentServiceImpl implements CommentService {
 
         Map<Long, UserModel> map = getUserInfo(userIds);
 
-        Map<Long, List<ReplyVo>> replyMap = handleReply(commentIds, map);
+        List<ReplyModel> replyList = replyDao.getReplyByCommentId(commentIds);
+        //处理回复内容 拼装成树形
+        Map<Long, List<ReplyVo>> replyMap = handleReply(replyList, map);
+        //评论回复总条数
+        long count = page.getTotal() + replyList.size();
 
-        for (CommentVo vo : list) {
-            UserModel userModel = map.get(vo.getUserId());
-            vo.setUserName(userModel.getUserName());
-            vo.setHeadPhoto(userModel.getHeadPhoto());
-            if (StringUtils.isNotBlank(userModel.getTags())) {
-                vo.setLabels(Arrays.asList(userModel.getTags().split(",")));
+        for (CommentVo.Detail detail : list) {
+            if (detail.getUserId() == -1) {
+                detail.setUserName("游客");
+            } else {
+                UserModel userModel = map.get(detail.getUserId());
+                detail.setUserName(userModel.getUserName());
+                detail.setHeadPhoto(userModel.getHeadPhoto());
+                if (StringUtils.isNotBlank(userModel.getTags())) {
+                    detail.setLabels(Arrays.asList(userModel.getTags().split(",")));
+                }
             }
-            vo.setChild(replyMap.get(vo.getId()));
+            detail.setChild(replyMap.get(detail.getId()));
+            detail.setReplyId(-1L);
         }
 
-        return PageBean.createPageBean(page.getPageNum(), page.getPageSize(), page.getTotal(), list);
+        return CommentVo.builder()
+                .count(count)
+                .detail(PageBean.createPageBean(page.getPageNum(), page.getPageSize(), page.getTotal(), list))
+                .build();
     }
-
-    @Override
-    public List<CommentVo> topCommentList() {
-        List<CommentModel> commentModels = commentDao.topCommentList();
-        if (CollectionUtils.isNotEmpty(commentModels)) {
-            return CopyDataUtil.copyList(commentModels, CommentVo.class);
-        }
-        return null;
-    }
-
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED,
@@ -101,23 +106,33 @@ public class CommentServiceImpl implements CommentService {
     public Boolean add(CommentDto dto) {
         // 获取当前登录人id
         UserLoginVo userInfo = tokenService.getUserInfo();
+        if (userInfo != null && userInfo.getUserId() != null) {
+            dto.setUserId(userInfo.getUserId());
+        } else {
+            dto.setUserId(-1L);
+        }
+        return commentDao.add(dto);
+    }
+
+    @Override
+    public Boolean addReply(ReplyDto dto) {
+        ReplyModel replyModel = CopyDataUtil.copyObject(dto, ReplyModel.class);
+        UserLoginVo userInfo = tokenService.getUserInfo();
         if (userInfo == null || userInfo.getUserId() == null) {
             throw new LoginException();
         }
-        dto.setUserId(userInfo.getUserId());
-        return commentDao.add(dto);
+        replyModel.setFromUserId(userInfo.getUserId());
+        return replyDao.add(replyModel);
     }
 
 
     /**
      * 处理回复内容
      *
-     * @param commentIds 评论id
-     * @param map        用户信息
+     * @param map 用户信息
      * @return Map<Long, List < ReplyVo>>
      */
-    private Map<Long, List<ReplyVo>> handleReply(List<Long> commentIds, Map<Long, UserModel> map) {
-        List<ReplyModel> replyList = replyDao.getReplyByCommentId(commentIds);
+    private Map<Long, List<ReplyVo>> handleReply(List<ReplyModel> replyList, Map<Long, UserModel> map) {
 
         if (CollectionUtils.isEmpty(replyList)) {
             return Collections.emptyMap();

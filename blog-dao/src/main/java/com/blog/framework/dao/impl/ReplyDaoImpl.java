@@ -2,6 +2,7 @@ package com.blog.framework.dao.impl;
 
 import com.blog.framework.dao.ReplyDao;
 import com.blog.framework.dto.comment.CommentDto;
+import com.blog.framework.dto.comment.ReplyDto;
 import com.blog.framework.mapper.ReplyMapper;
 import com.blog.framework.model.CommentModel;
 import com.blog.framework.model.ReplyModel;
@@ -32,7 +33,7 @@ public class ReplyDaoImpl implements ReplyDao {
     }
 
     @Override
-    public Boolean add(CommentDto dto) {
-        return null;
+    public Boolean add(ReplyModel model) {
+        return replyMapper.insertSelective(model) > 0;
     }
 }

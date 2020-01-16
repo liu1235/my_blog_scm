@@ -1,6 +1,5 @@
 package com.blog.framework.dao;
 
-import com.blog.framework.dto.comment.CommentDto;
 import com.blog.framework.model.ReplyModel;
 
 import java.util.List;
@@ -28,5 +27,5 @@ public interface ReplyDao {
      * @param dto 数据
      * @return Boolean
      */
-    Boolean add(CommentDto dto);
+    Boolean add(ReplyModel dto);
 }

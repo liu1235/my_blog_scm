@@ -2,7 +2,7 @@
  * Copyright (c) 2018 ABC.Co.Ltd. All rights reserved.
  */
 
-package com.blog.framework.vo;
+package com.blog.framework.vo.comment;
 
 
 import lombok.AllArgsConstructor;

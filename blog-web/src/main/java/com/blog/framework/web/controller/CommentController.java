@@ -5,8 +5,9 @@ import com.blog.framework.common.PageBean;
 import com.blog.framework.common.ResultData;
 import com.blog.framework.dto.comment.CommentDto;
 import com.blog.framework.dto.comment.CommentQueryDto;
+import com.blog.framework.dto.comment.ReplyDto;
 import com.blog.framework.service.CommentService;
-import com.blog.framework.vo.CommentVo;
+import com.blog.framework.vo.comment.CommentVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,32 +41,33 @@ public class CommentController {
      */
     @ApiOperation(value = "获取评论内容")
     @PostMapping(value = "/list")
-    public ResultData<PageBean<CommentVo>> list(@Validated @RequestBody CommentQueryDto dto) {
+    public ResultData<CommentVo> list(@Validated @RequestBody CommentQueryDto dto) {
         return ResultData.createSelectResult(commentService.list(dto));
     }
 
-    /**
-     * 获取最新的十条评论
-     *
-     * @return ResultData<CommentVo>
-     */
-    @ApiOperation(value = "获取评论内容")
-    @PostMapping(value = "/top-comment-list")
-    public ResultData<List<CommentVo>> topCommentList() {
-        return ResultData.createSelectResult(commentService.topCommentList());
-    }
 
     /**
      * 添加评论
      *
-     * @param dto 新增数据
+     * @param dto 添加评论
      * @return ResultData<String>
      */
-    @ApiOperation(value = "增加数据", notes = "增加数据")
+    @ApiOperation(value = "添加评论", notes = "添加评论")
     @PostMapping(value = "/add")
     public ResultData<String> add(@Validated @RequestBody CommentDto dto) {
         return ResultData.createInsertResult(commentService.add(dto));
     }
 
+    /**
+     * 添加回复
+     *
+     * @param dto 新增数据
+     * @return ResultData<String>
+     */
+    @ApiOperation(value = "添加回复", notes = "添加回复")
+    @PostMapping(value = "/add-reply")
+    public ResultData<String> addReply(@Validated @RequestBody ReplyDto dto) {
+        return ResultData.createInsertResult(commentService.addReply(dto));
+    }
 
 }

@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public ResultData<String> defaultErrorHandler(final Exception ex) {
         log.error("---------> defaultErrorHandler ", ex);
-        return ResultData.createErrorResult(ResultDataEnum.SYSTEM_ERROR.getCode(), ResultDataEnum.SYSTEM_ERROR.getMsg());
+        return ResultData.createErrorResult(ResultDataEnum.ERROR.getCode(), ResultDataEnum.ERROR.getMsg());
     }
 
 
@@ -55,7 +55,7 @@ public class GlobalExceptionHandler {
             IllegalStateException.class})
     public ResultData<String> handle500s(final RuntimeException ex) {
         log.error("---------> handle500s ", ex);
-        return ResultData.createErrorResult(ResultDataEnum.SYSTEM_ERROR.getCode(), ResultDataEnum.SYSTEM_ERROR.getMsg());
+        return ResultData.createErrorResult(ResultDataEnum.ERROR.getCode(), ResultDataEnum.ERROR.getMsg());
     }
 
 

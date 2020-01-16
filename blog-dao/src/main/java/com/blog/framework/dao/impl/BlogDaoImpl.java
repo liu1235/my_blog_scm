@@ -11,6 +11,7 @@ import com.blog.framework.vo.blog.BlogVO;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,5 +60,13 @@ public class BlogDaoImpl implements BlogDao {
     @Override
     public Boolean update(BlogModel model) {
         return blogMapper.updateByPrimaryKeySelective(model) > 0;
+    }
+
+    @Override
+    public List<BlogModel> getByIds(List<Long> blogIds) {
+        Example example = new Example(BlogModel.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andIn("id", blogIds);
+        return blogMapper.selectByExample(example);
     }
 }

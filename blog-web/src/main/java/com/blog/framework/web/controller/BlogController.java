@@ -8,6 +8,7 @@ import com.blog.framework.common.ResultData;
 import com.blog.framework.dto.blog.BlogQueryDto;
 import com.blog.framework.service.BlogService;
 import com.blog.framework.vo.blog.BlogDetailVO;
+import com.blog.framework.vo.blog.BlogTopCommentVo;
 import com.blog.framework.vo.blog.BlogTopVO;
 import com.blog.framework.vo.blog.BlogVO;
 import io.swagger.annotations.Api;
@@ -55,6 +56,18 @@ public class BlogController {
     public ResultData<List<BlogTopVO>> topBlogList() {
         return ResultData.createSelectResult(blogService.topBlogList());
     }
+
+    /**
+     * 获取最新的十条评论的博客
+     *
+     * @return ResultData<List<BlogTopCommentVo>>
+     */
+    @ApiOperation(value = "获取评论内容")
+    @PostMapping(value = "/top-blog-comment-list")
+    public ResultData<List<BlogTopCommentVo>> topBlogCommentList() {
+        return ResultData.createSelectResult(blogService.topBlogCommentList());
+    }
+
 
     /**
      * 获取喜欢的博客列表数据

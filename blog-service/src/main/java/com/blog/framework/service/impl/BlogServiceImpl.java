@@ -9,18 +9,22 @@ import com.blog.framework.common.utils.CopyDataUtil;
 import com.blog.framework.common.utils.JsonUtil;
 import com.blog.framework.dao.CommentDao;
 import com.blog.framework.dao.LikeDao;
+import com.blog.framework.dao.UserDao;
 import com.blog.framework.dto.blog.BlogQueryDto;
 import com.blog.framework.model.BlogModel;
+import com.blog.framework.model.CommentModel;
 import com.blog.framework.model.LikeModel;
+import com.blog.framework.model.UserModel;
 import com.blog.framework.service.BlogDao;
 import com.blog.framework.service.BlogService;
 import com.blog.framework.service.TokenService;
-import com.blog.framework.vo.CommentCountVo;
 import com.blog.framework.vo.LikeCountVO;
 import com.blog.framework.vo.LikeVO;
 import com.blog.framework.vo.blog.BlogDetailVO;
+import com.blog.framework.vo.blog.BlogTopCommentVo;
 import com.blog.framework.vo.blog.BlogTopVO;
 import com.blog.framework.vo.blog.BlogVO;
+import com.blog.framework.vo.comment.CommentCountVo;
 import com.blog.framework.vo.user.UserLoginVo;
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Lists;
@@ -29,6 +33,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +63,9 @@ public class BlogServiceImpl implements BlogService {
 
     @Autowired
     private RedisService redisService;
+
+    @Autowired
+    private UserDao userDao;
 
 
     @Override
@@ -111,6 +119,53 @@ public class BlogServiceImpl implements BlogService {
             return vos;
         }
         return null;
+    }
+
+    @Override
+    public List<BlogTopCommentVo> topBlogCommentList() {
+        //获取最新的10条评论
+        List<CommentModel> commentList = commentDao.topCommentList();
+        if (CollectionUtils.isEmpty(commentList)) {
+            return Collections.emptyList();
+        }
+        //获取对应的博客id
+        List<Long> blogIds = commentList.stream()
+                .map(CommentModel::getBlogId)
+                .distinct()
+                .collect(Collectors.toList());
+
+        //获取评论人id
+        //获取对应的博客id
+        List<Long> userIds = commentList.stream()
+                .map(CommentModel::getUserId)
+                .distinct()
+                .collect(Collectors.toList());
+        Map<Long, UserModel> map = getUserInfo(userIds);
+        //获取对应的博客信息
+        List<BlogModel> blogList = blogDao.getByIds(blogIds);
+
+        Map<Long, BlogModel> blogModelMap = blogList.stream().collect(Collectors.toMap(BlogModel::getId, v -> v));
+
+        List<BlogTopCommentVo> list = new ArrayList<>(commentList.size());
+        for (CommentModel model : commentList) {
+            BlogModel blogModel = blogModelMap.get(model.getBlogId());
+            if (blogModel != null) {
+                BlogTopCommentVo vo = BlogTopCommentVo.builder()
+                        .content(model.getContent())
+                        .id(blogModel.getId())
+                        .title(blogModel.getTitle())
+                        .build();
+                UserModel userModel = map.get(model.getUserId());
+                if (userModel != null) {
+                    vo.setUserName(userModel.getUserName());
+                    vo.setHeadPhoto(userModel.getHeadPhoto());
+                } else {
+                    vo.setUserName("游客");
+                }
+                list.add(vo);
+            }
+        }
+        return list;
     }
 
     @Override
@@ -248,6 +303,20 @@ public class BlogServiceImpl implements BlogService {
             throw new LoginException();
         }
         return userInfo;
+    }
+
+    /**
+     * 获取所有用户信息
+     *
+     * @return Map<userId, UserModel>
+     */
+    private Map<Long, UserModel> getUserInfo(List<Long> userIds) {
+        //获取所有用户信息
+        List<UserModel> list = userDao.selectByIds(userIds);
+        if (CollectionUtils.isEmpty(list)) {
+            return Collections.emptyMap();
+        }
+        return list.stream().collect(Collectors.toMap(UserModel::getId, u -> u));
     }
 
 }

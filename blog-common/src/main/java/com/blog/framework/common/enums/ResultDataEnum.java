@@ -8,11 +8,6 @@ package com.blog.framework.common.enums;
 public enum ResultDataEnum {
 
     /**
-     * 系统繁忙
-     */
-    SYSTEM_ERROR(-1, "系统繁忙"),
-
-    /**
      * 成功
      */
     SUCCESS(0, "操作成功"),

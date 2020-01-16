@@ -1,6 +1,7 @@
-package com.blog.framework.vo;
+package com.blog.framework.vo.comment;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,11 +36,13 @@ public class ReplyVo implements Serializable {
     /**
      * 回复目标id
      */
+    @ApiModelProperty(value = "回复目标id")
     private Long replyId;
 
     /**
      * 回复类型(1:评论的回复，2: 回复的回复)
      */
+    @ApiModelProperty(value = "回复类型(1:评论的回复，2: 回复的回复)")
     private Integer replyType;
 
     /**
@@ -87,12 +90,14 @@ public class ReplyVo implements Serializable {
     /**
      * 评论时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "评论时间")
     private Date createTime;
 
     /**
      * 子类
      */
+    @ApiModelProperty(value = "对回复的回复")
     private List<ReplyVo> child;
 
 }

@@ -26,18 +26,21 @@ spring:
       pool-prepared-statements: true
 
   #redis
-#  redis:
-#    host: 120.77.209.219
-#    port: 6379
+  redis:
+    host: 127.0.0.1
+    port: 6379
 #    password: liu133297
-#    jedis:
-#      pool:
-#        max-active: 8
-#        max-idle: 8
-#        min-idle: 0
+    jedis:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+
 #mybatis
 mybatis:
   type-aliases-package: com.blog.framework.model
+  configuration:
+    map-underscore-to-camel-case: true
 
 mapper:
   identity: MYSQL
