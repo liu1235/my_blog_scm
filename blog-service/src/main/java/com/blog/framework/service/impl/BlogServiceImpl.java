@@ -1,6 +1,8 @@
 package com.blog.framework.service.impl;
 
 
+import com.blog.framework.bo.BlogLikeOrCollectBo;
+import com.blog.framework.bo.BlogQueryBo;
 import com.blog.framework.common.PageBean;
 import com.blog.framework.common.constants.RedisConstants;
 import com.blog.framework.common.enums.StatusEnum;
@@ -69,38 +71,14 @@ public class BlogServiceImpl implements BlogService {
 
 
     @Override
-    public PageBean<BlogVO> list(BlogQueryDto dto) {
-        PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
+    public PageBean<BlogVO> list(BlogQueryBo bo) {
+        PageHelper.startPage(bo.getPageNum(), bo.getPageSize());
         //获取数据
-        List<BlogVO> list = blogDao.list(dto);
+        List<BlogVO> list = blogDao.list(bo);
         if (CollectionUtils.isEmpty(list)) {
             return new PageBean<>();
         }
-        //获取博客id集合
-        List<Long> blogIdList = list.stream().map(BlogVO::getId).distinct().collect(Collectors.toList());
-        //收藏数和点赞数
-        Map<Long, LikeCountVO> likeCountMap = getLikeCountMap(blogIdList);
-        //统计评论数
-        Map<Long, CommentCountVo> commentCountMap = getCommentCount(blogIdList);
-
-        for (BlogVO vo : list) {
-            LikeCountVO likeCountVO = likeCountMap.get(vo.getId());
-            //组装收藏数和点赞数
-            if (likeCountVO != null) {
-                vo.setCollectCount(likeCountVO.getCollectCount());
-                vo.setLikeCount(likeCountVO.getLikeCount());
-            } else {
-                vo.setCollectCount(0);
-                vo.setLikeCount(0);
-            }
-            //组装评论数
-            CommentCountVo commentCountVo = commentCountMap.get(vo.getId());
-            if (commentCountVo != null) {
-                vo.setCommentCount(commentCountVo.getCommentCount());
-            } else {
-                vo.setCommentCount(0);
-            }
-        }
+        handleBlogList(list);
         return PageBean.createPageBean(list);
     }
 
@@ -169,17 +147,15 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public PageBean<BlogVO> likeBlogList() {
-        return getBlogList(LikeModel.builder()
-                .likeStatus(StatusEnum.EFFECTIVE.getCode())
-                .build());
+    public PageBean<BlogVO> likeBlogList(BlogLikeOrCollectBo bo) {
+        bo.setLikeStatus(StatusEnum.EFFECTIVE.getCode());
+        return getLikeOrCollectBlogList(bo);
     }
 
     @Override
-    public PageBean<BlogVO> collectBlogList() {
-        return getBlogList(LikeModel.builder()
-                .collectStatus(StatusEnum.EFFECTIVE.getCode())
-                .build());
+    public PageBean<BlogVO> collectBlogList(BlogLikeOrCollectBo bo) {
+        bo.setCollectStatus(StatusEnum.EFFECTIVE.getCode());
+        return getLikeOrCollectBlogList(bo);
     }
 
     @Override
@@ -279,19 +255,50 @@ public class BlogServiceImpl implements BlogService {
     /**
      * 获取博客列表
      */
-    private PageBean<BlogVO> getBlogList(LikeModel model) {
+    private PageBean<BlogVO> getLikeOrCollectBlogList(BlogLikeOrCollectBo bo) {
+        PageHelper.startPage(bo.getPageNum(), bo.getPageSize());
         UserLoginVo userInfo = getUserInfo();
-        model.setUserId(userInfo.getUserId());
-        List<LikeModel> likeModels = likeDao.select(model);
-        if (CollectionUtils.isEmpty(likeModels)) {
+        bo.setUserId(userInfo.getUserId());
+        List<BlogVO> list = blogDao.getLikeOrCollectBlogList(bo);
+        if (CollectionUtils.isEmpty(list)) {
             return new PageBean<>();
         }
-        //获取对应博客id
-        List<Long> blogIds = likeModels.stream().map(LikeModel::getBlogId).collect(Collectors.toList());
-        BlogQueryDto dto = new BlogQueryDto();
-        dto.setBlogIds(blogIds);
-        return list(dto);
+        handleBlogList(list);
+        return PageBean.createPageBean(list);
     }
+
+
+    /**
+     * 处理博客列表数据
+     */
+    private void handleBlogList(List<BlogVO> list) {
+        //获取博客id集合
+        List<Long> blogIdList = list.stream().map(BlogVO::getId).distinct().collect(Collectors.toList());
+        //收藏数和点赞数
+        Map<Long, LikeCountVO> likeCountMap = getLikeCountMap(blogIdList);
+        //统计评论数
+        Map<Long, CommentCountVo> commentCountMap = getCommentCount(blogIdList);
+
+        for (BlogVO vo : list) {
+            LikeCountVO likeCountVO = likeCountMap.get(vo.getId());
+            //组装收藏数和点赞数
+            if (likeCountVO != null) {
+                vo.setCollectCount(likeCountVO.getCollectCount());
+                vo.setLikeCount(likeCountVO.getLikeCount());
+            } else {
+                vo.setCollectCount(0);
+                vo.setLikeCount(0);
+            }
+            //组装评论数
+            CommentCountVo commentCountVo = commentCountMap.get(vo.getId());
+            if (commentCountVo != null) {
+                vo.setCommentCount(commentCountVo.getCommentCount());
+            } else {
+                vo.setCommentCount(0);
+            }
+        }
+    }
+
 
     /**
      * 获取当前登录信息

@@ -5,8 +5,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.List;
-
 /**
  * my_blog_scm
  *
@@ -15,7 +13,7 @@ import java.util.List;
  **/
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class BlogQueryDto extends BasePage {
+public class BlogLikeOrCollectQueryDto extends BasePage {
 
     /**
      * 标题
@@ -28,11 +26,5 @@ public class BlogQueryDto extends BasePage {
      */
     @ApiModelProperty(value = "分类id")
     private Long classId;
-
-    /**
-     * 用户
-     */
-    @ApiModelProperty(hidden = true)
-    private Long userId;
 
 }

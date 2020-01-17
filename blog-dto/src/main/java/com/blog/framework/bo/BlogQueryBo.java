@@ -1,7 +1,6 @@
-package com.blog.framework.dto.blog;
+package com.blog.framework.bo;
 
 import com.blog.framework.common.BasePage;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,24 +14,21 @@ import java.util.List;
  **/
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class BlogQueryDto extends BasePage {
+public class BlogQueryBo extends BasePage {
 
     /**
      * 标题
      */
-    @ApiModelProperty(value = "标题")
     private String title;
 
     /**
      * 分类id
      */
-    @ApiModelProperty(value = "分类id")
     private Long classId;
 
     /**
-     * 用户
+     * 分类id
      */
-    @ApiModelProperty(hidden = true)
-    private Long userId;
+    List<Long> classIds;
 
 }

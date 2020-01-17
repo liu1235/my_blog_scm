@@ -1,5 +1,7 @@
 package com.blog.framework.dao.impl;
 
+import com.blog.framework.bo.BlogLikeOrCollectBo;
+import com.blog.framework.bo.BlogQueryBo;
 import com.blog.framework.dto.blog.BlogQueryDto;
 import com.blog.framework.mapper.BlogMapper;
 import com.blog.framework.mapper.ClassMapper;
@@ -34,22 +36,20 @@ public class BlogDaoImpl implements BlogDao {
 
 
     @Override
-    public List<BlogVO> list(BlogQueryDto dto) {
-        List<Long> classIds = new ArrayList<>();
-        if (dto.getClassId() != null) {
-            classIds.add(dto.getClassId());
-            //获取该分类是否有下级分类
-            List<ClassModel> list = classMapper.select(ClassModel.builder().parentId(dto.getClassId()).build());
-            if (CollectionUtils.isNotEmpty(list)) {
-                classIds.addAll(list.stream().map(ClassModel::getId).collect(Collectors.toList()));
-            }
-        }
-        return blogMapper.list(dto, classIds);
+    public List<BlogVO> list(BlogQueryBo bo) {
+        bo.setClassIds(getClassIds(bo.getClassId()));
+        return blogMapper.list(bo);
     }
 
     @Override
     public List<BlogTopVO> topBlogList() {
         return blogMapper.topBlogList();
+    }
+
+    @Override
+    public List<BlogVO> getLikeOrCollectBlogList(BlogLikeOrCollectBo bo) {
+        bo.setClassIds(getClassIds(bo.getClassId()));
+        return blogMapper.getLikeOrCollectBlogList(bo);
     }
 
     @Override
@@ -69,4 +69,25 @@ public class BlogDaoImpl implements BlogDao {
         criteria.andIn("id", blogIds);
         return blogMapper.selectByExample(example);
     }
+
+
+    /**
+     * 获取该分类下所有下级分类
+     *
+     * @param classId 分类id
+     * @return List<Long>
+     */
+    private List<Long> getClassIds(Long classId) {
+        List<Long> classIds = new ArrayList<>();
+        if (classId != null) {
+            classIds.add(classId);
+            //获取该分类是否有下级分类
+            List<ClassModel> list = classMapper.select(ClassModel.builder().parentId(classId).build());
+            if (CollectionUtils.isNotEmpty(list)) {
+                classIds.addAll(list.stream().map(ClassModel::getId).collect(Collectors.toList()));
+            }
+        }
+        return classIds;
+    }
+
 }

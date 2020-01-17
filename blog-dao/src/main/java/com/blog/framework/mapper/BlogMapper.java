@@ -1,11 +1,11 @@
 package com.blog.framework.mapper;
 
 
-import com.blog.framework.dto.blog.BlogQueryDto;
+import com.blog.framework.bo.BlogLikeOrCollectBo;
+import com.blog.framework.bo.BlogQueryBo;
 import com.blog.framework.model.BlogModel;
 import com.blog.framework.vo.blog.BlogTopVO;
 import com.blog.framework.vo.blog.BlogVO;
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
 import tk.mybatis.mapper.common.MySqlMapper;
@@ -22,8 +22,7 @@ public interface BlogMapper extends Mapper<BlogModel>, MySqlMapper<BlogModel> {
     /**
      * 获取博客列表数据
      *
-     * @param dto      查询参数
-     * @param classIds 分类id集合
+     * @param bo      查询参数
      * @return List<BlogVO>
      */
     @Select({
@@ -32,24 +31,48 @@ public interface BlogMapper extends Mapper<BlogModel>, MySqlMapper<BlogModel> {
             " t.create_date createDate, t.read_count readCount,t1.class_name className",
             " from t_blog t left join t_class t1 on t.class_id = t1.id ",
             " <where> ",
-            " <if test = \" dto.title != null and dto.title != '' \"> and t.title like concat(#{dto.title}, '%') </if>",
+            " <if test = \" title != null and title != '' \"> and t.title like concat(#{title}, '%') </if>",
             " <if test = \" classIds != null and classIds.size() > 0 \"> ",
             " and t.class_id in ",
             "   <foreach collection = 'classIds' item = 'classId' separator = ',' open = '(' close = ')' > ",
             "    #{classId}",
             "   </foreach>",
             " </if>",
-            " <if test = \" dto.blogIds != null and dto.blogIds.size() > 0 \"> ",
-            " and t.id in ",
-            "   <foreach collection = 'dto.blogIds' item = 'blogId' separator = ',' open = '(' close = ')' > ",
-            "    #{blogId}",
-            "   </foreach>",
-            " </if>",
             " </where> ",
             " order by t.create_date desc",
             "</script>"
     })
-    List<BlogVO> list(@Param("dto") BlogQueryDto dto, @Param("classIds") List<Long> classIds);
+    List<BlogVO> list(BlogQueryBo bo);
+
+
+    /**
+     * 获取博客列表数据
+     *
+     * @param bo      查询参数
+     * @return List<BlogVO>
+     */
+    @Select({
+            "<script>",
+            " select t.*, c.class_name from ",
+            " (select b.id, b.title,b.read_count,b.description,b.class_id,b.create_date",
+            " from t_like l",
+            " join t_blog b on l.blog_id = b.id",
+            " where l.user_id = #{userId} ",
+            " <if test = \" title != null and title != '' \"> and b.title like concat(#{title}, '%') </if>",
+            " <if test = \" likeStatus != null \"> and l.like_status = #{likeStatus} </if>",
+            " <if test = \" collectStatus != null \"> and l.collect_status = #{collectStatus} </if>",
+            " <if test = \" classIds != null and classIds.size() > 0 \"> ",
+            " and b.class_id in ",
+            "   <foreach collection = 'classIds' item = 'classId' separator = ',' open = '(' close = ')' > ",
+            "    #{classId}",
+            "   </foreach>",
+            " </if>",
+            ") t",
+            " left join t_class c on t.class_id = c.id",
+            " order by t.create_date desc",
+            "</script>"
+    })
+    List<BlogVO> getLikeOrCollectBlogList(BlogLikeOrCollectBo bo);
 
 
     /**

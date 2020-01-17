@@ -1,6 +1,8 @@
 package com.blog.framework.service;
 
 
+import com.blog.framework.bo.BlogLikeOrCollectBo;
+import com.blog.framework.bo.BlogQueryBo;
 import com.blog.framework.common.PageBean;
 import com.blog.framework.dto.blog.BlogQueryDto;
 import com.blog.framework.vo.blog.BlogDetailVO;
@@ -21,10 +23,10 @@ public interface BlogService {
     /**
      * 获取博客列表数据
      *
-     * @param dto 数据
+     * @param bo 查询数据
      * @return list<Blog>
      */
-    PageBean<BlogVO> list(BlogQueryDto dto);
+    PageBean<BlogVO> list(BlogQueryBo bo);
 
     /**
      * 获取最热的十条博客
@@ -44,24 +46,25 @@ public interface BlogService {
     /**
      * 获取喜欢的博客列表数据
      *
-     * @return list<Blog>
+     * @param bo 查询条件
+     * @return PageBean<BlogVO>
      */
-    PageBean<BlogVO> likeBlogList();
+    PageBean<BlogVO> likeBlogList(BlogLikeOrCollectBo bo);
 
     /**
      * 获取收藏的博客列表数据
      *
-     * @return list<Blog>
+     * @param bo 查询条件
+     * @return PageBean<BlogVO>
      */
-    PageBean<BlogVO> collectBlogList();
+    PageBean<BlogVO> collectBlogList(BlogLikeOrCollectBo bo);
 
     /**
      * 根据id返回信息
      *
      * @param id id
-     * @return BlogModel
+     * @return BlogDetailVO
      */
     BlogDetailVO detail(Long id);
-
 
 }

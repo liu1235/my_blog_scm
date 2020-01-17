@@ -1,6 +1,7 @@
 package com.blog.framework.web.controller;
 
 import com.blog.framework.common.ResultData;
+import com.blog.framework.common.enums.ResultDataEnum;
 import com.blog.framework.dto.like.LikeDto;
 import com.blog.framework.service.LikeService;
 import io.swagger.annotations.Api;
@@ -34,7 +35,8 @@ public class LikeController {
     @ApiOperation(value = "喜欢")
     @PostMapping(value = "/like")
     public ResultData<String> like(@Validated @RequestBody LikeDto dto) {
-        return ResultData.createInsertResult(likeService.like(dto));
+        likeService.like(dto);
+        return ResultData.createSuccessResult(ResultDataEnum.SUCCESS.getMsg());
     }
 
     /**
@@ -46,7 +48,8 @@ public class LikeController {
     @ApiOperation(value = "收藏")
     @PostMapping(value = "/collect")
     public ResultData<String> collect(@Validated @RequestBody LikeDto dto) {
-        return ResultData.createInsertResult(likeService.collect(dto));
+        likeService.collect(dto);
+        return ResultData.createSuccessResult(ResultDataEnum.SUCCESS.getMsg());
     }
 
 

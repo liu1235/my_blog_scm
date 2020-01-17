@@ -2,9 +2,12 @@
 package com.blog.framework.web.controller;
 
 
+import com.blog.framework.bo.BlogLikeOrCollectBo;
+import com.blog.framework.bo.BlogQueryBo;
 import com.blog.framework.common.Id;
 import com.blog.framework.common.PageBean;
 import com.blog.framework.common.ResultData;
+import com.blog.framework.common.utils.CopyDataUtil;
 import com.blog.framework.dto.blog.BlogQueryDto;
 import com.blog.framework.service.BlogService;
 import com.blog.framework.vo.blog.BlogDetailVO;
@@ -43,7 +46,8 @@ public class BlogController {
     @ApiOperation(value = "获取所有博客数据", notes = "获取所有博客数据")
     @PostMapping(value = "/list")
     public ResultData<PageBean<BlogVO>> list(@RequestBody BlogQueryDto dto) {
-        return ResultData.createSelectResult(blogService.list(dto));
+        BlogQueryBo bo = CopyDataUtil.copyObject(dto, BlogQueryBo.class);
+        return ResultData.createSelectResult(blogService.list(bo));
     }
 
     /**
@@ -76,8 +80,9 @@ public class BlogController {
      */
     @ApiOperation(value = "获取喜欢的博客列表数据", notes = "获取喜欢的博客列表数据")
     @PostMapping(value = "/like-blog-list")
-    public ResultData<PageBean<BlogVO>> likeBlogList() {
-        return ResultData.createSelectResult(blogService.likeBlogList());
+    public ResultData<PageBean<BlogVO>> likeBlogList(@RequestBody BlogQueryDto dto) {
+        BlogLikeOrCollectBo bo = CopyDataUtil.copyObject(dto, BlogLikeOrCollectBo.class);
+        return ResultData.createSelectResult(blogService.likeBlogList(bo));
     }
 
 
@@ -88,8 +93,9 @@ public class BlogController {
      */
     @ApiOperation(value = "获取收藏的博客列表数据", notes = "获取收藏的博客列表数据")
     @PostMapping(value = "/collect-blog-list")
-    public ResultData<PageBean<BlogVO>> collectBlogList() {
-        return ResultData.createSelectResult(blogService.collectBlogList());
+    public ResultData<PageBean<BlogVO>> collectBlogList(@RequestBody BlogQueryDto dto) {
+        BlogLikeOrCollectBo bo = CopyDataUtil.copyObject(dto, BlogLikeOrCollectBo.class);
+        return ResultData.createSelectResult(blogService.collectBlogList(bo));
     }
 
     /**

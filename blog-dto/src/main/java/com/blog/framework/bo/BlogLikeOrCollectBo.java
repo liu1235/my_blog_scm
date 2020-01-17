@@ -1,4 +1,4 @@
-package com.blog.framework.dto.blog;
+package com.blog.framework.bo;
 
 import com.blog.framework.common.BasePage;
 import io.swagger.annotations.ApiModelProperty;
@@ -15,24 +15,35 @@ import java.util.List;
  **/
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class BlogQueryDto extends BasePage {
+public class BlogLikeOrCollectBo extends BasePage {
 
     /**
      * 标题
      */
-    @ApiModelProperty(value = "标题")
     private String title;
 
     /**
      * 分类id
      */
-    @ApiModelProperty(value = "分类id")
     private Long classId;
+
+    /**
+     * 点赞状态
+     */
+    private Integer likeStatus;
+
+    /**
+     * 收藏状态
+     */
+    private Integer collectStatus;
 
     /**
      * 用户
      */
-    @ApiModelProperty(hidden = true)
     private Long userId;
 
+    /**
+     * 分类id
+     */
+    List<Long> classIds;
 }
