@@ -24,7 +24,12 @@ public class RedisConstants {
     /**
      *  redis blog key
      */
-    public static final String REDIS_BLOG_LIST = "redis:blog:list";
+    public static final String REDIS_BLOG_TOP = "redis:blog:top";
+
+    /**
+     *  redis blog key
+     */
+    public static final String REDIS_BLOG_ARCHIVE = "redis:blog:archive";
 
     /**
      *  redis 喜欢操作 key

@@ -4,6 +4,7 @@ package com.blog.framework.mapper;
 import com.blog.framework.bo.BlogLikeOrCollectBo;
 import com.blog.framework.bo.BlogQueryBo;
 import com.blog.framework.model.BlogModel;
+import com.blog.framework.vo.blog.BlogArchiveVO;
 import com.blog.framework.vo.blog.BlogTopVO;
 import com.blog.framework.vo.blog.BlogVO;
 import org.apache.ibatis.annotations.Select;
@@ -22,7 +23,7 @@ public interface BlogMapper extends Mapper<BlogModel>, MySqlMapper<BlogModel> {
     /**
      * 获取博客列表数据
      *
-     * @param bo      查询参数
+     * @param bo 查询参数
      * @return List<BlogVO>
      */
     @Select({
@@ -48,7 +49,7 @@ public interface BlogMapper extends Mapper<BlogModel>, MySqlMapper<BlogModel> {
     /**
      * 获取博客列表数据
      *
-     * @param bo      查询参数
+     * @param bo 查询参数
      * @return List<BlogVO>
      */
     @Select({
@@ -83,5 +84,12 @@ public interface BlogMapper extends Mapper<BlogModel>, MySqlMapper<BlogModel> {
     @Select("select id, read_count readCount,title title from t_blog order by read_count desc limit 10")
     List<BlogTopVO> topBlogList();
 
+    /**
+     * 获取归档
+     *
+     * @return List<BlogTopVO>
+     */
+    @Select("select id, create_date,title,description from t_blog order by create_date desc")
+    List<BlogArchiveVO> archive();
 
 }

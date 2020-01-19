@@ -1,6 +1,7 @@
 package com.blog.framework.vo.comment;
 
 
+import com.blog.framework.common.utils.DateUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -90,7 +91,7 @@ public class ReplyVo implements Serializable {
     /**
      * 评论时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = DateUtil.DATE_TIME)
     @ApiModelProperty(value = "评论时间")
     private Date createTime;
 

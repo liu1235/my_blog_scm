@@ -2,12 +2,12 @@ package com.blog.framework.dao.impl;
 
 import com.blog.framework.bo.BlogLikeOrCollectBo;
 import com.blog.framework.bo.BlogQueryBo;
-import com.blog.framework.dto.blog.BlogQueryDto;
+import com.blog.framework.dao.BlogDao;
 import com.blog.framework.mapper.BlogMapper;
 import com.blog.framework.mapper.ClassMapper;
 import com.blog.framework.model.BlogModel;
 import com.blog.framework.model.ClassModel;
-import com.blog.framework.service.BlogDao;
+import com.blog.framework.vo.blog.BlogArchiveVO;
 import com.blog.framework.vo.blog.BlogTopVO;
 import com.blog.framework.vo.blog.BlogVO;
 import org.apache.commons.collections4.CollectionUtils;
@@ -39,6 +39,11 @@ public class BlogDaoImpl implements BlogDao {
     public List<BlogVO> list(BlogQueryBo bo) {
         bo.setClassIds(getClassIds(bo.getClassId()));
         return blogMapper.list(bo);
+    }
+
+    @Override
+    public List<BlogArchiveVO> archive() {
+        return blogMapper.archive();
     }
 
     @Override

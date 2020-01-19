@@ -1,6 +1,7 @@
 package com.blog.framework.vo.blog;
 
 import cn.hutool.core.date.DatePattern;
+import com.blog.framework.common.utils.DateUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -55,7 +56,7 @@ public class BlogVO implements Serializable {
     /**
      * 发布日期
      */
-    @JsonFormat(pattern = DatePattern.NORM_DATE_PATTERN)
+    @JsonFormat(pattern = DateUtil.DATE)
     @ApiModelProperty(value = "发布日期")
     private Date createDate;
 

@@ -9,9 +9,9 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 /**
  * redis 操作类
@@ -65,7 +65,7 @@ public class RedisService {
     /**
      * key 对应value自增
      *
-     * @param key key
+     * @param key   key
      * @param delta value
      */
     public void increment(String key, long delta) {
@@ -120,9 +120,24 @@ public class RedisService {
      */
     public void setHash(String key, Map<String, ?> value) {
         if (StringUtils.isNotEmpty(key) && MapUtil.isNotEmpty(value)) {
-            Map<String, String> map = value.entrySet().stream()
-                    .collect(Collectors.toMap(Map.Entry::getKey, v -> JsonUtil.toJson(v.getValue())));
+            Map<String, String> map = new HashMap<>(value.size());
+            for (Map.Entry<String, ?> entry : value.entrySet()) {
+                map.put(entry.getKey(), JsonUtil.toJson(entry.getValue()));
+            }
             getHashOperations().putAll(key, map);
+        }
+    }
+
+    /**
+     * 存放hash
+     *
+     * @param key   key
+     * @param value value
+     */
+    public void setHash(String key, Map<String, ?> value, long expireTime, TimeUnit unit) {
+        if (StringUtils.isNotEmpty(key) && MapUtil.isNotEmpty(value)) {
+            setHash(key, value);
+            expire(key, expireTime, unit);
         }
     }
 

@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Date;
 
 /**
  * TABLE_NAME:(t_blog)
@@ -73,7 +74,14 @@ public class BlogModel {
      * 发布日期
      */
     @Column(name = "create_date")
-    private String createDate;
+    private Date createDate;
+
+
+    /**
+     * 发布日期
+     */
+    @Column(name = "update_time")
+    private Date updateTime;
 
     /**
      * 阅读次数

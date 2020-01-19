@@ -1,10 +1,10 @@
-package com.blog.framework.service;
+package com.blog.framework.dao;
 
 
 import com.blog.framework.bo.BlogLikeOrCollectBo;
 import com.blog.framework.bo.BlogQueryBo;
-import com.blog.framework.dto.blog.BlogQueryDto;
 import com.blog.framework.model.BlogModel;
+import com.blog.framework.vo.blog.BlogArchiveVO;
 import com.blog.framework.vo.blog.BlogTopVO;
 import com.blog.framework.vo.blog.BlogVO;
 
@@ -25,6 +25,14 @@ public interface BlogDao {
      * @return list<Blog>
      */
     List<BlogVO> list(BlogQueryBo bo);
+
+    /**
+     * 归档
+     *
+     * @return List<BlogModel>
+     */
+    List<BlogArchiveVO> archive();
+
 
     /**
      * 获取最热的十条博客
@@ -63,7 +71,7 @@ public interface BlogDao {
      * 根据博客id批量获取
      *
      * @param blogIds 博客id
-     * @return  List<BlogModel>
+     * @return List<BlogModel>
      */
     List<BlogModel> getByIds(List<Long> blogIds);
 

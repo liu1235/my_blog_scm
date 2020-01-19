@@ -5,6 +5,7 @@ import com.blog.framework.bo.BlogLikeOrCollectBo;
 import com.blog.framework.bo.BlogQueryBo;
 import com.blog.framework.common.PageBean;
 import com.blog.framework.dto.blog.BlogQueryDto;
+import com.blog.framework.vo.blog.BlogArchiveVO;
 import com.blog.framework.vo.blog.BlogDetailVO;
 import com.blog.framework.vo.blog.BlogTopCommentVo;
 import com.blog.framework.vo.blog.BlogTopVO;
@@ -34,6 +35,13 @@ public interface BlogService {
      * @return List<BlogTopVO>
      */
     List<BlogTopVO> topBlogList();
+
+    /**
+     * 博客归档
+     *
+     * @return List<BlogArchiveVO>
+     */
+    List<BlogArchiveVO> archive();
 
     /**
      * 获取最新的十条评论的博客

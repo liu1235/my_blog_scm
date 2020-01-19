@@ -10,6 +10,7 @@ import com.blog.framework.common.ResultData;
 import com.blog.framework.common.utils.CopyDataUtil;
 import com.blog.framework.dto.blog.BlogQueryDto;
 import com.blog.framework.service.BlogService;
+import com.blog.framework.vo.blog.BlogArchiveVO;
 import com.blog.framework.vo.blog.BlogDetailVO;
 import com.blog.framework.vo.blog.BlogTopCommentVo;
 import com.blog.framework.vo.blog.BlogTopVO;
@@ -60,6 +61,18 @@ public class BlogController {
     public ResultData<List<BlogTopVO>> topBlogList() {
         return ResultData.createSelectResult(blogService.topBlogList());
     }
+
+    /**
+     * 博客归档
+     *
+     * @return ResultData
+     */
+    @ApiOperation(value = "博客归档", notes = "博客归档")
+    @PostMapping(value = "/archive")
+    public ResultData<List<BlogArchiveVO>> archive() {
+        return ResultData.createSelectResult(blogService.archive());
+    }
+
 
     /**
      * 获取最新的十条评论的博客
