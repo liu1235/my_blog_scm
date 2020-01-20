@@ -52,4 +52,12 @@ public interface UserDao {
      * @return Boolean
      */
     Boolean updateById(UserModel userModel);
+
+    /**
+     * 更新
+     *
+     * @param userModel 用户数据
+     * @return Boolean
+     */
+    Boolean updateUserInfo(UserModel userModel);
 }

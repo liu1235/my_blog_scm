@@ -2,16 +2,24 @@ package com.blog.framework.service.impl;
 
 import com.blog.framework.common.enums.ResultDataEnum;
 import com.blog.framework.common.enums.UserStatusEnum;
+import com.blog.framework.common.exception.LoginException;
 import com.blog.framework.common.exception.ServiceException;
+import com.blog.framework.common.utils.CopyDataUtil;
 import com.blog.framework.common.utils.EncryptMd5Util;
 import com.blog.framework.dao.UserDao;
 import com.blog.framework.dto.MailDto;
 import com.blog.framework.dto.user.UserActivationDto;
+import com.blog.framework.dto.user.UserDto;
 import com.blog.framework.dto.user.UserRegisterDto;
 import com.blog.framework.model.UserModel;
 import com.blog.framework.service.MailService;
+import com.blog.framework.service.TokenService;
 import com.blog.framework.service.UserService;
+import com.blog.framework.vo.user.UserLoginVo;
+import com.blog.framework.vo.user.UserVo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 
@@ -41,6 +50,37 @@ public class UserServiceImpl implements UserService {
 
     @Value("${activation-address}")
     private String activationAddress;
+
+    @Autowired
+    private TokenService tokenService;
+
+    @Override
+    public UserVo detail() {
+        UserLoginVo userInfo = tokenService.getUserInfo();
+        if (userInfo == null) {
+            throw new LoginException();
+        }
+        UserModel userModel = userDao.selectByPrimaryKey(userInfo.getUserId());
+        UserVo userVo = CopyDataUtil.copyObject(userModel, UserVo.class);
+        if (StringUtils.isNotBlank(userModel.getTags())) {
+            userVo.setTags(Arrays.asList(userModel.getTags().split(",")));
+        }
+        return userVo;
+    }
+
+    @Override
+    public Boolean update(UserDto userDto) {
+        UserLoginVo userInfo = tokenService.getUserInfo();
+        if (userInfo == null) {
+            throw new LoginException();
+        }
+        UserModel userModel = CopyDataUtil.copyObject(userDto, UserModel.class);
+        userModel.setId(userInfo.getUserId());
+        if (CollectionUtils.isNotEmpty(userDto.getTags())) {
+            userModel.setTags(StringUtils.join(userDto.getTags(), ","));
+        }
+        return userDao.updateUserInfo(userModel);
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)

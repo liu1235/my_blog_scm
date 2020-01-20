@@ -55,4 +55,9 @@ public class UserDaoImpl implements UserDao {
     public Boolean updateById(UserModel userModel) {
         return userMapper.updateByPrimaryKeySelective(userModel) > 0;
     }
+
+    @Override
+    public Boolean updateUserInfo(UserModel userModel) {
+        return userMapper.updateUserInfo(userModel) > 0;
+    }
 }

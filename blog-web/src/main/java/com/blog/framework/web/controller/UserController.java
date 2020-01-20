@@ -2,8 +2,10 @@ package com.blog.framework.web.controller;
 
 import com.blog.framework.common.ResultData;
 import com.blog.framework.dto.user.UserActivationDto;
+import com.blog.framework.dto.user.UserDto;
 import com.blog.framework.dto.user.UserRegisterDto;
 import com.blog.framework.service.UserService;
+import com.blog.framework.vo.user.UserVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +65,29 @@ public class UserController {
     public ResultData<String> sendMail(@Validated @RequestBody UserActivationDto dto) {
         userService.sendMail(dto);
         return ResultData.createSuccessResult();
+    }
+
+
+    /**
+     * 个人详情
+     *
+     * @return ResultData<BlogBean>
+     */
+    @ApiOperation(value = "个人详情", notes = "个人详情")
+    @PostMapping(value = "/detail")
+    public ResultData<UserVo> detail() {
+        return ResultData.createSelectResult(userService.detail());
+    }
+
+    /**
+     * 修改用户信息
+     *
+     * @return ResultData<BlogBean>
+     */
+    @ApiOperation(value = "修改用户信息", notes = "修改用户信息")
+    @PostMapping(value = "/update")
+    public ResultData<String> update(@Validated @RequestBody UserDto userDto) {
+        return ResultData.createUpdateResult(userService.update(userDto));
     }
 
 }

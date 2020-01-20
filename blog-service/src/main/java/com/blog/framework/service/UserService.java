@@ -1,7 +1,9 @@
 package com.blog.framework.service;
 
 import com.blog.framework.dto.user.UserActivationDto;
+import com.blog.framework.dto.user.UserDto;
 import com.blog.framework.dto.user.UserRegisterDto;
+import com.blog.framework.vo.user.UserVo;
 
 /**
  * 用户管理
@@ -10,6 +12,21 @@ import com.blog.framework.dto.user.UserRegisterDto;
  * @date 2019-04-29
  **/
 public interface UserService {
+
+    /**
+     * 个人详情
+     *
+     * @return UserVo
+     */
+    UserVo detail();
+
+    /**
+     * 修改个人信息
+     *
+     * @param userDto 修改内容
+     * @return Boolean
+     */
+    Boolean update(UserDto userDto);
 
 
     /**
@@ -33,5 +50,5 @@ public interface UserService {
      *
      * @param dto 数据
      */
-    void  sendMail(UserActivationDto dto);
+    void sendMail(UserActivationDto dto);
 }
