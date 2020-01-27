@@ -3,7 +3,10 @@ package com.blog.framework.service;
 import com.blog.framework.dto.user.UserActivationDto;
 import com.blog.framework.dto.user.UserDto;
 import com.blog.framework.dto.user.UserRegisterDto;
+import com.blog.framework.vo.user.FriendsLinkVo;
 import com.blog.framework.vo.user.UserVo;
+
+import java.util.List;
 
 /**
  * 用户管理
@@ -51,4 +54,12 @@ public interface UserService {
      * @param dto 数据
      */
     void sendMail(UserActivationDto dto);
+
+
+    /**
+     * 获取友链
+     *
+     * @return FriendsLinkVo
+     */
+    List<FriendsLinkVo> friendsLink();
 }

@@ -60,4 +60,9 @@ public class UserDaoImpl implements UserDao {
     public Boolean updateUserInfo(UserModel userModel) {
         return userMapper.updateUserInfo(userModel) > 0;
     }
+
+    @Override
+    public List<UserModel> friendsLink() {
+        return userMapper.selectAll();
+    }
 }

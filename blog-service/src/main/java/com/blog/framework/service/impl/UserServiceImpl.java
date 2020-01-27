@@ -15,6 +15,7 @@ import com.blog.framework.model.UserModel;
 import com.blog.framework.service.MailService;
 import com.blog.framework.service.TokenService;
 import com.blog.framework.service.UserService;
+import com.blog.framework.vo.user.FriendsLinkVo;
 import com.blog.framework.vo.user.UserLoginVo;
 import com.blog.framework.vo.user.UserVo;
 import lombok.extern.slf4j.Slf4j;
@@ -28,9 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * blog
@@ -184,6 +184,22 @@ public class UserServiceImpl implements UserService {
                 .updateTime(new Date())
                 .build();
         userDao.updateById(build);
+    }
+
+    @Override
+    public List<FriendsLinkVo> friendsLink() {
+        List<UserModel> list = userDao.friendsLink();
+        if (CollectionUtils.isEmpty(list)) {
+            return Collections.emptyList();
+        }
+        return list.stream()
+                .map(v -> FriendsLinkVo.builder()
+                        .websiteAddress(v.getWebsiteAddress())
+                        .websiteIntroduction(v.getWebsiteIntroduction())
+                        .websiteLogo(v.getWebsiteLogo())
+                        .websiteName(v.getWebsiteName())
+                        .build())
+                .collect(Collectors.toList());
     }
 
 
