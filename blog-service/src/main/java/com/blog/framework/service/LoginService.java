@@ -1,6 +1,6 @@
 package com.blog.framework.service;
 
-import com.blog.framework.dto.user.UserActivationDto;
+import com.blog.framework.dto.user.AdminUserLoginDto;
 import com.blog.framework.dto.user.UserLoginDto;
 import com.blog.framework.vo.user.UserLoginVo;
 
@@ -27,5 +27,14 @@ public interface LoginService {
      * @return Boolean
      */
     Boolean logout();
+
+
+    /**
+     * 管理员登录
+     *
+     * @param dto
+     * @return
+     */
+    UserLoginVo loginAdmin(AdminUserLoginDto dto);
 
 }

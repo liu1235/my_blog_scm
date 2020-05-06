@@ -5,12 +5,14 @@ import com.blog.framework.common.enums.UserStatusEnum;
 import com.blog.framework.common.exception.ServiceException;
 import com.blog.framework.common.utils.EncryptMd5Util;
 import com.blog.framework.dao.UserDao;
+import com.blog.framework.dto.user.AdminUserLoginDto;
 import com.blog.framework.dto.user.UserLoginDto;
 import com.blog.framework.model.UserModel;
 import com.blog.framework.service.LoginService;
 import com.blog.framework.service.TokenService;
 import com.blog.framework.vo.user.UserLoginVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -29,6 +31,12 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     private TokenService tokenService;
+
+    @Value("${admin.username}")
+    private String username;
+
+    @Value("${admin.password}")
+    private String password;
 
     @Override
     public UserLoginVo login(UserLoginDto dto) {
@@ -68,6 +76,14 @@ public class LoginServiceImpl implements LoginService {
     public Boolean logout() {
         // 删除redis 用户数据
         return tokenService.deleteUserInfo();
+    }
+
+    @Override
+    public UserLoginVo loginAdmin(AdminUserLoginDto dto) {
+        if (username.equals(dto.getUsername()) && password.equals(dto.getPassword())) {
+            return UserLoginVo.builder().userName(username).build();
+        }
+        throw new ServiceException("账号密码错误");
     }
 
 

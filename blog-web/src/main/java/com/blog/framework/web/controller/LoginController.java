@@ -1,6 +1,7 @@
 package com.blog.framework.web.controller;
 
 import com.blog.framework.common.ResultData;
+import com.blog.framework.dto.user.AdminUserLoginDto;
 import com.blog.framework.dto.user.UserLoginDto;
 import com.blog.framework.service.LoginService;
 import com.blog.framework.vo.user.UserLoginVo;
@@ -51,4 +52,15 @@ public class LoginController {
         return ResultData.createSelectResult(loginService.logout());
     }
 
+    /**
+     * 管理员登录
+     *
+     * @param dto 登录数据
+     * @return ResultData<String>
+     */
+    @PostMapping("/login_admin")
+    @ApiOperation(value = "管理员登录")
+    public ResultData<UserLoginVo> loginAdmin(@Validated @RequestBody AdminUserLoginDto dto) {
+        return ResultData.createSelectResult(loginService.loginAdmin(dto));
+    }
 }
