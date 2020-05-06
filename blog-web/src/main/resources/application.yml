@@ -6,9 +6,9 @@ spring:
     username: 670115782@qq.com
     password: nvjyqdkscropbfha
   datasource:
-    url: jdbc:mysql://localhost:3306/blog?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2B8
+    url: jdbc:mysql://120.77.209.219:3306/blog?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2B8
     username: root
-    password: 123456
+    password: liu133297
     driver-class-name: com.mysql.jdbc.Driver
     platform: mysql
     type: com.alibaba.druid.pool.DruidDataSource
@@ -27,9 +27,9 @@ spring:
 
   #redis
   redis:
-    host: 127.0.0.1
+    host: 120.77.209.219
     port: 6379
-#    password: liu133297
+    password: liu133297
     jedis:
       pool:
         max-active: 8

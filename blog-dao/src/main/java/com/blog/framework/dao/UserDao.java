@@ -60,4 +60,11 @@ public interface UserDao {
      * @return Boolean
      */
     Boolean updateUserInfo(UserModel userModel);
+
+    /**
+     * 获取友链
+     *
+     * @return FriendsLinkVo
+     */
+    List<UserModel> friendsLink();
 }
