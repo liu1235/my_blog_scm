@@ -6,7 +6,7 @@ spring:
     username: 670115782@qq.com
     password: nvjyqdkscropbfha
   datasource:
-    url: jdbc:mysql://120.77.209.219:3306/blog?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2B8
+    url: jdbc:mysql://127.0.0.1:3306/blog?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2B8
     username: root
     password: liu133297
     driver-class-name: com.mysql.jdbc.Driver
@@ -27,7 +27,7 @@ spring:
 
   #redis
   redis:
-    host: 120.77.209.219
+    host: 127.0.0.1
     port: 6379
     password: liu133297
     jedis:
