@@ -53,9 +53,15 @@ public class BlogVO implements Serializable {
     private String className;
 
     /**
+     * 博客内容
+     */
+    @ApiModelProperty(value = "博客内容")
+    private String content;
+
+    /**
      * 发布日期
      */
-    @JsonFormat(pattern = DateUtil.DATE)
+    @JsonFormat(pattern = DateUtil.DATE_TIME)
     @ApiModelProperty(value = "发布日期")
     private Date releaseTime;
 

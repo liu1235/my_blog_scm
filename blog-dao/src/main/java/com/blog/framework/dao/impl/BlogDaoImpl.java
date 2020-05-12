@@ -20,6 +20,7 @@ import org.springframework.stereotype.Repository;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -85,7 +86,10 @@ public class BlogDaoImpl implements BlogDao {
     public Boolean updateStatus(BlogReleaseBo bo) {
         Example example = new Example(BlogModel.class);
         example.createCriteria().andIn("id", bo.getIds());
-        BlogModel update = BlogModel.builder().status(bo.getStatus()).build();
+        BlogModel update = BlogModel.builder()
+                .status(bo.getStatus())
+                .releaseTime(new Date())
+                .build();
         return blogMapper.updateByExampleSelective(update, example) > 0;
     }
 

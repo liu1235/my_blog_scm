@@ -31,7 +31,7 @@ public interface BlogMapper extends Mapper<BlogModel>, MySqlMapper<BlogModel> {
      */
     @Select({
             "<script>",
-            " select t.id, t.title, t.content,t.class_id classId, t.description description,",
+            " select t.id, t.title,t.class_id classId, t.description description,",
             " t.release_time releaseTime,t.create_time createTime, t.read_count readCount,t1.class_name className, t.status",
             " from t_blog t left join t_class t1 on t.class_id = t1.id ",
             " <where> ",
@@ -53,7 +53,7 @@ public interface BlogMapper extends Mapper<BlogModel>, MySqlMapper<BlogModel> {
      */
     @Select({
             "<script>",
-            " select t.id, t.title, t.content,t.class_id classId, t.description description,",
+            " select t.id, t.title,t.class_id classId, t.description description,",
             " t.release_time releaseTime, t.read_count readCount,t1.class_name className",
             " from t_blog t left join t_class t1 on t.class_id = t1.id ",
             " where t.status = 1 ",
