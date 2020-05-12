@@ -113,6 +113,19 @@ public class ClassServiceImpl implements ClassService {
         return classDao.deleteById(id);
     }
 
+    @Override
+    public List<ClassVo> selectList() {
+        List<ClassModel> list = classDao.select(ClassModel.builder().status(ClassStatusEnum.ENABLE.getCode()).build());
+        if (CollectionUtils.isEmpty(list)) {
+            return Collections.emptyList();
+        }
+        return list.stream().map(v -> ClassVo.builder()
+                .classId(v.getId())
+                .className(v.getClassName())
+                .build()
+        ).collect(Collectors.toList());
+    }
+
 
     private List<ClassVo> select(Long parentId) {
         List<ClassModel> list = classDao.select(parentId);

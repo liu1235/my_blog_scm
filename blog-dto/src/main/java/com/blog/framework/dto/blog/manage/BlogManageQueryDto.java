@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
  **/
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class BlogQueryDto extends BasePage {
+public class BlogManageQueryDto extends BasePage {
 
     private static final long serialVersionUID = -3546731565744438096L;
 

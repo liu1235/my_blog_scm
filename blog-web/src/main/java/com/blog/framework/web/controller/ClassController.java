@@ -115,4 +115,16 @@ public class ClassController {
     public ResultData<Boolean> delete(@Validated @RequestBody Id<Long> idDto) {
         return ResultData.createDeleteResult(classService.delete(idDto.getId()));
     }
+
+
+    /**
+     * 获取分类下拉菜单数据
+     *
+     * @return ResultData<List<ClassVo>>
+     */
+    @ApiOperation(value = "获取一级分类数据")
+    @PostMapping(value = "/selectList")
+    public ResultData<List<ClassVo>> selectList() {
+        return ResultData.createSelectResult(classService.selectList());
+    }
 }

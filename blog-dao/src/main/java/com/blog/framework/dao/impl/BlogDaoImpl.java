@@ -5,6 +5,7 @@ import com.blog.framework.bo.BlogQueryBo;
 import com.blog.framework.bo.BlogReleaseBo;
 import com.blog.framework.dao.BlogDao;
 import com.blog.framework.dto.blog.BlogQueryDto;
+import com.blog.framework.dto.blog.manage.BlogManageQueryDto;
 import com.blog.framework.mapper.BlogMapper;
 import com.blog.framework.mapper.ClassMapper;
 import com.blog.framework.model.BlogModel;
@@ -39,8 +40,8 @@ public class BlogDaoImpl implements BlogDao {
 
 
     @Override
-    public List<BlogListVO> list(BlogQueryDto dto) {
-        return blogMapper.list(dto);
+    public List<BlogListVO> list(BlogManageQueryDto dto) {
+        return blogMapper.getAllList(dto);
     }
 
     @Override

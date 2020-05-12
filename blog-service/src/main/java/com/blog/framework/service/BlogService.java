@@ -6,6 +6,7 @@ import com.blog.framework.bo.BlogQueryBo;
 import com.blog.framework.common.PageBean;
 import com.blog.framework.dto.blog.BlogQueryDto;
 import com.blog.framework.dto.blog.manage.BlogAddDto;
+import com.blog.framework.dto.blog.manage.BlogManageQueryDto;
 import com.blog.framework.dto.blog.manage.BlogUpdateDto;
 import com.blog.framework.vo.blog.BlogArchiveVO;
 import com.blog.framework.vo.blog.BlogDetailVO;
@@ -31,7 +32,7 @@ public interface BlogService {
      * @param bo 查询数据
      * @return list<BlogListVO>
      */
-    PageBean<BlogListVO> list(BlogQueryDto bo);
+    PageBean<BlogListVO> list(BlogManageQueryDto bo);
 
     /**
      * 获取博客详情

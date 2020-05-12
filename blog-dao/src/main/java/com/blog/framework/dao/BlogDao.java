@@ -4,14 +4,12 @@ package com.blog.framework.dao;
 import com.blog.framework.bo.BlogLikeOrCollectBo;
 import com.blog.framework.bo.BlogQueryBo;
 import com.blog.framework.bo.BlogReleaseBo;
-import com.blog.framework.dto.blog.BlogQueryDto;
-import com.blog.framework.dto.blog.manage.BlogAddDto;
-import com.blog.framework.dto.blog.manage.BlogUpdateDto;
+import com.blog.framework.dto.blog.manage.BlogManageQueryDto;
 import com.blog.framework.model.BlogModel;
 import com.blog.framework.vo.blog.BlogArchiveVO;
-import com.blog.framework.vo.blog.manage.BlogListVO;
 import com.blog.framework.vo.blog.BlogTopVO;
 import com.blog.framework.vo.blog.BlogVO;
+import com.blog.framework.vo.blog.manage.BlogListVO;
 
 import java.util.List;
 
@@ -28,7 +26,7 @@ public interface BlogDao {
      * @param bo 查询数据
      * @return list<BlogListVO>
      */
-    List<BlogListVO> list(BlogQueryDto bo);
+    List<BlogListVO> list(BlogManageQueryDto bo);
 
     /**
      * 获取博客列表数据

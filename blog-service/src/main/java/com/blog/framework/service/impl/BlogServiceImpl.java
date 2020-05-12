@@ -18,6 +18,7 @@ import com.blog.framework.dao.LikeDao;
 import com.blog.framework.dao.UserDao;
 import com.blog.framework.dto.blog.BlogQueryDto;
 import com.blog.framework.dto.blog.manage.BlogAddDto;
+import com.blog.framework.dto.blog.manage.BlogManageQueryDto;
 import com.blog.framework.dto.blog.manage.BlogUpdateDto;
 import com.blog.framework.model.BlogModel;
 import com.blog.framework.model.CommentModel;
@@ -80,13 +81,17 @@ public class BlogServiceImpl implements BlogService {
 
 
     @Override
-    public PageBean<BlogListVO> list(BlogQueryDto dto) {
+    public PageBean<BlogListVO> list(BlogManageQueryDto dto) {
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
         //获取数据
         List<BlogListVO> list = blogDao.list(dto);
         if (CollectionUtils.isEmpty(list)) {
             return new PageBean<>();
         }
+        list.forEach(v ->
+            v.setStatusName(BlogStatusEnum.getMsg(v.getStatus()))
+        );
+
         return PageBean.createPageBean(list);
     }
 

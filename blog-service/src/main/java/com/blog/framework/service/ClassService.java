@@ -69,4 +69,11 @@ public interface ClassService {
      */
     Boolean delete(Long id);
 
+    /**
+     * 获取分类下拉菜单数据
+     *
+     * @return List<ClassVo>
+     */
+    List<ClassVo> selectList();
+
 }

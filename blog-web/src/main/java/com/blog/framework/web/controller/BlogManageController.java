@@ -5,8 +5,8 @@ package com.blog.framework.web.controller;
 import com.blog.framework.common.Id;
 import com.blog.framework.common.PageBean;
 import com.blog.framework.common.ResultData;
-import com.blog.framework.dto.blog.BlogQueryDto;
 import com.blog.framework.dto.blog.manage.BlogAddDto;
+import com.blog.framework.dto.blog.manage.BlogManageQueryDto;
 import com.blog.framework.dto.blog.manage.BlogUpdateDto;
 import com.blog.framework.service.BlogService;
 import com.blog.framework.vo.blog.manage.BlogListVO;
@@ -43,7 +43,7 @@ public class BlogManageController {
      */
     @ApiOperation(value = "获取所有博客数据", notes = "获取所有博客数据")
     @PostMapping(value = "/list")
-    public ResultData<PageBean<BlogListVO>> list(@RequestBody BlogQueryDto dto) {
+    public ResultData<PageBean<BlogListVO>> list(@RequestBody BlogManageQueryDto dto) {
         return ResultData.createSelectResult(blogService.list(dto));
     }
 

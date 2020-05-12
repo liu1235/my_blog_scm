@@ -47,11 +47,30 @@ public class BlogListVO implements Serializable {
     private String className;
 
     /**
+     * 状态
+     */
+    @ApiModelProperty(value = "状态")
+    private Integer status;
+
+    /**
+     * 状态
+     */
+    @ApiModelProperty(value = "状态")
+    private String statusName;
+
+    /**
      * 发布日期
      */
-    @JsonFormat(pattern = DateUtil.DATE)
+    @JsonFormat(pattern = DateUtil.DATE_TIME)
     @ApiModelProperty(value = "发布日期")
     private Date releaseTime;
+
+    /**
+     * 创建时间
+     */
+    @JsonFormat(pattern = DateUtil.DATE_TIME)
+    @ApiModelProperty(value = "创建时间")
+    private Date createTime;
 
     /**
      * 阅读次数

@@ -4,6 +4,7 @@ package com.blog.framework.mapper;
 import com.blog.framework.bo.BlogLikeOrCollectBo;
 import com.blog.framework.bo.BlogQueryBo;
 import com.blog.framework.dto.blog.BlogQueryDto;
+import com.blog.framework.dto.blog.manage.BlogManageQueryDto;
 import com.blog.framework.model.BlogModel;
 import com.blog.framework.vo.blog.BlogArchiveVO;
 import com.blog.framework.vo.blog.manage.BlogListVO;
@@ -31,17 +32,17 @@ public interface BlogMapper extends Mapper<BlogModel>, MySqlMapper<BlogModel> {
     @Select({
             "<script>",
             " select t.id, t.title, t.content,t.class_id classId, t.description description,",
-            " t.release_time releaseTime, t.read_count readCount,t1.class_name className",
+            " t.release_time releaseTime,t.create_time createTime, t.read_count readCount,t1.class_name className, t.status",
             " from t_blog t left join t_class t1 on t.class_id = t1.id ",
             " <where> ",
             " <if test = \" title != null and title != '' \"> and t.title like concat(#{title}, '%') </if>",
-            " <if test = \" classId != null \">   and t.class_id = #{classId}  </if>",
-            " <if test = \" status != null \">   and t.status = #{status}  </if>",
+            " <if test = \" classId != null \"> and t.class_id = #{classId}  </if>",
+            " <if test = \" status != null \">  and t.status = #{status}  </if>",
             " </where> ",
             " order by t.create_time desc",
             "</script>"
     })
-    List<BlogListVO> list(BlogQueryDto dto);
+    List<BlogListVO> getAllList(BlogManageQueryDto dto);
 
 
     /**
@@ -63,7 +64,6 @@ public interface BlogMapper extends Mapper<BlogModel>, MySqlMapper<BlogModel> {
             "    #{classId}",
             "   </foreach>",
             " </if>",
-            " </where> ",
             " order by t.release_time desc",
             "</script>"
     })
