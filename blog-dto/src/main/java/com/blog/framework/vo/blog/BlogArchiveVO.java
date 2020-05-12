@@ -28,15 +28,15 @@ public class BlogArchiveVO {
     private String title;
 
     /**
-     * 创建时间
+     * 发布时间
      */
-    @ApiModelProperty(value = "创建时间")
-    private String createDate;
+    @ApiModelProperty(value = "发布时间")
+    private String releaseTime;
 
     /**
      * 描述
      */
-    @ApiModelProperty(value = "创建时间")
+    @ApiModelProperty(value = "描述")
     private String description;
 
 }

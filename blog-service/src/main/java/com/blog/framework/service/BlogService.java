@@ -139,4 +139,13 @@ public interface BlogService {
      */
     BlogDetailVO detail(Long id);
 
+    /**
+     * 更新阅读次数
+     *
+     * @param id id
+     * @return BlogDetailVO
+     */
+    Boolean updateReadCount(Long id);
+
+
 }

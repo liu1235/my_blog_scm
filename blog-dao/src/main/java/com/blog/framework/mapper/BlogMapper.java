@@ -10,7 +10,9 @@ import com.blog.framework.vo.blog.BlogArchiveVO;
 import com.blog.framework.vo.blog.manage.BlogListVO;
 import com.blog.framework.vo.blog.BlogTopVO;
 import com.blog.framework.vo.blog.BlogVO;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import tk.mybatis.mapper.common.Mapper;
 import tk.mybatis.mapper.common.MySqlMapper;
 
@@ -113,7 +115,15 @@ public interface BlogMapper extends Mapper<BlogModel>, MySqlMapper<BlogModel> {
      *
      * @return List<BlogTopVO>
      */
-    @Select("select id, create_date,title,description from t_blog order by create_date desc")
+    @Select("select id, release_time releaseTime, title,description from t_blog order by release_time desc")
     List<BlogArchiveVO> archive();
 
+    /**
+     * 更新阅读次数
+     *
+     * @param id  博客id
+     * @return Integer
+     */
+    @Update(" update t_blog set read_count = read_count + 1 where id = #{id}")
+    Integer updateReadCount(@Param("id") Long id);
 }

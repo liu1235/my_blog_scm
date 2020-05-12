@@ -109,4 +109,12 @@ public interface BlogDao {
     List<BlogModel> getByIds(List<Long> blogIds);
 
 
+    /**
+     * 更新阅读次数
+     *
+     * @param id id
+     * @return Boolean
+     */
+    Boolean updateReadCount(Long id);
+
 }

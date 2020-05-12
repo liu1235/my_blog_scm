@@ -12,18 +12,12 @@ import com.blog.framework.common.exception.LoginException;
 import com.blog.framework.common.utils.CopyDataUtil;
 import com.blog.framework.common.utils.DateUtil;
 import com.blog.framework.common.utils.JsonUtil;
-import com.blog.framework.dao.BlogDao;
-import com.blog.framework.dao.CommentDao;
-import com.blog.framework.dao.LikeDao;
-import com.blog.framework.dao.UserDao;
+import com.blog.framework.dao.*;
 import com.blog.framework.dto.blog.BlogQueryDto;
 import com.blog.framework.dto.blog.manage.BlogAddDto;
 import com.blog.framework.dto.blog.manage.BlogManageQueryDto;
 import com.blog.framework.dto.blog.manage.BlogUpdateDto;
-import com.blog.framework.model.BlogModel;
-import com.blog.framework.model.CommentModel;
-import com.blog.framework.model.LikeModel;
-import com.blog.framework.model.UserModel;
+import com.blog.framework.model.*;
 import com.blog.framework.service.BlogService;
 import com.blog.framework.service.TokenService;
 import com.blog.framework.vo.LikeCountVO;
@@ -66,6 +60,9 @@ public class BlogServiceImpl implements BlogService {
 
     @Autowired
     private LikeDao likeDao;
+
+    @Autowired
+    private ClassDao classDao;
 
     @Autowired
     private CommentDao commentDao;
@@ -181,23 +178,23 @@ public class BlogServiceImpl implements BlogService {
             if (CollectionUtils.isEmpty(list)) {
                 return Collections.emptyList();
             }
-            list.forEach(v -> v.setCreateDate(DateUtil.convertStringDate(DateUtil.DATE_TIME, v.getCreateDate())));
+            list.forEach(v -> v.setReleaseTime(DateUtil.convertStringDate(DateUtil.DATE_TIME, v.getReleaseTime())));
             Map<String, List<BlogArchiveVO>> listMap = list.stream()
-                    .collect(Collectors.groupingBy(v -> v.getCreateDate().substring(0, 4)));
+                    .collect(Collectors.groupingBy(v -> v.getReleaseTime().substring(0, 4)));
             //存到redis
-            redisService.setHash(RedisConstants.REDIS_BLOG_ARCHIVE, listMap, 15, TimeUnit.DAYS);
+            redisService.setHash(RedisConstants.REDIS_BLOG_ARCHIVE, listMap, 2, TimeUnit.HOURS);
 
             List<Map.Entry<String, List<BlogArchiveVO>>> entries = listMap.entrySet()
                     .stream()
                     .sorted(Map.Entry.<String, List<BlogArchiveVO>>comparingByKey().reversed())
                     .collect(Collectors.toList());
             for (Map.Entry<String, List<BlogArchiveVO>> entry : entries) {
-                voList.add(BlogArchiveVO.builder().createDate(entry.getKey()).build());
+                voList.add(BlogArchiveVO.builder().releaseTime(entry.getKey()).build());
                 voList.addAll(entry.getValue());
             }
         } else {
             for (Map.Entry<String, String> entry : map.entrySet()) {
-                voList.add(BlogArchiveVO.builder().createDate(entry.getKey()).build());
+                voList.add(BlogArchiveVO.builder().releaseTime(entry.getKey()).build());
                 voList.addAll(JsonUtil.toList(entry.getValue(), BlogArchiveVO.class));
             }
         }
@@ -272,6 +269,9 @@ public class BlogServiceImpl implements BlogService {
         //博客id
         Long blogId = blogVO.getId();
 
+        //分类
+        ClassModel classModel = classDao.selectById(blogModel.getClassId());
+        blogVO.setClassName(classModel.getClassName());
         List<Long> blogIds = Lists.newArrayList(blogId);
 
         //收藏数和点赞数
@@ -310,17 +310,15 @@ public class BlogServiceImpl implements BlogService {
             }
         }
 
-        //todo 更新博客阅读次数  这里需要优化 每次点击都对数据库操作  可以先存到redis 然后定时任务定时去更新 因为此数据不需要很高准确性
-
-        blogDao.update(BlogModel.builder()
-                .id(blogModel.getId())
-                .readCount(blogModel.getReadCount() + 1)
-                .build());
-
         return BlogDetailVO.builder()
                 .like(likeVO)
                 .blog(blogVO)
                 .build();
+    }
+
+    @Override
+    public Boolean updateReadCount(Long id) {
+        return blogDao.updateReadCount(id);
     }
 
     /**

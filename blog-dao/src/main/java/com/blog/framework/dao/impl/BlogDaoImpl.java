@@ -106,6 +106,11 @@ public class BlogDaoImpl implements BlogDao {
         return blogMapper.selectByExample(example);
     }
 
+    @Override
+    public Boolean updateReadCount(Long id) {
+        return blogMapper.updateReadCount(id) > 0;
+    }
+
 
     /**
      * 获取该分类下所有下级分类

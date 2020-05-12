@@ -123,4 +123,16 @@ public class BlogController {
         return ResultData.createSelectResult(blogService.detail(idDto.getId()));
     }
 
+    /**
+     * 更新阅读次数
+     *
+     * @param idDto 博客id
+     * @return ResultData<BlogBean>
+     */
+    @ApiOperation(value = "博客详情", notes = "博客详情")
+    @PostMapping(value = "/updateReadCount")
+    public ResultData<Boolean> updateReadCount(@RequestBody Id<Long> idDto) {
+        return ResultData.createUpdateResult(blogService.updateReadCount(idDto.getId()));
+    }
+
 }
