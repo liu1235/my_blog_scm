@@ -122,4 +122,9 @@
         <appender-ref ref="FILE_WARN"/>
     </logger>
 
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE_INFO"/>
+    </root>
+
 </configuration>

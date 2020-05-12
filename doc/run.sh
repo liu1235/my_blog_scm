@@ -31,13 +31,13 @@ GC_LOG_PATH=$APP_HOME/logs/gc-$APP_NAME-$ADATE.log
 #JMX监控需用到
 #JMX="-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=1091 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false"
 #JVM参数
-JVM_OPTS="-Dname=$APP_NAME -Dloader.path="$APP_HOME/lib/" -Duser.timezone=Asia/Shanghai -Xms512M -Xmx2048M  -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDateStamps -Xloggc:$GC_LOG_PATH -XX:+PrintGCDetails -XX:NewRatio=1 -XX:SurvivorRatio=30 -XX:+UseParallelGC -XX:+UseParallelOldGC"
+JVM_OPTS="-Dname=$APP_NAME -Dspring.profiles.active=prod -Dloader.path="$APP_HOME/lib/" -Duser.timezone=Asia/Shanghai -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDateStamps -Xloggc:$GC_LOG_PATH -XX:+PrintGCDetails -XX:NewRatio=1 -XX:SurvivorRatio=30 -XX:+UseParallelGC -XX:+UseParallelOldGC"
 
 JAR_FILE=$APP_HOME/$APP_NAME.jar
 pid=0
 
 start(){
-  find $APP_HOME/logs/ -mtime +7 -name "*.log" -exec rm -rf {} \;
+  #find $APP_HOME/logs/ -mtime +7 -name "*.log" -exec rm -rf {} \;
   checkpid
   if [ ! -n "$pid" ]; then
     JAVA_CMD="nohup java -jar $JVM_OPTS $JAR_FILE  &"
