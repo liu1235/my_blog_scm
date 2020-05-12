@@ -41,7 +41,7 @@ public class BlogManageDetailVO implements Serializable {
      * 分类id
      */
     @ApiModelProperty(value = "分类id")
-    private String classId;
+    private Long classId;
 
     /**
      * 博客状态
