@@ -47,7 +47,7 @@ start(){
     echo "启动完成，按CTRL+C退出日志界面即可>>>>>"
     echo "---------------------------------"
     sleep 2s
-    tail -f $LOG_PATH
+    tail -f /root/logs/blog-server/info/log_info.log
   else
       echo "$APP_NAME is runing PID: $pid"   
   fi
