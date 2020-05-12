@@ -3,8 +3,10 @@ package com.blog.framework.service.impl;
 
 import com.blog.framework.bo.BlogLikeOrCollectBo;
 import com.blog.framework.bo.BlogQueryBo;
+import com.blog.framework.bo.BlogReleaseBo;
 import com.blog.framework.common.PageBean;
 import com.blog.framework.common.constants.RedisConstants;
+import com.blog.framework.common.enums.BlogStatusEnum;
 import com.blog.framework.common.enums.StatusEnum;
 import com.blog.framework.common.exception.LoginException;
 import com.blog.framework.common.utils.CopyDataUtil;
@@ -14,6 +16,9 @@ import com.blog.framework.dao.BlogDao;
 import com.blog.framework.dao.CommentDao;
 import com.blog.framework.dao.LikeDao;
 import com.blog.framework.dao.UserDao;
+import com.blog.framework.dto.blog.BlogQueryDto;
+import com.blog.framework.dto.blog.manage.BlogAddDto;
+import com.blog.framework.dto.blog.manage.BlogUpdateDto;
 import com.blog.framework.model.BlogModel;
 import com.blog.framework.model.CommentModel;
 import com.blog.framework.model.LikeModel;
@@ -24,9 +29,11 @@ import com.blog.framework.vo.LikeCountVO;
 import com.blog.framework.vo.LikeVO;
 import com.blog.framework.vo.blog.BlogArchiveVO;
 import com.blog.framework.vo.blog.BlogDetailVO;
+import com.blog.framework.vo.blog.manage.BlogListVO;
 import com.blog.framework.vo.blog.BlogTopCommentVo;
 import com.blog.framework.vo.blog.BlogTopVO;
 import com.blog.framework.vo.blog.BlogVO;
+import com.blog.framework.vo.blog.manage.BlogManageDetailVO;
 import com.blog.framework.vo.comment.CommentCountVo;
 import com.blog.framework.vo.user.UserLoginVo;
 import com.github.pagehelper.PageHelper;
@@ -39,7 +46,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -71,6 +77,63 @@ public class BlogServiceImpl implements BlogService {
 
     @Autowired
     private UserDao userDao;
+
+
+    @Override
+    public PageBean<BlogListVO> list(BlogQueryDto dto) {
+        PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
+        //获取数据
+        List<BlogListVO> list = blogDao.list(dto);
+        if (CollectionUtils.isEmpty(list)) {
+            return new PageBean<>();
+        }
+        return PageBean.createPageBean(list);
+    }
+
+    @Override
+    public BlogManageDetailVO detailBlog(Long id) {
+        //获取详情
+        BlogModel blogModel = blogDao.detail(id);
+        if (blogModel == null) {
+            return null;
+        }
+        return CopyDataUtil.copyObject(blogModel, BlogManageDetailVO.class);
+    }
+
+    @Override
+    public Boolean add(BlogAddDto addDto) {
+        BlogModel insertModel = CopyDataUtil.copyObject(addDto, BlogModel.class);
+        return blogDao.insert(insertModel);
+    }
+
+    @Override
+    public Boolean edit(BlogUpdateDto updateDto) {
+        BlogModel updateModel = CopyDataUtil.copyObject(updateDto, BlogModel.class);
+        return blogDao.update(updateModel);
+    }
+
+    @Override
+    public Boolean published(List<Long> ids) {
+        BlogReleaseBo bo = BlogReleaseBo.builder()
+                .ids(ids)
+                .status(BlogStatusEnum.PUBLISHED.getCode())
+                .build();
+        return blogDao.updateStatus(bo);
+    }
+
+    @Override
+    public Boolean unpublished(List<Long> ids) {
+        BlogReleaseBo bo = BlogReleaseBo.builder()
+                .ids(ids)
+                .status(BlogStatusEnum.UNPUBLISHED.getCode())
+                .build();
+        return blogDao.updateStatus(bo);
+    }
+
+    @Override
+    public Boolean delete(Long id) {
+        return blogDao.delete(id);
+    }
 
 
     @Override

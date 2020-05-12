@@ -3,8 +3,13 @@ package com.blog.framework.dao;
 
 import com.blog.framework.bo.BlogLikeOrCollectBo;
 import com.blog.framework.bo.BlogQueryBo;
+import com.blog.framework.bo.BlogReleaseBo;
+import com.blog.framework.dto.blog.BlogQueryDto;
+import com.blog.framework.dto.blog.manage.BlogAddDto;
+import com.blog.framework.dto.blog.manage.BlogUpdateDto;
 import com.blog.framework.model.BlogModel;
 import com.blog.framework.vo.blog.BlogArchiveVO;
+import com.blog.framework.vo.blog.manage.BlogListVO;
 import com.blog.framework.vo.blog.BlogTopVO;
 import com.blog.framework.vo.blog.BlogVO;
 
@@ -17,6 +22,13 @@ import java.util.List;
  */
 public interface BlogDao {
 
+    /**
+     * 获取博客列表数据
+     *
+     * @param bo 查询数据
+     * @return list<BlogListVO>
+     */
+    List<BlogListVO> list(BlogQueryDto bo);
 
     /**
      * 获取博客列表数据
@@ -66,6 +78,29 @@ public interface BlogDao {
      */
     Boolean update(BlogModel model);
 
+    /**
+     * 新增博客
+     *
+     * @param model 新增数据
+     * @return Boolean
+     */
+    Boolean insert(BlogModel model);
+
+    /**
+     * 发布博客
+     *
+     * @param bo 博客id集合
+     * @return Boolean
+     */
+    Boolean updateStatus(BlogReleaseBo bo);
+
+    /**
+     * 删除博客
+     *
+     * @param id 博客id
+     * @return Boolean
+     */
+    Boolean delete(Long id);
 
     /**
      * 根据博客id批量获取

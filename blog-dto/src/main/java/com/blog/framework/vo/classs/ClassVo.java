@@ -1,4 +1,4 @@
-package com.blog.framework.vo;
+package com.blog.framework.vo.classs;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

@@ -5,11 +5,15 @@ import com.blog.framework.bo.BlogLikeOrCollectBo;
 import com.blog.framework.bo.BlogQueryBo;
 import com.blog.framework.common.PageBean;
 import com.blog.framework.dto.blog.BlogQueryDto;
+import com.blog.framework.dto.blog.manage.BlogAddDto;
+import com.blog.framework.dto.blog.manage.BlogUpdateDto;
 import com.blog.framework.vo.blog.BlogArchiveVO;
 import com.blog.framework.vo.blog.BlogDetailVO;
 import com.blog.framework.vo.blog.BlogTopCommentVo;
 import com.blog.framework.vo.blog.BlogTopVO;
 import com.blog.framework.vo.blog.BlogVO;
+import com.blog.framework.vo.blog.manage.BlogListVO;
+import com.blog.framework.vo.blog.manage.BlogManageDetailVO;
 
 import java.util.List;
 
@@ -25,7 +29,66 @@ public interface BlogService {
      * 获取博客列表数据
      *
      * @param bo 查询数据
-     * @return list<Blog>
+     * @return list<BlogListVO>
+     */
+    PageBean<BlogListVO> list(BlogQueryDto bo);
+
+    /**
+     * 获取博客详情
+     *
+     * @param id id
+     * @return BlogManageDetailVO
+     */
+    BlogManageDetailVO detailBlog(Long id);
+
+    /**
+     * 新增博客
+     *
+     * @param addDto 新增数据
+     * @return Boolean
+     */
+    Boolean add(BlogAddDto addDto);
+
+    /**
+     * 编辑博客
+     *
+     * @param updateDto 编辑博客
+     * @return Boolean
+     */
+    Boolean edit(BlogUpdateDto updateDto);
+
+    /**
+     * 发布博客
+     *
+     * @param ids 博客id集合
+     * @return Boolean
+     */
+    Boolean published(List<Long> ids);
+
+    /**
+     * 取消发布博客
+     *
+     * @param ids 博客id集合
+     * @return Boolean
+     */
+    Boolean unpublished(List<Long> ids);
+
+
+    /**
+     * 删除博客
+     *
+     * @param id 博客id
+     * @return Boolean
+     */
+    Boolean delete(Long id);
+
+
+
+    /**
+     * 获取已发布博客列表数据
+     *
+     * @param bo 查询数据
+     * @return list<BlogVO>
      */
     PageBean<BlogVO> list(BlogQueryBo bo);
 

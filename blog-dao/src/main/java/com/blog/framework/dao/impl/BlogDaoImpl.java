@@ -2,12 +2,15 @@ package com.blog.framework.dao.impl;
 
 import com.blog.framework.bo.BlogLikeOrCollectBo;
 import com.blog.framework.bo.BlogQueryBo;
+import com.blog.framework.bo.BlogReleaseBo;
 import com.blog.framework.dao.BlogDao;
+import com.blog.framework.dto.blog.BlogQueryDto;
 import com.blog.framework.mapper.BlogMapper;
 import com.blog.framework.mapper.ClassMapper;
 import com.blog.framework.model.BlogModel;
 import com.blog.framework.model.ClassModel;
 import com.blog.framework.vo.blog.BlogArchiveVO;
+import com.blog.framework.vo.blog.manage.BlogListVO;
 import com.blog.framework.vo.blog.BlogTopVO;
 import com.blog.framework.vo.blog.BlogVO;
 import org.apache.commons.collections4.CollectionUtils;
@@ -34,6 +37,11 @@ public class BlogDaoImpl implements BlogDao {
     @Autowired
     private ClassMapper classMapper;
 
+
+    @Override
+    public List<BlogListVO> list(BlogQueryDto dto) {
+        return blogMapper.list(dto);
+    }
 
     @Override
     public List<BlogVO> list(BlogQueryBo bo) {
@@ -65,6 +73,24 @@ public class BlogDaoImpl implements BlogDao {
     @Override
     public Boolean update(BlogModel model) {
         return blogMapper.updateByPrimaryKeySelective(model) > 0;
+    }
+
+    @Override
+    public Boolean insert(BlogModel model) {
+        return blogMapper.insertSelective(model) > 0;
+    }
+
+    @Override
+    public Boolean updateStatus(BlogReleaseBo bo) {
+        Example example = new Example(BlogModel.class);
+        example.createCriteria().andIn("id", bo.getIds());
+        BlogModel update = BlogModel.builder().status(bo.getStatus()).build();
+        return blogMapper.updateByExampleSelective(update, example) > 0;
+    }
+
+    @Override
+    public Boolean delete(Long id) {
+        return blogMapper.deleteByPrimaryKey(id) > 0;
     }
 
     @Override

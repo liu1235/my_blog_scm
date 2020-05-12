@@ -73,12 +73,17 @@ public class BlogModel {
     /**
      * 发布日期
      */
-    @Column(name = "create_date")
-    private Date createDate;
-
+    @Column(name = "release_time")
+    private Date releaseTime;
 
     /**
-     * 发布日期
+     * 创建时间
+     */
+    @Column(name = "create_time")
+    private Date createTime;
+
+    /**
+     * 修改时间
      */
     @Column(name = "update_time")
     private Date updateTime;

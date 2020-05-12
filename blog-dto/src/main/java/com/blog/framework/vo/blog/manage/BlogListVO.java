@@ -1,4 +1,4 @@
-package com.blog.framework.vo.blog;
+package com.blog.framework.vo.blog.manage;
 
 import com.blog.framework.common.utils.DateUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -18,9 +18,9 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BlogVO implements Serializable {
+public class BlogListVO implements Serializable {
 
-    private static final long serialVersionUID = -7359643838651578359L;
+    private static final long serialVersionUID = -5710684877024649444L;
 
     /**
      * 博客id
@@ -41,15 +41,9 @@ public class BlogVO implements Serializable {
     private String description;
 
     /**
-     * 博客类别id
+     * 分类名称
      */
-    @ApiModelProperty(value = "博客类别id")
-    private Long classId;
-
-    /**
-     * 博客类别
-     */
-    @ApiModelProperty(value = "博客类别")
+    @ApiModelProperty(value = "分类名称")
     private String className;
 
     /**
@@ -64,23 +58,5 @@ public class BlogVO implements Serializable {
      */
     @ApiModelProperty(value = "阅读次数")
     private Integer readCount;
-
-    /**
-     * 点赞数
-     */
-    @ApiModelProperty(value = "点赞数")
-    private Integer likeCount;
-
-    /**
-     * 收藏数
-     */
-    @ApiModelProperty(value = "收藏数")
-    private Integer collectCount;
-
-    /**
-     * 评论数
-     */
-    @ApiModelProperty(value = "评论数")
-    private Integer commentCount;
 
 }

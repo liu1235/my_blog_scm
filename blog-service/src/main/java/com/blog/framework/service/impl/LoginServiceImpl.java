@@ -81,7 +81,15 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public UserLoginVo loginAdmin(AdminUserLoginDto dto) {
         if (username.equals(dto.getUsername()) && password.equals(dto.getPassword())) {
-            return UserLoginVo.builder().userName(username).build();
+            String token = UUID.randomUUID().toString();
+            token = token.replace("-", "").toLowerCase();
+            // 存放用户信息到redis
+            UserLoginVo vo = UserLoginVo.builder()
+                    .userName(username)
+                    .token(token)
+                    .build();
+            tokenService.saveUserInfo(token, vo);
+            return vo;
         }
         throw new ServiceException("账号密码错误");
     }
