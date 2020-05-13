@@ -20,7 +20,7 @@ public interface UserMapper extends Mapper<UserModel>, MySqlMapper<UserModel> {
      * @param userModel 用户信息
      * @return int
      */
-    @Update(" update t_user set username = #{username},sex = #{sex},show_flag = #{showflag}," +
+    @Update(" update t_user set username = #{userName},sex = #{sex},show_flag = #{showFlag},tags = #{tags}, " +
             " head_photo = #{headPhoto},website_name = #{websiteName},website_address = #{websiteAddress}," +
             " website_introduction = #{websiteIntroduction},website_logo = #{websiteLogo} " +
             " where id = #{id}")

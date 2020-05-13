@@ -63,6 +63,8 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<UserModel> friendsLink() {
-        return userMapper.selectAll();
+        return userMapper.select(UserModel.builder()
+                .showFlag(1)
+                .build());
     }
 }

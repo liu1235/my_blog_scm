@@ -53,7 +53,7 @@ pagehelper:
 
 
 #激活地址
-activation-address: http://localhost:8080/#/msg?urlState=urlInvalid&param={1}
+activation-address: http://192.168.10.170:6090/#/msg?urlState=urlInvalid&param={1}
 
 #管理员账号密码
 admin:

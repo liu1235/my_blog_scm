@@ -152,16 +152,16 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public List<BlogTopVO> topBlogList() {
-        //首先从redis中获取数据
-        String json = redisService.get(RedisConstants.REDIS_BLOG_TOP);
-        if (StringUtils.isNotBlank(json)) {
-            return JsonUtil.toList(json, BlogTopVO.class);
-        }
+//        //首先从redis中获取数据
+//        String json = redisService.get(RedisConstants.REDIS_BLOG_TOP);
+//        if (StringUtils.isNotBlank(json)) {
+//            return JsonUtil.toList(json, BlogTopVO.class);
+//        }
         //从数据库获取
         List<BlogTopVO> vos = blogDao.topBlogList();
         if (CollectionUtils.isNotEmpty(vos)) {
             //存到redis中
-            redisService.set(RedisConstants.REDIS_BLOG_TOP, vos, 12, TimeUnit.HOURS);
+//            redisService.set(RedisConstants.REDIS_BLOG_TOP, vos, 12, TimeUnit.HOURS);
             return vos;
         }
         return null;
@@ -170,10 +170,10 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public List<BlogArchiveVO> archive() {
         List<BlogArchiveVO> voList = new ArrayList<>();
-        //先从redis中获取数据
-        Map<String, String> map = redisService.getHash(RedisConstants.REDIS_BLOG_ARCHIVE);
-        //如果redis没有 则从数据库获取数据
-        if (MapUtils.isEmpty(map)) {
+//        //先从redis中获取数据
+//        Map<String, String> map = redisService.getHash(RedisConstants.REDIS_BLOG_ARCHIVE);
+//        //如果redis没有 则从数据库获取数据
+//        if (MapUtils.isEmpty(map)) {
             List<BlogArchiveVO> list = blogDao.archive();
             if (CollectionUtils.isEmpty(list)) {
                 return Collections.emptyList();
@@ -182,7 +182,7 @@ public class BlogServiceImpl implements BlogService {
             Map<String, List<BlogArchiveVO>> listMap = list.stream()
                     .collect(Collectors.groupingBy(v -> v.getReleaseTime().substring(0, 4)));
             //存到redis
-            redisService.setHash(RedisConstants.REDIS_BLOG_ARCHIVE, listMap, 2, TimeUnit.HOURS);
+//            redisService.setHash(RedisConstants.REDIS_BLOG_ARCHIVE, listMap, 2, TimeUnit.HOURS);
 
             List<Map.Entry<String, List<BlogArchiveVO>>> entries = listMap.entrySet()
                     .stream()
@@ -192,12 +192,12 @@ public class BlogServiceImpl implements BlogService {
                 voList.add(BlogArchiveVO.builder().releaseTime(entry.getKey()).build());
                 voList.addAll(entry.getValue());
             }
-        } else {
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-                voList.add(BlogArchiveVO.builder().releaseTime(entry.getKey()).build());
-                voList.addAll(JsonUtil.toList(entry.getValue(), BlogArchiveVO.class));
-            }
-        }
+//        } else {
+//            for (Map.Entry<String, String> entry : map.entrySet()) {
+//                voList.add(BlogArchiveVO.builder().releaseTime(entry.getKey()).build());
+//                voList.addAll(JsonUtil.toList(entry.getValue(), BlogArchiveVO.class));
+//            }
+//        }
         return voList;
     }
 
