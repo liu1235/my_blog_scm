@@ -84,7 +84,7 @@ public interface BlogMapper extends Mapper<BlogModel>, MySqlMapper<BlogModel> {
             " (select b.id, b.title,b.read_count,b.description,b.class_id,b.create_date",
             " from t_like l",
             " join t_blog b on l.blog_id = b.id",
-            " where l.user_id = #{userId} ",
+            " where l.user_id = #{userId} and b.status = 1 ",
             " <if test = \" title != null and title != '' \"> and b.title like concat(#{title}, '%') </if>",
             " <if test = \" likeStatus != null \"> and l.like_status = #{likeStatus} </if>",
             " <if test = \" collectStatus != null \"> and l.collect_status = #{collectStatus} </if>",
@@ -107,7 +107,7 @@ public interface BlogMapper extends Mapper<BlogModel>, MySqlMapper<BlogModel> {
      *
      * @return List<BlogTopVO>
      */
-    @Select("select id, read_count readCount,title title from t_blog order by read_count desc limit 10")
+    @Select("select id, read_count readCount,title title from t_blog where status = 1 order by read_count desc limit 10")
     List<BlogTopVO> topBlogList();
 
     /**
@@ -115,7 +115,7 @@ public interface BlogMapper extends Mapper<BlogModel>, MySqlMapper<BlogModel> {
      *
      * @return List<BlogTopVO>
      */
-    @Select("select id, release_time releaseTime, title,description from t_blog order by release_time desc")
+    @Select("select id, release_time releaseTime, title,description from t_blog where status = 1  order by release_time desc")
     List<BlogArchiveVO> archive();
 
     /**
@@ -124,6 +124,6 @@ public interface BlogMapper extends Mapper<BlogModel>, MySqlMapper<BlogModel> {
      * @param id  博客id
      * @return Integer
      */
-    @Update(" update t_blog set read_count = read_count + 1 where id = #{id}")
+    @Update(" update t_blog set read_count = read_count + 1 where id = #{id} and status = 1")
     Integer updateReadCount(@Param("id") Long id);
 }

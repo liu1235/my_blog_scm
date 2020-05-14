@@ -29,6 +29,14 @@ public interface BlogDao {
     List<BlogListVO> list(BlogManageQueryDto bo);
 
     /**
+     * 根据id返回信息
+     *
+     * @param id id
+     * @return BlogModel
+     */
+    BlogModel detailBlog(Long id);
+
+    /**
      * 获取博客列表数据
      *
      * @param bo 查询条件
