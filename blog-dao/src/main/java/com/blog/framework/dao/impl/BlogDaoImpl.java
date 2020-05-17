@@ -122,6 +122,11 @@ public class BlogDaoImpl implements BlogDao {
         return blogMapper.updateReadCount(id) > 0;
     }
 
+    @Override
+    public Integer count(BlogManageQueryDto bo) {
+        return blogMapper.selectCount(BlogModel.builder().classId(bo.getClassId()).build());
+    }
+
 
     /**
      * 获取该分类下所有下级分类

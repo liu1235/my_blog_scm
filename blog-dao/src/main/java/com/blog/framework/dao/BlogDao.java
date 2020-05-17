@@ -125,4 +125,11 @@ public interface BlogDao {
      */
     Boolean updateReadCount(Long id);
 
+    /**
+     * 获取博客列表数据条数
+     *
+     * @param bo 查询数据
+     * @return list<BlogListVO>
+     */
+    Integer count(BlogManageQueryDto bo);
 }

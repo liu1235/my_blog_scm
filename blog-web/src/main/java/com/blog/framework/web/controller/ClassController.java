@@ -104,10 +104,35 @@ public class ClassController {
         return ResultData.createUpdateResult(classService.edit(updateDto));
     }
 
+
+    /**
+     * 启用
+     *
+     * @param idDto 分类id
+     * @return ResultData<BlogBean>
+     */
+    @ApiOperation(value = "修改分类状态")
+    @PostMapping(value = "/enable")
+    public ResultData<Boolean> enable(@Validated @RequestBody Id<Long> idDto) {
+        return ResultData.createUpdateResult(classService.enable(idDto.getId()));
+    }
+
+    /**
+     * 禁用
+     *
+     * @param idDto 分类id
+     * @return ResultData<BlogBean>
+     */
+    @ApiOperation(value = "修改分类状态")
+    @PostMapping(value = "/disable")
+    public ResultData<Boolean> disable(@Validated @RequestBody Id<Long> idDto) {
+        return ResultData.createUpdateResult(classService.disable(idDto.getId()));
+    }
+
     /**
      * 删除分类
      *
-     * @param idDto 博客id
+     * @param idDto 分类id
      * @return ResultData<BlogBean>
      */
     @ApiOperation(value = "删除分类")

@@ -3,7 +3,9 @@ package com.blog.framework.service.impl;
 import com.blog.framework.common.enums.ClassStatusEnum;
 import com.blog.framework.common.exception.ServiceException;
 import com.blog.framework.common.utils.CopyDataUtil;
+import com.blog.framework.dao.BlogDao;
 import com.blog.framework.dao.ClassDao;
+import com.blog.framework.dto.blog.manage.BlogManageQueryDto;
 import com.blog.framework.dto.classs.ClassAddDto;
 import com.blog.framework.dto.classs.ClassQueryDto;
 import com.blog.framework.dto.classs.ClassUpdateDto;
@@ -31,6 +33,9 @@ public class ClassServiceImpl implements ClassService {
 
     @Autowired
     private ClassDao classDao;
+
+    @Autowired
+    private BlogDao blogDao;
 
     @Override
     public List<ClassListVo> list(ClassQueryDto queryDto) {
@@ -109,7 +114,29 @@ public class ClassServiceImpl implements ClassService {
     }
 
     @Override
+    public Boolean enable(Long id) {
+        ClassModel updateModel = ClassModel.builder()
+                .id(id)
+                .status(ClassStatusEnum.ENABLE.getCode())
+                .build();
+        return classDao.edit(updateModel);
+    }
+
+    @Override
+    public Boolean disable(Long id) {
+        //校验
+        check(id);
+        ClassModel updateModel = ClassModel.builder()
+                .id(id)
+                .status(ClassStatusEnum.DISABLE.getCode())
+                .build();
+        return classDao.edit(updateModel);
+    }
+
+    @Override
     public Boolean delete(Long id) {
+        //校验
+        check(id);
         return classDao.deleteById(id);
     }
 
@@ -137,6 +164,30 @@ public class ClassServiceImpl implements ClassService {
                 .classId(v.getId())
                 .build())
                 .collect(Collectors.toList());
+    }
+
+
+    /**
+     * 校验删除/禁用
+     *
+     * @param classId 分类id
+     */
+    private void check(Long classId) {
+        //首先判断该分类下有没有正在使用的博客
+        BlogManageQueryDto queryDto = new BlogManageQueryDto();
+        queryDto.setClassId(classId);
+        Integer count = blogDao.count(queryDto);
+        if (count != null && count > 0) {
+            throw new ServiceException("当前分类下存在博客,禁止操作");
+        }
+        //判断是否存在下级
+        List<ClassModel> list = classDao.select(ClassModel.builder()
+                .parentId(classId)
+                .status(ClassStatusEnum.ENABLE.getCode())
+                .build());
+        if (CollectionUtils.isNotEmpty(list)) {
+            throw new ServiceException("当前分类下存在下级分类,禁止操作");
+        }
     }
 
 }
