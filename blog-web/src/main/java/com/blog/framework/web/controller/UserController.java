@@ -1,11 +1,15 @@
 package com.blog.framework.web.controller;
 
+import com.blog.framework.common.Id;
+import com.blog.framework.common.PageBean;
 import com.blog.framework.common.ResultData;
 import com.blog.framework.dto.user.UserActivationDto;
-import com.blog.framework.dto.user.UserDto;
+import com.blog.framework.dto.user.UserAddDto;
+import com.blog.framework.dto.user.UserQueryDto;
 import com.blog.framework.dto.user.UserRegisterDto;
 import com.blog.framework.service.UserService;
 import com.blog.framework.vo.user.FriendsLinkVo;
+import com.blog.framework.vo.user.UserListVo;
 import com.blog.framework.vo.user.UserVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,6 +35,42 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+
+    /**
+     * 获取所有用户
+     *
+     * @param dto 查询参数
+     * @return ResultData
+     */
+    @ApiOperation(value = "获取所有用户", notes = "获取所有用户")
+    @PostMapping(value = "/list")
+    public ResultData<PageBean<UserListVo>> list(@RequestBody UserQueryDto dto) {
+        return ResultData.createSelectResult(userService.list(dto));
+    }
+
+    /**
+     * 获取用户详情
+     *
+     * @return ResultData
+     */
+    @ApiOperation(value = "获取用户详情")
+    @PostMapping(value = "/details")
+    public ResultData<UserVo> details(@Validated @RequestBody Id<Long> idDto) {
+        return ResultData.createSelectResult(userService.detail(idDto.getId()));
+    }
+
+    /**
+     * 删除用户
+     *
+     * @param idDto 用户id
+     * @return ResultData<BlogBean>
+     */
+    @ApiOperation(value = "删除用户")
+    @PostMapping(value = "/delete")
+    public ResultData<Boolean> delete(@Validated @RequestBody Id<Long> idDto) {
+        return ResultData.createDeleteResult(userService.delete(idDto.getId()));
+    }
 
     /**
      * 注册
@@ -89,8 +129,8 @@ public class UserController {
      */
     @ApiOperation(value = "修改用户信息", notes = "修改用户信息")
     @PostMapping(value = "/update")
-    public ResultData<String> update(@Validated @RequestBody UserDto userDto) {
-        return ResultData.createUpdateResult(userService.update(userDto));
+    public ResultData<String> update(@Validated @RequestBody UserAddDto userAddDto) {
+        return ResultData.createUpdateResult(userService.update(userAddDto));
     }
 
 

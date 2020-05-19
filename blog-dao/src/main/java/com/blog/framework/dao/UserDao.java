@@ -12,6 +12,15 @@ import java.util.List;
  **/
 public interface UserDao {
 
+
+    /**
+     * 获取用户数据
+     *
+     * @param userModel 查询条件
+     * @return UserModel
+     */
+    List<UserModel> select(UserModel userModel);
+
     /**
      * 根据邮箱获取用户
      *
@@ -67,4 +76,12 @@ public interface UserDao {
      * @return FriendsLinkVo
      */
     List<UserModel> friendsLink();
+
+    /**
+     * 删除用户
+     *
+     * @param id 用户id
+     * @return Boolean
+     */
+    Boolean delete(Long id);
 }

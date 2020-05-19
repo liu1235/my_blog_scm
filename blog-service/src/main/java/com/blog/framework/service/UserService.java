@@ -1,10 +1,14 @@
 package com.blog.framework.service;
 
+import com.blog.framework.common.PageBean;
 import com.blog.framework.dto.user.UserActivationDto;
-import com.blog.framework.dto.user.UserDto;
+import com.blog.framework.dto.user.UserAddDto;
+import com.blog.framework.dto.user.UserQueryDto;
 import com.blog.framework.dto.user.UserRegisterDto;
 import com.blog.framework.vo.user.FriendsLinkVo;
+import com.blog.framework.vo.user.UserListVo;
 import com.blog.framework.vo.user.UserVo;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -17,6 +21,30 @@ import java.util.List;
 public interface UserService {
 
     /**
+     * 获取用户列表数据
+     *
+     * @param dto 查询条件
+     * @return PageBean<UserVo>
+     */
+    PageBean<UserListVo> list(@RequestBody UserQueryDto dto);
+
+    /**
+     * 查看个人详情
+     *
+     * @param id 用户id
+     * @return UserVo
+     */
+    UserVo detail(Long id);
+
+    /**
+     * 删除用户
+     *
+     * @param id 用户id
+     * @return Boolean
+     */
+    Boolean delete(Long id);
+
+    /**
      * 个人详情
      *
      * @return UserVo
@@ -26,10 +54,10 @@ public interface UserService {
     /**
      * 修改个人信息
      *
-     * @param userDto 修改内容
+     * @param userAddDto 修改内容
      * @return Boolean
      */
-    Boolean update(UserDto userDto);
+    Boolean update(UserAddDto userAddDto);
 
 
     /**
