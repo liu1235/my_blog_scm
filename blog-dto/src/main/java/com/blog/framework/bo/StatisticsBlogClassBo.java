@@ -1,13 +1,10 @@
 package com.blog.framework.bo;
 
-import com.blog.framework.common.KeyValueBean;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 /**
  * blog
@@ -22,10 +19,10 @@ import java.util.List;
 public class StatisticsBlogClassBo {
 
     /**
-     * 博客id
+     * 博客数量
      */
-    @ApiModelProperty("博客id")
-    private Long blogId;
+    @ApiModelProperty("博客数量")
+    private Long blogNum;
 
     /**
      * 分类名称
@@ -38,10 +35,4 @@ public class StatisticsBlogClassBo {
      */
     @ApiModelProperty("分类id")
     private Long classId;
-
-    /**
-     * 分类父id
-     */
-    @ApiModelProperty("分类父id")
-    private Long parentId;
 }

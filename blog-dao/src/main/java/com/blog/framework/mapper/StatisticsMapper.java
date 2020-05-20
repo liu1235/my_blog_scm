@@ -55,31 +55,27 @@ public interface StatisticsMapper {
      *
      * @return StatisticsChartVo
      */
-    @Select(" SELECT c.class_name className, b.class_id classId , c.parent_id parentId, b.id bloId " +
-            " FROM t_blog b " +
-            " left join t_class c on c.id = b.class_id" +
-            " WHERE  b.`status` = 1 ")
+    @Select(" select c.class_name className, b.parent_class_id classId, count(b.id) blogNum " +
+            " from t_blog b " +
+            " left join t_class c on c.id = b.parent_class_id" +
+            " where  b.`status` = 1 " +
+            " group by className, classId")
     List<StatisticsBlogClassBo> statisticsBlogClass();
 
 
     /**
      * 统计博客发布数据
      *
-     * @param classIds 分类id
+     * @param classId 分类id
      * @return StatisticsChartVo
      */
-    @Select(" <script> " +
-            " SELECT c.class_name `key`, COUNT(b.id) value " +
+    @Select(" SELECT c.class_name `key`, COUNT(b.id) value " +
             " FROM t_blog b" +
             " left join t_class c on c.id = b.class_id" +
-            " WHERE b.class_id in" +
-            " <foreach collection = 'classIds' item = 'classId' separator = ',' open = '(' close = ')' >" +
-            " #{classId}" +
-            " </foreach>" +
+            " WHERE b.parent_class_id = #{classId}" +
             " AND b.`status` = 1" +
-            " GROUP BY `key`" +
-            " </script>")
-    List<KeyValueBean<String, Long>> statisticsBlogClassChild(@Param("classIds") List<Long> classIds);
+            " GROUP BY `key`")
+    List<KeyValueBean<String, Long>> statisticsBlogClassChild(@Param("classId") Long classId);
 
     /**
      * 统计用户数据

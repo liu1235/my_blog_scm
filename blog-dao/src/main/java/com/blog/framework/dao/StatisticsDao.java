@@ -41,10 +41,10 @@ public interface StatisticsDao {
     /**
      * 统计博客分类子类数据
      *
-     * @param classIds 分类id
+     * @param classId 分类id
      * @return StatisticsChartVo
      */
-    List<KeyValueBean<String, Long>> statisticsBlogClassChild(List<Long> classIds);
+    List<KeyValueBean<String, Long>> statisticsBlogClassChild(Long classId);
 
     /**
      * 统计用户数据

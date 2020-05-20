@@ -75,33 +75,11 @@ public class StatisticsServiceImpl implements StatisticsService {
         if (CollectionUtils.isEmpty(list)) {
             return null;
         }
-        //获取一级分类
-        Map<Long, List<StatisticsBlogClassBo>> map = list.stream().filter(v -> v.getParentId() == 0)
-                .collect(Collectors.groupingBy(StatisticsBlogClassBo::getClassId));
-
-        //获取一级分类
-        Map<Long, String> classMap = list.stream().filter(v -> v.getParentId() == 0)
-                .collect(Collectors.toMap(StatisticsBlogClassBo::getClassId, StatisticsBlogClassBo::getClassName, (v1, v2) -> v2));
-
-        //获取二级分类
-        Map<Long, List<StatisticsBlogClassBo>> secondMap = list.stream().filter(v -> v.getParentId() != 0)
-                .collect(Collectors.groupingBy(StatisticsBlogClassBo::getParentId));
-
-        List<StatisticsBlogClassVo> result = new ArrayList<>();
-
-        for (Map.Entry<Long, List<StatisticsBlogClassBo>> entry : map.entrySet()) {
-            Long classId = entry.getKey();
-            int size = entry.getValue().size();
-            List<StatisticsBlogClassBo> statisticsBlogClassBos = secondMap.get(classId);
-            if (CollectionUtils.isNotEmpty(statisticsBlogClassBos)) {
-                size += statisticsBlogClassBos.size();
-            }
-            result.add(StatisticsBlogClassVo.builder()
-                    .name(classMap.get(classId))
-                    .value((long) size)
-                    .classId(classId)
-                    .build());
-        }
+        List<StatisticsBlogClassVo> result = list.stream().map(v -> StatisticsBlogClassVo.builder()
+                .name(v.getClassName())
+                .value(v.getBlogNum())
+                .classId(v.getClassId())
+                .build()).collect(Collectors.toList());
 
         return StatisticsChartVo.builder()
                 .columns(Arrays.asList("分类", "博客数量"))
@@ -111,15 +89,8 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     public StatisticsChartVo statisticsBlogClassChild(Long classId) {
-        //获取分类下所有子类
-        List<ClassModel> classModels = classDao.select(classId);
-        if (CollectionUtils.isEmpty(classModels)) {
-            return null;
-        }
-        List<Long> classIds = classModels.stream().map(ClassModel::getId).collect(Collectors.toList());
-        classIds.add(classId);
         //获取时间段类的数据
-        List<KeyValueBean<String, Long>> list = statisticsDao.statisticsBlogClassChild(classIds);
+        List<KeyValueBean<String, Long>> list = statisticsDao.statisticsBlogClassChild(classId);
         if (CollectionUtils.isEmpty(list)) {
             return null;
         }
