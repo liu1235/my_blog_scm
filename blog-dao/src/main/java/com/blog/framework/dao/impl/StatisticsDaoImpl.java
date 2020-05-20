@@ -40,6 +40,11 @@ public class StatisticsDaoImpl implements StatisticsDao {
     }
 
     @Override
+    public List<KeyValueBean<String, Long>> statisticsBlogClassChild(List<Long> classIds) {
+        return statisticsMapper.statisticsBlogClassChild(classIds);
+    }
+
+    @Override
     public List<KeyValueBean<String, Long>> statisticsUser(StatisticsQueryDto dto) {
         return statisticsMapper.statisticsUser(dto);
     }

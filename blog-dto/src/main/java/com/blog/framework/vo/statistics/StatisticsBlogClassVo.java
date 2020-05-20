@@ -1,7 +1,10 @@
 package com.blog.framework.vo.statistics;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * blog
@@ -10,6 +13,9 @@ import lombok.Data;
  * @date 2020-05-19
  **/
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class StatisticsBlogClassVo {
 
     /**
@@ -22,7 +28,7 @@ public class StatisticsBlogClassVo {
      * 博客数量
      */
     @ApiModelProperty("博客数量")
-    private String value;
+    private Long value;
 
     /**
      * 分类id

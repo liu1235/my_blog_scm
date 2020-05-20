@@ -1,5 +1,6 @@
 package com.blog.framework.web.controller;
 
+import com.blog.framework.common.Id;
 import com.blog.framework.common.ResultData;
 import com.blog.framework.dto.statistics.StatisticsQueryDto;
 import com.blog.framework.service.StatisticsService;
@@ -60,6 +61,19 @@ public class StatisticsController {
     public ResultData<StatisticsChartVo> statisticsBlogClass() {
         return ResultData.createSelectResult(statisticsService.statisticsBlogClass());
     }
+
+    /**
+     * 统计博客分类子类数据
+     *
+     * @return ResultData<StatisticsChartVo>
+     */
+    @ApiOperation(value = "统计博客分类子类数据")
+    @PostMapping("/statisticsBlogClassChild")
+    public ResultData<StatisticsChartVo> statisticsBlogClassChild(@RequestBody Id<Long> longId) {
+        return ResultData.createSelectResult(statisticsService.statisticsBlogClassChild(longId.getId()));
+    }
+
+
 
     /**
      * 统计用户数据

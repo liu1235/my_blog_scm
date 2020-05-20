@@ -35,6 +35,13 @@ public interface StatisticsService {
     StatisticsChartVo statisticsBlogClass();
 
     /**
+     * 统计博客分类子类数据
+     *
+     * @return StatisticsChartVo
+     */
+    StatisticsChartVo statisticsBlogClassChild(Long classId);
+
+    /**
      * 统计用户数据
      *
      * @param dto 查询参数

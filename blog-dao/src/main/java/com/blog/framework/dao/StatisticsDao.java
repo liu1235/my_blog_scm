@@ -3,7 +3,6 @@ package com.blog.framework.dao;
 import com.blog.framework.bo.StatisticsBlogClassBo;
 import com.blog.framework.common.KeyValueBean;
 import com.blog.framework.dto.statistics.StatisticsQueryDto;
-import com.blog.framework.vo.statistics.StatisticsChartVo;
 import com.blog.framework.vo.statistics.StatisticsVo;
 
 import java.util.List;
@@ -38,6 +37,14 @@ public interface StatisticsDao {
      * @return StatisticsChartVo
      */
     List<StatisticsBlogClassBo> statisticsBlogClass();
+
+    /**
+     * 统计博客分类子类数据
+     *
+     * @param classIds 分类id
+     * @return StatisticsChartVo
+     */
+    List<KeyValueBean<String, Long>> statisticsBlogClassChild(List<Long> classIds);
 
     /**
      * 统计用户数据

@@ -3,9 +3,12 @@ package com.blog.framework.service.impl;
 import com.blog.framework.bo.StatisticsBlogClassBo;
 import com.blog.framework.common.KeyValueBean;
 import com.blog.framework.common.utils.DateUtil;
+import com.blog.framework.dao.ClassDao;
 import com.blog.framework.dao.StatisticsDao;
 import com.blog.framework.dto.statistics.StatisticsQueryDto;
+import com.blog.framework.model.ClassModel;
 import com.blog.framework.service.StatisticsService;
+import com.blog.framework.vo.statistics.StatisticsBlogClassVo;
 import com.blog.framework.vo.statistics.StatisticsChartVo;
 import com.blog.framework.vo.statistics.StatisticsVo;
 import org.apache.commons.collections4.CollectionUtils;
@@ -16,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -31,6 +35,9 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Autowired
     private StatisticsDao statisticsDao;
+
+    @Autowired
+    private ClassDao classDao;
 
     @Override
     public StatisticsVo statistics() {
@@ -50,9 +57,15 @@ public class StatisticsServiceImpl implements StatisticsService {
             return null;
         }
         buildData(dto, list);
+        List<Map<String, Object>> mapList = list.stream().map(v -> {
+            Map<String, Object> map = new HashMap<>(2);
+            map.put("日期", v.getKey());
+            map.put("当天发博客数数", v.getValue());
+            return map;
+        }).collect(Collectors.toList());
         return StatisticsChartVo.builder()
-                .columns(Arrays.asList("日期", "今日发博客数数"))
-                .rows(list)
+                .columns(Arrays.asList("日期", "当天发博客数数"))
+                .rows(mapList)
                 .build();
     }
 
@@ -74,21 +87,51 @@ public class StatisticsServiceImpl implements StatisticsService {
         Map<Long, List<StatisticsBlogClassBo>> secondMap = list.stream().filter(v -> v.getParentId() != 0)
                 .collect(Collectors.groupingBy(StatisticsBlogClassBo::getParentId));
 
-        List<KeyValueBean<String, Long>> result = new ArrayList<>();
+        List<StatisticsBlogClassVo> result = new ArrayList<>();
 
         for (Map.Entry<Long, List<StatisticsBlogClassBo>> entry : map.entrySet()) {
             Long classId = entry.getKey();
             int size = entry.getValue().size();
-            size += secondMap.get(classId).size();
-            result.add(KeyValueBean.<String, Long>builder()
-                    .key(classMap.get(classId))
+            List<StatisticsBlogClassBo> statisticsBlogClassBos = secondMap.get(classId);
+            if (CollectionUtils.isNotEmpty(statisticsBlogClassBos)) {
+                size += statisticsBlogClassBos.size();
+            }
+            result.add(StatisticsBlogClassVo.builder()
+                    .name(classMap.get(classId))
                     .value((long) size)
+                    .classId(classId)
                     .build());
         }
 
         return StatisticsChartVo.builder()
                 .columns(Arrays.asList("分类", "博客数量"))
-                .rows(result)
+                .data(result)
+                .build();
+    }
+
+    @Override
+    public StatisticsChartVo statisticsBlogClassChild(Long classId) {
+        //获取分类下所有子类
+        List<ClassModel> classModels = classDao.select(classId);
+        if (CollectionUtils.isEmpty(classModels)) {
+            return null;
+        }
+        List<Long> classIds = classModels.stream().map(ClassModel::getId).collect(Collectors.toList());
+        classIds.add(classId);
+        //获取时间段类的数据
+        List<KeyValueBean<String, Long>> list = statisticsDao.statisticsBlogClassChild(classIds);
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        }
+        List<Map<String, Object>> mapList = list.stream().map(v -> {
+            Map<String, Object> map = new HashMap<>(2);
+            map.put("分类", v.getKey());
+            map.put("博客数量", v.getValue());
+            return map;
+        }).collect(Collectors.toList());
+        return StatisticsChartVo.builder()
+                .columns(Arrays.asList("分类", "博客数量"))
+                .rows(mapList)
                 .build();
     }
 
@@ -101,9 +144,16 @@ public class StatisticsServiceImpl implements StatisticsService {
             return null;
         }
         buildData(dto, list);
+
+        List<Map<String, Object>> mapList = list.stream().map(v -> {
+            Map<String, Object> map = new HashMap<>(2);
+            map.put("日期", v.getKey());
+            map.put("当天注册用户数", v.getValue());
+            return map;
+        }).collect(Collectors.toList());
         return StatisticsChartVo.builder()
-                .columns(Arrays.asList("日期", "今日注册用户数"))
-                .rows(list)
+                .columns(Arrays.asList("日期", "当天注册用户数"))
+                .rows(mapList)
                 .build();
     }
 

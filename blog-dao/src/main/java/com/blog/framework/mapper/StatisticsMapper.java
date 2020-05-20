@@ -3,13 +3,10 @@ package com.blog.framework.mapper;
 import com.blog.framework.bo.StatisticsBlogClassBo;
 import com.blog.framework.common.KeyValueBean;
 import com.blog.framework.dto.statistics.StatisticsQueryDto;
-import com.blog.framework.vo.statistics.StatisticsBlogClassVo;
-import com.blog.framework.vo.statistics.StatisticsChartVo;
 import com.blog.framework.vo.statistics.StatisticsVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -63,6 +60,26 @@ public interface StatisticsMapper {
             " left join t_class c on c.id = b.class_id" +
             " WHERE  b.`status` = 1 ")
     List<StatisticsBlogClassBo> statisticsBlogClass();
+
+
+    /**
+     * 统计博客发布数据
+     *
+     * @param classIds 分类id
+     * @return StatisticsChartVo
+     */
+    @Select(" <script> " +
+            " SELECT c.class_name `key`, COUNT(b.id) value " +
+            " FROM t_blog b" +
+            " left join t_class c on c.id = b.class_id" +
+            " WHERE b.class_id in" +
+            " <foreach collection = 'classIds' item = 'classId' separator = ',' open = '(' close = ')' >" +
+            " #{classId}" +
+            " </foreach>" +
+            " AND b.`status` = 1" +
+            " GROUP BY `key`" +
+            " </script>")
+    List<KeyValueBean<String, Long>> statisticsBlogClassChild(@Param("classIds") List<Long> classIds);
 
     /**
      * 统计用户数据

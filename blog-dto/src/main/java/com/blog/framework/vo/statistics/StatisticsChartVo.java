@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * blog
@@ -31,5 +32,12 @@ public class StatisticsChartVo {
      * 每列数据
      */
     @ApiModelProperty("每列数据")
-    private List<KeyValueBean<String, Long>> rows;
+    private List<Map<String, Object>> rows;
+
+
+    /**
+     * 每列数据
+     */
+    @ApiModelProperty("每列数据")
+    private List<StatisticsBlogClassVo> data;
 }
