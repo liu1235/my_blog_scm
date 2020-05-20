@@ -81,7 +81,7 @@ public interface BlogMapper extends Mapper<BlogModel>, MySqlMapper<BlogModel> {
     @Select({
             "<script>",
             " select t.*, c.class_name from ",
-            " (select b.id, b.title,b.read_count,b.description,b.class_id,b.create_date",
+            " (select b.id, b.title,b.read_count,b.description,b.class_id,b.release_time",
             " from t_like l",
             " join t_blog b on l.blog_id = b.id",
             " where l.user_id = #{userId} and b.status = 1 ",
@@ -96,7 +96,7 @@ public interface BlogMapper extends Mapper<BlogModel>, MySqlMapper<BlogModel> {
             " </if>",
             ") t",
             " left join t_class c on t.class_id = c.id",
-            " order by t.create_date desc",
+            " order by t.release_time desc",
             "</script>"
     })
     List<BlogVO> getLikeOrCollectBlogList(BlogLikeOrCollectBo bo);
