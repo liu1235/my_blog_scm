@@ -5,6 +5,7 @@ import com.blog.framework.common.enums.ResultDataEnum;
 import com.blog.framework.common.exception.LoginException;
 import com.blog.framework.common.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.mail.MailSendException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -41,7 +42,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({LoginException.class})
     public ResultData<String> handleLoginException(final LoginException ex) {
         log.error("---------> handleLoginException", ex);
-        return ResultData.createErrorResult(ResultDataEnum.UN_LOGIN.getCode(), ResultDataEnum.UN_LOGIN.getMsg());
+        String message = ex.getMessage();
+        if (StringUtils.isBlank(message)) {
+            message = ResultDataEnum.UN_LOGIN.getMsg();
+        }
+        return ResultData.createErrorResult(ResultDataEnum.UN_LOGIN.getCode(), message);
     }
 
     @ExceptionHandler({MailSendException.class})

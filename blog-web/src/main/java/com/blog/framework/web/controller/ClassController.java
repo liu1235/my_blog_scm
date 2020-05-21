@@ -9,6 +9,8 @@ import com.blog.framework.dto.classs.ClassUpdateDto;
 import com.blog.framework.service.ClassService;
 import com.blog.framework.vo.classs.ClassListVo;
 import com.blog.framework.vo.classs.ClassVo;
+import com.blog.framework.web.annotation.Permissions;
+import com.blog.framework.web.annotation.SysLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,8 @@ public class ClassController {
      *
      * @return ResultData
      */
+    @SysLog
+    @Permissions(permissions = "blog:class:view")
     @ApiOperation(value = "获取分类列表数据")
     @PostMapping(value = "/list")
     public ResultData<List<ClassListVo>> list(@RequestBody ClassQueryDto queryDto) {
@@ -50,6 +54,8 @@ public class ClassController {
      *
      * @return ResultData
      */
+    @SysLog
+    @Permissions(permissions = "blog:class:view")
     @ApiOperation(value = "获取分类详情")
     @PostMapping(value = "/detail")
     public ResultData<ClassListVo> detail(@Validated @RequestBody Id<Long> idDto) {
@@ -61,6 +67,7 @@ public class ClassController {
      *
      * @return ResultData
      */
+    @SysLog
     @ApiOperation(value = "获取一级分类数据")
     @PostMapping(value = "/first")
     public ResultData<List<ClassVo>> first() {
@@ -73,6 +80,7 @@ public class ClassController {
      * @param idDto 分类id
      * @return ResultData<BlogBean>
      */
+    @SysLog
     @ApiOperation(value = "根据一级分类获取二级分类")
     @PostMapping(value = "/second")
     public ResultData<ClassVo> second(@Validated @RequestBody Id<Long> idDto) {
@@ -86,6 +94,8 @@ public class ClassController {
      * @param addDto 新增数据
      * @return ResultData<BlogBean>
      */
+    @SysLog
+    @Permissions(permissions = "blog:class:add")
     @ApiOperation(value = "新增分类")
     @PostMapping(value = "/add")
     public ResultData<Boolean> add(@Validated @RequestBody ClassAddDto addDto) {
@@ -98,6 +108,8 @@ public class ClassController {
      * @param updateDto 编辑数据
      * @return ResultData<BlogBean>
      */
+    @SysLog
+    @Permissions(permissions = "blog:class:edit")
     @ApiOperation(value = "编辑分类")
     @PostMapping(value = "/edit")
     public ResultData<Boolean> edit(@Validated @RequestBody ClassUpdateDto updateDto) {
@@ -111,6 +123,8 @@ public class ClassController {
      * @param idDto 分类id
      * @return ResultData<BlogBean>
      */
+    @SysLog
+    @Permissions(permissions = "blog:class:edit")
     @ApiOperation(value = "修改分类状态")
     @PostMapping(value = "/enable")
     public ResultData<Boolean> enable(@Validated @RequestBody Id<Long> idDto) {
@@ -123,6 +137,8 @@ public class ClassController {
      * @param idDto 分类id
      * @return ResultData<BlogBean>
      */
+    @SysLog
+    @Permissions(permissions = "blog:class:edit")
     @ApiOperation(value = "修改分类状态")
     @PostMapping(value = "/disable")
     public ResultData<Boolean> disable(@Validated @RequestBody Id<Long> idDto) {
@@ -135,6 +151,8 @@ public class ClassController {
      * @param idDto 分类id
      * @return ResultData<BlogBean>
      */
+    @SysLog
+    @Permissions(permissions = "blog:class:delete")
     @ApiOperation(value = "删除分类")
     @PostMapping(value = "/delete")
     public ResultData<Boolean> delete(@Validated @RequestBody Id<Long> idDto) {
@@ -147,6 +165,7 @@ public class ClassController {
      *
      * @return ResultData<List<ClassVo>>
      */
+    @SysLog
     @ApiOperation(value = "获取一级分类数据")
     @PostMapping(value = "/selectList")
     public ResultData<List<ClassVo>> selectList() {

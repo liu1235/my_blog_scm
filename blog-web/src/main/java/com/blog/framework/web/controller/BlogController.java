@@ -15,6 +15,7 @@ import com.blog.framework.vo.blog.BlogDetailVO;
 import com.blog.framework.vo.blog.BlogTopCommentVo;
 import com.blog.framework.vo.blog.BlogTopVO;
 import com.blog.framework.vo.blog.BlogVO;
+import com.blog.framework.web.annotation.SysLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,7 @@ public class BlogController {
      * @param dto 查询参数
      * @return ResultData
      */
+    @SysLog
     @ApiOperation(value = "获取所有博客数据", notes = "获取所有博客数据")
     @PostMapping(value = "/list")
     public ResultData<PageBean<BlogVO>> list(@RequestBody BlogQueryDto dto) {
@@ -56,6 +58,7 @@ public class BlogController {
      *
      * @return ResultData
      */
+    @SysLog
     @ApiOperation(value = "获取最热的十条博客", notes = "获取最热的十条博客")
     @PostMapping(value = "/top-blog-list")
     public ResultData<List<BlogTopVO>> topBlogList() {
@@ -67,6 +70,7 @@ public class BlogController {
      *
      * @return ResultData
      */
+    @SysLog
     @ApiOperation(value = "博客归档", notes = "博客归档")
     @PostMapping(value = "/archive")
     public ResultData<List<BlogArchiveVO>> archive() {
@@ -79,6 +83,7 @@ public class BlogController {
      *
      * @return ResultData<List<BlogTopCommentVo>>
      */
+    @SysLog
     @ApiOperation(value = "获取评论内容")
     @PostMapping(value = "/top-blog-comment-list")
     public ResultData<List<BlogTopCommentVo>> topBlogCommentList() {
@@ -91,6 +96,7 @@ public class BlogController {
      *
      * @return ResultData
      */
+    @SysLog
     @ApiOperation(value = "获取喜欢的博客列表数据", notes = "获取喜欢的博客列表数据")
     @PostMapping(value = "/like-blog-list")
     public ResultData<PageBean<BlogVO>> likeBlogList(@RequestBody BlogQueryDto dto) {
@@ -104,6 +110,7 @@ public class BlogController {
      *
      * @return ResultData
      */
+    @SysLog
     @ApiOperation(value = "获取收藏的博客列表数据", notes = "获取收藏的博客列表数据")
     @PostMapping(value = "/collect-blog-list")
     public ResultData<PageBean<BlogVO>> collectBlogList(@RequestBody BlogQueryDto dto) {
@@ -117,6 +124,7 @@ public class BlogController {
      * @param idDto 博客id
      * @return ResultData<BlogBean>
      */
+    @SysLog
     @ApiOperation(value = "博客详情", notes = "博客详情")
     @PostMapping(value = "/detail")
     public ResultData<BlogDetailVO> detail(@RequestBody Id<Long> idDto) {
@@ -129,6 +137,7 @@ public class BlogController {
      * @param idDto 博客id
      * @return ResultData<BlogBean>
      */
+    @SysLog
     @ApiOperation(value = "博客详情", notes = "博客详情")
     @PostMapping(value = "/updateReadCount")
     public ResultData<Boolean> updateReadCount(@RequestBody Id<Long> idDto) {

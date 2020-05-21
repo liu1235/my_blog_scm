@@ -1,6 +1,7 @@
 package com.blog.framework.service;
 
 
+import com.blog.framework.vo.sys.user.SysUserLoginVo;
 import com.blog.framework.vo.user.UserLoginVo;
 
 /**
@@ -15,7 +16,7 @@ public interface TokenService {
      * @param token    token
      * @param userInfo 用户信息实体类
      */
-    void saveUserInfo(String token, UserLoginVo userInfo);
+    void saveUserInfo(String token, Object userInfo);
 
     /**
      * 删除token信息
@@ -33,10 +34,23 @@ public interface TokenService {
     Boolean checkTokenExists(String tokenStr);
 
     /**
-     * 获取当前token信息
+     * 检测token是否存在
      *
-     * @return UserBean
+     * @return Boolean
+     */
+    Boolean checkTokenExists();
+
+    /**
+     * 获取当前用户token信息
+     *
+     * @return UserLoginVo
      */
     UserLoginVo getUserInfo();
 
+    /**
+     * 获取当前系统用户token信息
+     *
+     * @return SysUserLoginVo
+     */
+    SysUserLoginVo getSysUserInfo();
 }

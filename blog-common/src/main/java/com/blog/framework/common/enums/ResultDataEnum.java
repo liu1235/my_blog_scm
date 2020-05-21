@@ -53,6 +53,11 @@ public enum ResultDataEnum {
     UPDATE_ERROR(1, "修改失败"),
 
     /**
+     * 没有操作权限
+     */
+    AUTH_FAIL(6, "没有操作权限"),
+
+    /**
      * 参数不能为空
      */
     PARAM_NOT_NULL(100, "参数不能为空"),

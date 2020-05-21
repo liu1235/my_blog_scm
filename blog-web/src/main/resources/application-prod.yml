@@ -56,10 +56,5 @@ pagehelper:
 #激活地址
 activation-address: http://liuzwei.top/#/msg?urlState=urlInvalid&param={1}
 
-#管理员账号密码
-admin:
-  username: admin
-  password: liu133297
-
 file:
   uploadPath: /www/wwwroot/blog/file/

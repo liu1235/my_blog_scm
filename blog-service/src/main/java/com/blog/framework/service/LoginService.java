@@ -1,7 +1,8 @@
 package com.blog.framework.service;
 
-import com.blog.framework.dto.user.AdminUserLoginDto;
+import com.blog.framework.dto.sys.user.AdminUserLoginDto;
 import com.blog.framework.dto.user.UserLoginDto;
+import com.blog.framework.vo.sys.user.SysUserLoginVo;
 import com.blog.framework.vo.user.UserLoginVo;
 
 /**
@@ -35,6 +36,6 @@ public interface LoginService {
      * @param dto
      * @return
      */
-    UserLoginVo loginAdmin(AdminUserLoginDto dto);
+    SysUserLoginVo loginAdmin(AdminUserLoginDto dto);
 
 }

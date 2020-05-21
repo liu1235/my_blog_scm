@@ -1,21 +1,33 @@
 package com.blog.framework.service.impl;
 
+import com.blog.framework.common.enums.AdminEnum;
+import com.blog.framework.common.enums.MenuTypeEnum;
 import com.blog.framework.common.enums.ResultDataEnum;
 import com.blog.framework.common.enums.UserStatusEnum;
+import com.blog.framework.common.exception.LoginException;
 import com.blog.framework.common.exception.ServiceException;
+import com.blog.framework.common.utils.CopyDataUtil;
 import com.blog.framework.common.utils.EncryptMd5Util;
 import com.blog.framework.dao.UserDao;
-import com.blog.framework.dto.user.AdminUserLoginDto;
+import com.blog.framework.dao.sys.SysUserDao;
+import com.blog.framework.dto.sys.user.AdminUserLoginDto;
 import com.blog.framework.dto.user.UserLoginDto;
 import com.blog.framework.model.UserModel;
+import com.blog.framework.model.sys.SysUserModel;
 import com.blog.framework.service.LoginService;
 import com.blog.framework.service.TokenService;
+import com.blog.framework.service.sys.SysMenuService;
+import com.blog.framework.vo.sys.menu.SysMenuVo;
+import com.blog.framework.vo.sys.user.SysUserLoginVo;
 import com.blog.framework.vo.user.UserLoginVo;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * blog
@@ -32,11 +44,11 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private TokenService tokenService;
 
-    @Value("${admin.username}")
-    private String username;
+    @Autowired
+    private SysUserDao sysUserDao;
 
-    @Value("${admin.password}")
-    private String password;
+    @Autowired
+    private SysMenuService sysMenuService;
 
     @Override
     public UserLoginVo login(UserLoginDto dto) {
@@ -79,19 +91,53 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public UserLoginVo loginAdmin(AdminUserLoginDto dto) {
-        if (username.equals(dto.getUsername()) && password.equals(dto.getPassword())) {
-            String token = UUID.randomUUID().toString();
-            token = token.replace("-", "").toLowerCase();
-            // 存放用户信息到redis
-            UserLoginVo vo = UserLoginVo.builder()
-                    .userName(username)
-                    .token(token)
-                    .build();
-            tokenService.saveUserInfo(token, vo);
-            return vo;
+    public SysUserLoginVo loginAdmin(AdminUserLoginDto dto) {
+        //判断账号密码是否正确
+        SysUserModel model = sysUserDao.selectOne(SysUserModel.builder()
+                .account(dto.getAccount())
+                .password(dto.getPassword().toLowerCase())
+                .build());
+        if (model == null) {
+            throw new LoginException("用户名密码错误");
         }
-        throw new ServiceException("账号密码错误");
+
+        //生成token
+        String token = UUID.randomUUID().toString().replace("-", "");
+
+        //存入redis
+        SysUserLoginVo userInfo = SysUserLoginVo.builder()
+                .account(model.getAccount())
+                .userName(model.getAccount())
+                .adminFlag(model.getAdminFlag())
+                .token(token)
+                .build();
+        //获取当前用户对应的菜单
+        List<SysMenuVo> menuList;
+        if (AdminEnum.YES.getCode().equals(model.getAdminFlag())) {
+            menuList = sysMenuService.selectAllByAdmin();
+        } else {
+            menuList = sysMenuService.getMenuByUserId(model.getId());
+        }
+
+        if (CollectionUtils.isNotEmpty(menuList)) {
+            //获取权限数据
+            List<String> permsList = menuList.stream()
+                    .filter(v -> MenuTypeEnum.BUTTON.getCode().equals(v.getMenuType()))
+                    .map(SysMenuVo::getMenuPerms)
+                    .collect(Collectors.toList());
+            userInfo.setPermsList(permsList);
+
+            //获取菜单数据
+            List<SysMenuVo> list = menuList.stream()
+                    .filter(v -> !MenuTypeEnum.BUTTON.getCode().equals(v.getMenuType()))
+                    .collect(Collectors.toList());
+            userInfo.setMenuList(sysMenuService.formatMenuList(list));
+        }
+        SysUserLoginVo info = CopyDataUtil.copyObject(userInfo, SysUserLoginVo.class);
+        info.setMenuList(null);
+        tokenService.saveUserInfo(token, info);
+
+        return userInfo;
     }
 
 

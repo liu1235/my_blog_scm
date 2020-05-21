@@ -1,4 +1,4 @@
-package com.blog.framework.dto.user;
+package com.blog.framework.dto.sys.user;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -21,8 +21,8 @@ public class AdminUserLoginDto implements Serializable {
      * 用户名
      */
     @NotBlank(message = "用户名为空")
-    @ApiModelProperty(value = "邮箱", required = true)
-    private String username;
+    @ApiModelProperty(value = "用户名", required = true)
+    private String account;
 
     /**
      * 密码

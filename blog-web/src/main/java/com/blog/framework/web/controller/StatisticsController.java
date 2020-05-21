@@ -6,6 +6,7 @@ import com.blog.framework.dto.statistics.StatisticsQueryDto;
 import com.blog.framework.service.StatisticsService;
 import com.blog.framework.vo.statistics.StatisticsChartVo;
 import com.blog.framework.vo.statistics.StatisticsVo;
+import com.blog.framework.web.annotation.SysLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,7 @@ public class StatisticsController {
      *
      * @return ResultData
      */
+    @SysLog
     @ApiOperation(value = "统计基础数据")
     @PostMapping("/base")
     public ResultData<StatisticsVo> statistics() {
@@ -45,6 +47,7 @@ public class StatisticsController {
      * @param dto 查询参数
      * @return ResultData
      */
+    @SysLog
     @ApiOperation(value = "统计博客发布数据")
     @PostMapping("/statisticsBlog")
     public ResultData<StatisticsChartVo> statisticsBlog(@RequestBody StatisticsQueryDto dto) {
@@ -56,6 +59,7 @@ public class StatisticsController {
      *
      * @return ResultData
      */
+    @SysLog
     @ApiOperation(value = "统计博客分类数据")
     @PostMapping("/statisticsBlogClass")
     public ResultData<StatisticsChartVo> statisticsBlogClass() {
@@ -67,6 +71,7 @@ public class StatisticsController {
      *
      * @return ResultData<StatisticsChartVo>
      */
+    @SysLog
     @ApiOperation(value = "统计博客分类子类数据")
     @PostMapping("/statisticsBlogClassChild")
     public ResultData<StatisticsChartVo> statisticsBlogClassChild(@RequestBody Id<Long> longId) {
@@ -81,6 +86,7 @@ public class StatisticsController {
      * @param dto 查询参数
      * @return ResultData
      */
+    @SysLog
     @ApiOperation(value = "统计用户数据")
     @PostMapping("/statisticsUser")
     public ResultData<StatisticsChartVo> statisticsUser(@RequestBody StatisticsQueryDto dto) {
