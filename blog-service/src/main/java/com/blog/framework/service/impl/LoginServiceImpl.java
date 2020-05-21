@@ -107,6 +107,7 @@ public class LoginServiceImpl implements LoginService {
 
         //存入redis
         SysUserLoginVo userInfo = SysUserLoginVo.builder()
+                .id(model.getId())
                 .account(model.getAccount())
                 .userName(model.getAccount())
                 .adminFlag(model.getAdminFlag())
@@ -143,7 +144,6 @@ public class LoginServiceImpl implements LoginService {
         info.setMenuList(null);
         info.setUrls(null);
         tokenService.saveUserInfo(token, info);
-
         return userInfo;
     }
 

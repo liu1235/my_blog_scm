@@ -117,7 +117,7 @@ public class SysUserController {
     @ApiOperation(value = "重置密码", notes = "重置密码")
     @PostMapping(value = "/resetPwd")
     public ResultData<String> resetPwd(@Validated @RequestBody Id<Long> idBean) {
-        return ResultData.createDeleteResult(sysUserService.resetPwd(idBean.getId()));
+        return ResultData.createUpdateResult(sysUserService.resetPwd(idBean.getId()));
     }
 
     /**
@@ -131,7 +131,7 @@ public class SysUserController {
     @ApiOperation(value = "修改密码", notes = "修改密码")
     @PostMapping(value = "/editPwd")
     public ResultData<String> editPwd(@Validated @RequestBody SysUserEditPwdDto pwdReq) {
-        return ResultData.createDeleteResult(sysUserService.editPwd(pwdReq));
+        return ResultData.createUpdateResult(sysUserService.editPwd(pwdReq));
     }
 
     /**
