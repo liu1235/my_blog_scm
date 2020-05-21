@@ -21,6 +21,7 @@ import com.blog.framework.vo.sys.menu.SysMenuVo;
 import com.blog.framework.vo.sys.user.SysUserLoginVo;
 import com.blog.framework.vo.user.UserLoginVo;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -132,9 +133,15 @@ public class LoginServiceImpl implements LoginService {
                     .filter(v -> !MenuTypeEnum.BUTTON.getCode().equals(v.getMenuType()))
                     .collect(Collectors.toList());
             userInfo.setMenuList(sysMenuService.formatMenuList(list));
+            //获取菜单url
+            List<String> urls = menuList.stream().map(SysMenuVo::getMenuUrl)
+                    .filter(StringUtils::isNotBlank)
+                    .distinct().collect(Collectors.toList());
+            userInfo.setUrls(urls);
         }
         SysUserLoginVo info = CopyDataUtil.copyObject(userInfo, SysUserLoginVo.class);
         info.setMenuList(null);
+        info.setUrls(null);
         tokenService.saveUserInfo(token, info);
 
         return userInfo;

@@ -52,24 +52,6 @@ public class SysMenuVo {
     private String menuPerms;
 
     /**
-     * 菜单code 相同菜单下 按钮唯一标识
-     */
-    @ApiModelProperty(value = "菜单code 相同菜单下 按钮唯一标识")
-    private String menuCode;
-
-    /**
-     * 菜单对应方法
-     */
-    @ApiModelProperty(value = "菜单对应方法")
-    private String menuMethod;
-
-    /**
-     * 菜单对应前端页面路径（如: /sys/user.vue）
-     */
-    @ApiModelProperty(value = "菜单对应前端页面路径（如: /sys/user.vue）")
-    private String menuPath;
-
-    /**
      * 类型 (1,目录;2,菜单;3,按钮)
      */
     @ApiModelProperty(hidden = true)
@@ -103,12 +85,6 @@ public class SysMenuVo {
      */
     @ApiModelProperty(value = "状态(0,禁用;1,启用)")
     private String menuStatusName;
-
-    /**
-     * 平台（1：业务；2：其他）
-     */
-    @ApiModelProperty(value = "平台（1：业务；2：其他）")
-    private Integer menuPlatform;
 
     /**
      * 子级

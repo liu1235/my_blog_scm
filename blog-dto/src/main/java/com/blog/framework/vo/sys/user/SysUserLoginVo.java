@@ -54,6 +54,11 @@ public class SysUserLoginVo implements Serializable {
     private List<String> permsList;
 
     /**
+     * 用户能够访问的路由
+     */
+    private List<String> urls;
+
+    /**
      * 用户拥有菜单
      */
     private List<?> menuList;
