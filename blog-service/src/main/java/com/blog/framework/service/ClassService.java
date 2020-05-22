@@ -62,6 +62,22 @@ public interface ClassService {
     Boolean edit(ClassUpdateDto updateDto);
 
     /**
+     * 启用
+     *
+     * @param id 分类id
+     * @return Boolean
+     */
+    Boolean enable(Long id);
+
+    /**
+     * 禁用
+     *
+     * @param id 分类id
+     * @return Boolean
+     */
+    Boolean disable(Long id);
+
+    /**
      * 删除分类
      *
      * @param id 分类id

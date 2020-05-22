@@ -8,6 +8,7 @@ import com.blog.framework.dto.comment.CommentQueryDto;
 import com.blog.framework.dto.comment.ReplyDto;
 import com.blog.framework.service.CommentService;
 import com.blog.framework.vo.comment.CommentVo;
+import com.blog.framework.web.annotation.SysLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,7 @@ public class CommentController {
      * @param dto 查询条件
      * @return ResultData<Page<CommentVo>>
      */
+    @SysLog
     @ApiOperation(value = "获取评论内容")
     @PostMapping(value = "/list")
     public ResultData<CommentVo> list(@Validated @RequestBody CommentQueryDto dto) {
@@ -52,6 +54,7 @@ public class CommentController {
      * @param dto 添加评论
      * @return ResultData<String>
      */
+    @SysLog
     @ApiOperation(value = "添加评论", notes = "添加评论")
     @PostMapping(value = "/add")
     public ResultData<String> add(@Validated @RequestBody CommentDto dto) {
@@ -64,6 +67,7 @@ public class CommentController {
      * @param dto 新增数据
      * @return ResultData<String>
      */
+    @SysLog
     @ApiOperation(value = "添加回复", notes = "添加回复")
     @PostMapping(value = "/add-reply")
     public ResultData<String> addReply(@Validated @RequestBody ReplyDto dto) {

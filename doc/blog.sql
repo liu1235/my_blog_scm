@@ -5,239 +5,320 @@
 -- HeidiSQL 版本:                  9.5.0.5196
 -- --------------------------------------------------------
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT = @@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!50503 SET NAMES utf8mb4 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS = @@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS = 0 */;
-/*!40101 SET @OLD_SQL_MODE = @@SQL_MODE, SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO' */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 -- 导出  表 blog.t_blog 结构
-CREATE TABLE IF NOT EXISTS `t_blog`
-(
-    `id`           bigint(20)    NOT NULL AUTO_INCREMENT COMMENT '博客id',
-    `title`        varchar(200)  NOT NULL COMMENT '博客标题',
-    `description`  varchar(1024) NOT NULL COMMENT '描述',
-    `image`        varchar(1024)          DEFAULT NULL COMMENT '图片',
-    `content`      text          NOT NULL COMMENT '博客内容',
-    `raw_data`     text          NOT NULL COMMENT '原始输入数据',
-    `class_id`     bigint(20)    NOT NULL COMMENT '分类id',
-    `status`       tinyint(1)    NOT NULL DEFAULT '0' COMMENT '是否发布(1:是, 0:否)',
-    `read_count`   int(11)       NOT NULL DEFAULT '0' COMMENT '阅读次数',
-    `release_time` datetime               DEFAULT NULL COMMENT '发布日期',
-    `create_time`  datetime      NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time`  datetime      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 15
-  DEFAULT CHARSET = utf8 COMMENT ='博客表';
+CREATE TABLE IF NOT EXISTS `t_blog` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '博客id',
+  `title` varchar(200) NOT NULL COMMENT '博客标题',
+  `description` varchar(1024) NOT NULL COMMENT '描述',
+  `image` varchar(1024) DEFAULT NULL COMMENT '图片',
+  `content` text NOT NULL COMMENT '博客内容',
+  `raw_data` text NOT NULL COMMENT '原始输入数据',
+  `class_id` bigint(20) NOT NULL COMMENT '分类id',
+  `parent_class_id` bigint(20) NOT NULL COMMENT '分类id父id（当分类id没有父id时 此值就是分类id）（冗余字段，用于统计）',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否发布(1:是, 0:否)',
+  `read_count` int(11) NOT NULL DEFAULT '0' COMMENT '阅读次数',
+  `release_time` datetime DEFAULT NULL COMMENT '发布日期',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8 COMMENT='博客表';
 
--- 正在导出表  blog.t_blog 的数据：~13 rows (大约)
-DELETE
-FROM `t_blog`;
-/*!40000 ALTER TABLE `t_blog`
-    DISABLE KEYS */;
-INSERT INTO `t_blog` (`id`, `title`, `description`, `image`, `content`, `raw_data`, `class_id`, `status`, `read_count`,
-                      `release_time`, `create_time`, `update_time`)
-VALUES (14, '测试',
-        'REmote DIctionary Server(Redis) 是一个由Salvatore Sanfilippo写的key-value存储系统。\nRedis是一个开源的使用ANSI C语言编写、遵守BSD协议、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。\n\n它通常被称为数据结构服务器，因为值（value）可以是 字符串(String), 哈希(Hash), 列表(list), 集合(sets) 和 有序集合(sorted sets)等类型。',
-        NULL,
-        '<h1><a id="Redis_String_0"></a>Redis 字符串(String)</h1>\n<p>Redis 字符串数据类型的相关命令用于管理 redis 字符串值，基本语法如下：</p>\n<h2><a id="_3"></a>语法</h2>\n<p><code>redis 127.0.0.1:6379&gt; COMMAND KEY_NAME</code></p>\n<h2><a id="_5"></a>实例</h2>\n<pre><code class="lang-">redis 127.0.0.1:6379&gt; SET runoobkey redis\nOK\nredis 127.0.0.1:6379&gt; GET runoobkey\n&quot;redis&quot;\n</code></pre>\n<p>在以上实例中我们使用了 SET 和 GET 命令，键为 runoobkey。</p>\n',
-        '# Redis 字符串(String)\nRedis 字符串数据类型的相关命令用于管理 redis 字符串值，基本语法如下：\n\n## 语法\n```redis 127.0.0.1:6379> COMMAND KEY_NAME```\n## 实例\n```\nredis 127.0.0.1:6379> SET runoobkey redis\nOK\nredis 127.0.0.1:6379> GET runoobkey\n"redis"\n```\n在以上实例中我们使用了 SET 和 GET 命令，键为 runoobkey。',
-        3, 1, 2, '2020-05-12 18:47:10', '2020-05-12 18:27:56', '2020-05-12 18:48:12');
-/*!40000 ALTER TABLE `t_blog`
-    ENABLE KEYS */;
+-- 正在导出表  blog.t_blog 的数据：~3 rows (大约)
+DELETE FROM `t_blog`;
+/*!40000 ALTER TABLE `t_blog` DISABLE KEYS */;
+INSERT INTO `t_blog` (`id`, `title`, `description`, `image`, `content`, `raw_data`, `class_id`, `parent_class_id`, `status`, `read_count`, `release_time`, `create_time`, `update_time`) VALUES
+	(14, '测试', 'REmote DIctionary Server(Redis) 是一个由Salvatore Sanfilippo写的key-value存储系统。\nRedis是一个开源的使用ANSI C语言编写、遵守BSD协议、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。\n\n它通常被称为数据结构服务器，因为值（value）可以是 字符串(String), 哈希(Hash), 列表(list), 集合(sets) 和 有序集合(sorted sets)等类型。', NULL, '<h1><a id="Redis_String_0"></a>Redis 字符串(String)</h1>\n<p>Redis 字符串数据类型的相关命令用于管理 redis 字符串值，基本语法如下：</p>\n<h2><a id="_3"></a>语法</h2>\n<p><code>redis 127.0.0.1:6379&gt; COMMAND KEY_NAME</code></p>\n<h2><a id="_5"></a>实例</h2>\n<pre><code class="lang-">redis 127.0.0.1:6379&gt; SET runoobkey redis\nOK\nredis 127.0.0.1:6379&gt; GET runoobkey\n&quot;redis&quot;\n</code></pre>\n<p>在以上实例中我们使用了 SET 和 GET 命令，键为 runoobkey。</p>\n', '# Redis 字符串(String)\nRedis 字符串数据类型的相关命令用于管理 redis 字符串值，基本语法如下：\n\n## 语法\n```redis 127.0.0.1:6379> COMMAND KEY_NAME```\n## 实例\n```\nredis 127.0.0.1:6379> SET runoobkey redis\nOK\nredis 127.0.0.1:6379> GET runoobkey\n"redis"\n```\n在以上实例中我们使用了 SET 和 GET 命令，键为 runoobkey。', 3, 3, 1, 15, '2020-05-14 22:52:31', '2020-05-12 18:27:56', '2020-05-20 14:43:24'),
+	(24, 'java锁原理分析', '在编程中，很多人都会尝试使用多线程的方式去编程，但是却很难保证自己写出来的多线程程序的正确性，在多线程中如果涉及到对共享资源的并发读写，这时就会产生资源的争夺。而在资源争夺中，第一想到的就是使用锁 ,对共享资源进行数据保护。java中提供了2种基本也是最常用的锁，synchronized、Lock！但是这2种锁有什么特点？分别使用的场景?在使用过程中应该注意哪些？各自有哪些不足呢？\n本文将带着上面的问题并结合源码进行仔细分析，让你对锁有一个深入的了解。', NULL, '<h1><a id="_0"></a>前言</h1>\n<p>在编程中，很多人都会尝试使用多线程的方式去编程，但是却很难保证自己写出来的多线程程序的正确性，在多线程中如果涉及到对共享资源的并发读写，这时就会产生资源的争夺。而在资源争夺中，第一想到的就是使用锁 ,对共享资源进行数据保护。java中提供了2种基本也是最常用的锁，synchronized、Lock！但是这2种锁有什么特点？分别使用的场景?在使用过程中应该注意哪些？各自有哪些不足呢？</p>\n<p>本文将带着上面的问题并结合源码进行仔细分析，让你对锁有一个深入的了解。</p>\n<h1><a id="synchronized__5"></a>synchronized 详解</h1>\n<h1><a id="_6"></a>一、概念</h1>\n<p>synchronized 是java中的关键字，利用锁的机制来实现同步，来达到对共享资源保护。</p>\n<p>锁的机制有2种特质：<br />\n1、互斥性：在同一时间只允许一个线程持有某个对象锁，通过这种特性来实现多线程中的协调机制。互斥性我们往往称作原子性<br />\n2、可见性：确保在锁被释放之前，对共享变量所做的修改，对其余的线程是可见的(也就是说在获得锁的时候应获得最新的共享变量值)，否则对于另外一个线程在操作共享变量是自己在本地缓存的副本上，这样就会引发数据的不一致。</p>\n<h1><a id="_13"></a>二、对象锁和类锁</h1>\n<p>在使用Synchronized之前，先了解什么是对象锁和类锁<br />\n1、对象锁<br />\n在java中,每个对象都会有一个monitor对象，这个对象其实就是java对象锁，通常也被称作为&quot;内置锁&quot;或&quot;对象锁&quot;，类的对象有多个，所有对象锁也有多个，相互之间互不干涉。<br />\n2、类锁<br />\n在java中，针对每一个类都有一个帧，可以称作为&quot;类锁&quot;，类锁实际也是通过对象锁实现的，即类的Class对象锁，每一个类有且仅有一个Class对象(JVM加载类的时候产生)，所有每一个类只有一个类锁。</p>\n<h1><a id="_20"></a>三、修饰方法</h1>\n<p>1、修饰实例方法：作用于当前实例加锁，在进入同步代码方法时先获取当前实例锁<br />\n2、修饰静态方法：作用于当前类对象锁，在进入同步代码方法时先获取当前对象锁（类.class）</p>\n<p>修饰实例方法:<br />\n顾名思义就是修饰类中的实例方法，并且默认是当前对象作为锁的对象，而一个对象只有一把锁，所以同一时刻只能有一个线程执行被同步的方法，等到线程执行完方法后，其他线程才能继续执行被同步的方法。正确实例代码如下：</p>\n<pre><code class="lang-">public class SynchronizedTest implements Runnable {\n      public static int count = 0;\n    @Override\n      public void run() {\n          for (int i = 1; i &lt;= 1000000; i++) {\n            add();\n          }\n      }\n  \n      public synchronized void add() {\n          ++count;\n      }\n\n      public static void main(String[] args) throws Exception {\n          SynchronizedTest test = new SynchronizedTest();\n          Thread t1 = new Thread(test);\n          Thread t2 = new Thread(test);\n          t1.start();\n          t2.start();\n          t1.join();\n          t2.join();\n         System.out.println(count); //2000000\n}\n}\n</code></pre>\n<p>错误代码：对同一共享资源使用不同实例锁</p>\n<pre><code class="lang-">public class SynchronizedTest implements Runnable {\n\nprivate Object object;\n\npublic SynchronizedTest(Object object) {\n    this.object = object;\n}\n\npublic static int count = 0;\n\n@Override\npublic void run() {\n\n    synchronized (object) {\n        for (int i = 1; i &lt;= 1000000; i++) {\n            add();\n        }\n    }\n}\n\npublic static  void add() {\n    ++count;\n}\n\npublic static void main(String[] args) throws Exception {\n    Object object1 = new Object();\n    Object object2 = new Object();\n    SynchronizedTest firstLock = new SynchronizedTest(object1);\n    SynchronizedTest secondLock = new SynchronizedTest(object2);\n    Thread t1 = new Thread(firstLock);\n    Thread t2 = new Thread(secondLock);\n    t1.start();\n    t2.start();\n    t1.join();\n    t2.join();\n    System.out.println(count);//小于 20000000\n}\n}\n</code></pre>\n<p>运行程序后，会发现结果永远小于2000000，说明synchronized没有起到同步的作用了，说明修饰实例方法只能作用实例对象，不能作用到类对象</p>\n<p>修饰静态方法:</p>\n<pre><code class="lang-">public class SynchronizedTest implements Runnable {\n\npublic static int count = 0;\n\n@Override\npublic void run() {\n    for (int i = 1; i &lt;= 100000; i++) {\n        add();\n    }\n}\n\npublic static synchronized void add() {\n    ++count;\n}\n\npublic static void main(String[] args) throws Exception {\n    SynchronizedTest firstLock = new SynchronizedTest();\n    SynchronizedTest secondLock = new SynchronizedTest();\n    Thread t1 = new Thread(firstLock);\n    Thread t2 = new Thread(secondLock);\n    t1.start();\n    t2.start();\n    t1.join();\n    t2.join();\n    System.out.println(count);=2000000\n}\n}\n</code></pre>\n<p>作用与静态方法的时候，不管实例化多少个实例对象，结果用于等2000000，说明锁对象是当前类.class,有且仅有一把锁，最终结果和实际结果一致！</p>\n<p>修饰代码块：正确案例</p>\n<pre><code class="lang-">ppublic class SynchronizedTest implements Runnable {\n\nprivate Object object;\n\npublic SynchronizedTest(Object object) {\n    this.object = object;\n}\n\npublic static int count = 0;\n\n@Override\npublic void run() {\n\n    synchronized (object) {\n        for (int i = 1; i &lt;= 1000000; i++) {\n            add();\n        }\n    }\n}\npublic static void add() {\n    ++count;\n}\npublic static void main(String[] args) throws Exception {\n    Object object = new Object();\n    SynchronizedTest firstLock = new SynchronizedTest(object);\n    SynchronizedTest secondLock = new SynchronizedTest(object);\n    Thread t1 = new Thread(firstLock);\n    Thread t2 = new Thread(secondLock);\n    t1.start();\n    t2.start();\n    t1.join();\n    t2.join();\n    System.out.println(count);//= 20000000\n}\n}\n</code></pre>\n<p>错误案例：</p>\n<pre><code class="lang-">public class SynchronizedTest implements Runnable {\nprivate Object object;\n\npublic SynchronizedTest(Object object) {\n    this.object = object;\n}\n\npublic static int count = 0;\n\n@Override\npublic void run() {\n    synchronized (object) {\n        for (int i = 1; i &lt;= 1000000; i++) {\n            add();\n        }\n    }\n}\npublic static void add() {\n    ++count;\n}\npublic static void main(String[] args) throws Exception {\n    Object object1 = new Object();\n    Object object2 = new Object();\n    SynchronizedTest firstLock = new SynchronizedTest(object1);\n    SynchronizedTest secondLock = new SynchronizedTest(object2);\n    Thread t1 = new Thread(firstLock);\n    Thread t2 = new Thread(secondLock);\n    t1.start();\n    t2.start();\n    t1.join();\n    t2.join();\n    System.out.println(count);//小于 20000000\n}\n}\n</code></pre>\n<p>代码块使用加Synchronized的时候，使用同一把锁，其他的线程就必须等待，这样也就保证了每次只有一个线程执行被同步的代码块。不是同一把同锁，无法达到共享资源同步结果</p>\n<h1><a id="synchronized_204"></a>四、synchronized底层原理</h1>\n<p>在java虚拟机中的同步是基于进入和退出管程（Monitor）对象实现的,同步有显示同步(有明确的monitorenter和moniterexit)和隐士同步(ACC_SYNCHRONIZED)</p>\n<h3><a id="1_207"></a>1、代码块底层原理</h3>\n<p>下面是一段被synchronized修饰 的同步代码块，在代码块中操作共享变量：</p>\n<pre><code class="lang-">public class SynchronizedBlockTest {\n\npublic int j = 0;\n\npublic void excuteSynTask() {\n    synchronized (this) {\n        j++;\n    }\n}\n}\n</code></pre>\n<p>通过javap -c反编译出来如下：</p>\n<pre><code class="lang-">    Compiled from&quot;SynchronizedBlockTest.java&quot;\n    public class com.example.thread.SynchroniedTest.SynchronizedBlockTest{\n    public int j;\n    public com.example.thread.SynchroniedTest.SynchronizedBlockTest();\n    Code:\n    0:aload_0\n    1:invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V\n    4:aload_0\n    5:iconst_0\n    6:putfield      #2                  // Field j:I\n    9:return\n\n    public void excuteSynTask();\n            Code:\n            0:aload_0\n            1:dup\n            2:astore_1\n            3:monitorenter //进入监视器（进入同步方法）\n            4:aload_0\n            5:dup\n            6:getfield      #2                  // Field j:I\n            9:iconst_1\n            10:iadd\n            11:putfield      #2                  // Field j:I\n            14:aload_1\n            15:monitorexit //退出监视器（退出同步方法）\n            16:goto 24\n            19:astore_2\n            20:aload_1\n            21:monitorexit //退出同步方法\n            22:aload_2\n            23:athrow\n            24:return\n            Exception table:\n            from to target type\n            4 16 19any\n            19 22 19any\n            }\n</code></pre>\n<p>从上面字节码可以看出同步代码块实现使用的<code>monitorenter</code> 和<code>monnitorexit</code>指令，其中<code>monitorenter</code>指令指向同步代码块起始的位置，<code>monitorexit</code>指令则指明同步代码块结束的位置，当执行<code>monitorenter</code>指令的时候，当前线程将试图获取<code>objectref</code>（即对象锁）所对应的<code>moniter</code>持有权,当<code>objectref</code>的<code>monitor</code>进入计数器为 0，那么此线程就可以成功取得monitor，并且将计数器的值设置为1,获取锁成功。如果当前线程已经拥有objectref的monitor的特有权，那么它可以重入这个monitor，重入时的计算器值也会被执行，执行线程将释放monitor(锁)并设置计数器值为0，其他线程将有机会持有monitor，值得注意的是编译器将会确保无论方法通过何种方式完成，方法中调用过的每条 monitorenter 指令都有执行其对应 monitorexit 指令，而无论这个方法是正常结束还是异常结束。为了保证在方法异常完成时 monitorenter 和 monitorexit 指令依然可以正确配对执行，编译器会自动产生一个异常处理器，这个异常处理器声明可处理所有的异常，它的目的就是用来执行 monitorexit 指令。从字节码中也可以看出多了一个monitorexit指令，它就是异常结束时被执行的释放monitor 的指令。</p>\n<h3><a id="2synchronized_264"></a>2、synchronized方法底层原理</h3>\n<p>方法级别的同步是隐士的，即无需通过字节码指令来控制。JVM可以从方法常量池中的方法表结构中的ACC_SYNCHRONIZED访问标志来区分一个方法是否是同步方法.当方法调用的时候，调用指令将会检查方法中的ACC_SYNCHRONIZED 访问是否被标志了，如果设置了，执行线程将会先持有monitor，然后在执行方法，最后在方法完成的时候释放monitor。在方法执行的期间，执行线程持有monitor，其他任何线程无法在获得同一个monitor。如果线程在执行同步方法的时候抛出了异常，并且在方法内部无法处理此异常，那么这个同步方法锁持有的monitor将在异常抛到同步方法之外时将会自动释放。</p>\n<pre><code>public com.example.thread.SynchroniedTest.SynchronizedBlockTest();\n        Code:\n        0:aload_0\n        1:invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V\n        4:aload_0\n        5:iconst_0\n        6:putfield      #2                  // Field j:I\n        9:return\n\npublic synchronized void excuteSynTask();\n        flags:ACC_PUBLIC,ACC_SYNCHRONIZED\n      Code:\n      0:aload_0\n      1:dup\n      2:getfield      #2                  // Field j:I\n      5:iconst_1\n      6:iadd\n      7:putfield      #2                  // Field j:I\n    10:return\n</code></pre>\n<p>从字节码中可以看出，synchronized修饰的方法并没有monitorenter指令和monitorexit指令，取得代之的 确实是ACC_SYNCHRONIZED标识，该标识指明了该方法是一个同步方法，JVM通过该 ACC_SYNCHRONIZED访问标志来辨别一个方法是否声明为同步方法，从而执行相应的同步调用。这便是synchronized锁在同步代码块和同步方法上实现的基本原理。同时我们还必须注意到的是在java早期版本中，synchronized是属于重量级锁，效率低下，因为监视器是依赖于底层的操作系统来实现的，但是在操作系统实现线程之间的切换时需要从用户态转换到核心态，这个转态之间的转换是需要相对比较长的时间，时间成本相对比较高，这个也是早期版本中synchronized效率低下的原因。然而在java6之后官方从JVM层面对synchronized有了较大的优化，所以现在的synchonize锁效率也优化了很多。在java6之后，为了减少获得锁和释放锁带来的性能消耗，引入了轻量级锁和偏向锁，接下来Java官方在JVM层面synchronized锁的优化。</p>\n<h3><a id="3JAVAsynchronized_288"></a>3、JAVA虚拟机对synchronized的优化</h3>\n<p>锁的状态总共优化总共有四种，无锁状态、偏向锁、轻量级锁和重量级锁。随着锁的竞争，锁可以从偏向锁升级到轻量级锁，在升级到重量级锁，但是锁的升级只能是单向的，也就是说只能是低到高升级，不会出现锁的降级，关于重量级锁,前面已经讲述过了，下面介绍的剩下几种锁，</p>\n<h4><a id="_291"></a>偏向锁</h4>\n<p>偏向锁是在java6之后才加入的新锁，他是针对加锁操作的优化手段，在大多数情况下，锁不仅存在多线程竞争，而且总是由同一线程多次获得，因此为了减少同一线程获取锁的代价而引入的偏向锁，偏向锁的核心思想是，如果一个线程获得了锁，那么就进入了偏向模式，此时Mark word 的结构也就变为了偏向锁结构，当这个线程再次请求锁的时候，就不需要再做任何同步操作了，即获取锁的过程，就省去了大量的有关锁的申请操作了，从而就提高了程序的性能。所以，对于没有锁的竞争的场合，偏向锁有很好的优化效果，毕竟这样既有可能连续多次是同一个线程重复的去申请相同的锁，但是对于锁竞争比较激烈的场合，偏向锁就失效了，因为这样的场合极有可能每次申请锁的线程都是不相同的，因此这种场合下不应该使用偏向锁，否则会得不偿失，需要注意的是，偏向锁失败后，并不会立即膨胀为重量级锁，而是先升级为轻量级锁。</p>\n<h4><a id="_294"></a>轻量级锁</h4>\n<p>假如偏向锁失败，虚拟机并不会立即升级为重量级锁，他还会尝试使用一种称为轻量级锁的优化手段，此时Mark Word的结构也会变为轻量级锁结构，轻量级锁能够提升程序的依据是“对绝大部分的锁，在整个同步周期内都不存在竞争”。</p>\n<h4><a id="_297"></a>自旋锁</h4>\n<p>当上面的轻量级锁失败之后，虚拟机为了避免线程真实的在操作系统层面上被挂起，这个时候可以利用自旋锁的优化手段。在大多数情况下，线程持有锁的时间都不会太长，如果直接挂起操作系统层面的线程可能会得不偿失，毕竟操作系统实现线程之间转换需要从用户态转化为核心态，这个状态之间的转化需要较长的时间，时间的成本是想多比较高的，因此自旋锁会假设在不久的将来当前的线程就可以获得锁，因此虚拟机会让当前想要获取的线程做几个空的循环，一般不会太久，在经过一段时间的循环之后，如果得到了锁，就可以进入到了临界区。如果还不能获取到锁，那么就会将线程在操作系统层面上挂起，这就是自旋锁的优化方式，这种方式确实也是可以提升效率的，最后没有办法就只能升级为重量级锁。</p>\n<h4><a id="_300"></a>锁消除</h4>\n<p>消除锁是虚拟机另外一种锁的优化，这种优化更加的彻底，在java虚拟机在JIT编译时（可以简单理解为当某段代码即将第一次执行时，也叫及时编译 ）</p>\n<p>通过对运行上下的扫描，去除不可能存在资源竞争的锁，同过这种方式消除没有必要的锁，可以节省毫无意义的请求锁的时间，对于StringBuffer的append方法是一个同步方法，但是在add方法中的StringBuffer属于一个局部变量，并且不会被其余的线程锁使用，因此StringBuffer不可能存在资源竞争的背景，JVM会自动将其锁消除。</p>\n<pre><code class="lang-">    public class StringBufferRemoveLock {\n         public void add(String str, String str2) {\n         StringBuffer sb = new StringBuffer();\n        sb.append(str).append(str2);\n    }\n\npublic static void main(String[] args) {\n    StringBufferRemoveLock stringBufferRemoveLock = new StringBufferRemoveLock();\n    for (int i = 0; i &lt; 10000; i++) {\n        stringBufferRemoveLock.add(&quot;abc&quot;, &quot;&quot; + i);\n    }\n}\n}\n}\n</code></pre>\n<h3><a id="4synchronized_320"></a>4、线程中断与synchronized</h3>\n<p>中断锁表达的意思是，在线程运行期间大断他，在java中，提供了下面三个有关线程中断的方法：</p>\n<p>在讲解中断与Synchronized时先了解下面interrupt isInterrupted，interrupted方法的基本用法：</p>\n<p>/ 中断线程(此线程并不一定是当前线程，而是指调用该方法的Thread实例所代表的线程)这个其实只是给线程打了一个中断标志，线程任然会继续运行<br />\nThread.interrupt();</p>\n<p>// 判断线程是否被中断，并不会清除中断状态<br />\nThread.isInterrupt();</p>\n<p>//表示的线程是否被中断并清除当前线程的中断状态<br />\nThread.interrupted();<br />\n案例分析</p>\n<p>图片1.png<br />\n从结果可以看出在调用了interrupt()方法的后，线程仍然在继续运行，并未停止，但是这个时候已经给线程设置了中断标志，两个isInterrupt方法都会的输出true；</p>\n<p>对上面的案例在做一下变动：</p>\n<p>图片2.png<br />\n上面可以看出第一次调用isInterrupted方法的时候返回结果是true</p>\n<p>第一次和第二次调用interrupted方法返回结果是false 这个和之前解释interrupted不一致，应该一个是true一个是false才正确。 这其实有一个坑，interrputed方方法测试的是当前线程是否被中断，注意是当前线程!!</p>\n<p>上面的当前线程其实就是main线程，而mythread.interrupt()调用的是mythread线程。所以这里调用mythread.interrupted()其调用的是main.interrupted</p>\n<p>interrupted源码分析：</p>\n<p>图片3.png<br />\n从源码中可以看出调用的是currentThread线程，true表示的是是否清除中断标志</p>\n<p>请看下面的案例：</p>\n<p>图片4.png<br />\n实际结果和预料之中是一致的。</p>\n<p>注意：</p>\n<p>若线程在阻塞状态时，调用了它的interrupt()方法，那么它的“中断状态”会被清除并且会收到一个InterruptedException异常。</p>\n<p>例如，线程通过wait()，sleep()进入阻塞状态，此时通过interrupt()中断该线程；调用interrupt()会立即将线程的中断标记设为“true”，但是由于线程处于阻塞状态，所以该“中断标记”会立即被清除为“false”，同时，会产生一个InterruptedException的异常。</p>\n<p>中断与synchronized</p>\n<pre><code class="lang-">public class SynchronizedBlock implements Runnable {\n\npublic synchronized void test() {\n    System.out.println(&quot;开始调用test()方法&quot;);\n    while (true) // Never releases lock\n        Thread.yield(); //将执行权交给其他线程执行\n}\n\npublic SynchronizedBlock() {\n\n    new Thread(new Runnable() {\n        @Override\n        public void run() {\n            test();\n        }\n    }).start();\n}\n\n@Override\npublic void run() {\n    while (true) {\n        System.out.println(&quot;开始执行----&quot;);\n        if (Thread.interrupted()) {\n            System.out.println(&quot;中断线程&quot;);\n        } else {\n            test();\n        }\n    }\n}\n\n\npublic static void main(String[] args) throws InterruptedException {\n    SynchronizedBlock synchronizedBlock = new SynchronizedBlock();\n    Thread thread = new Thread(synchronizedBlock);\n    thread.start();\n    TimeUnit.SECONDS.sleep(1);\n    thread.interrupt();\n}\n}\n</code></pre>\n<p>运行结果:<br />\n开始调用test()方法<br />\n开始执行----</p>\n<p>通过上面的结果发现 控制台输出结果并没有：中断线程，因为interrupt对Synchronized修饰的方法，代码块不会响应中断。但是后文lock锁 对interrupt可以响应中断。</p>\n<p>Lock<br />\n在jdk1.5 以后，增加了Juc并发包且提供了Lock接口用来实现锁的功能，他除了与synchronized关键字类似的同步功能，还提供了比synchronized更加灵活的实现。多线程下可以精确控制线程，且在jdk1.5 并发效率比synchornized更高的并发率，但是这也会带来一些缺点，下文将一步步去分析。</p>\n<p>Lock本质上是一个接口(位于源码包中的java.util.concurrentLocks中)它包含以下几个方法</p>\n<p>//尝试获取锁，获取锁成功则立马返回，否则阻塞当前线程<br />\nvoid lock();</p>\n<p>//尝试获取锁，线程在成功获取锁之后被中断。则放弃获取锁并且抛出异常<br />\nVoid lockInterruptibly() throws InterruptException;</p>\n<p>//尝试获取锁，获取成成功之后，就返回true，否则就返回false<br />\nBoolean tryLock();</p>\n<p>//尝试获取锁，若在规定的时间内获取到锁，立马就返回true，否则就返回false，未获取到锁之前被中断就抛出异常<br />\nBoolean tryLock(long time,TimeUnit unit) throws InterruptException;</p>\n<p>//释放锁<br />\nVoid unlock();</p>\n<p>//返回当前锁的条件变量，通过条件变量可以实现类似notify和wait()a的功能，一个锁可以有多个条件变量<br />\nCondition newCondition();</p>\n<p>Lock里面有三个实现类，第一个是ReentrantLock ，另外2个是ReentrantReadWriteLock类中ReadLock和WriteLock。</p>\n<p>使用方法：多线程下访问共享之源时，访问前需要加上锁，访问结束的时候在解开锁，解锁条件代码必须放在finally中，不然会出现死锁</p>\n<pre><code class="lang-">    ReentLock lock = new ReentLock();\n    lock.lock();\n    try {\n    } finally {\n        lock.lock();\n    }\n</code></pre>\n<p>注意：加锁必须位于对资源访问的try外部，特别是使用lockInterruptibly方法锁的时候就必须这样子去做，这是为了防止线程在获取锁的时候被中断了，不需要也没有必要去释放锁。</p>\n<pre><code class="lang-">ReentrantLock reentrantLock = new ReentrantLock();\n    try {\n        reentrantLock.lockInterruptibly();\n        try {\n            //access the resource protected by this lock\n        } finally {\n            reentrantLock.unlock();\n          }\n    } catch (InterruptedException exception) {\n    }\n</code></pre>\n<h3><a id="ReentLock_458"></a>ReentLock内部源码分析</h3>\n<p>概念<br />\nReentLock 是基于AbstractQueendSynchronized来实现的，所以在了解ReentLock之前先简单的说一下AQS<br />\n我们最熟悉的同步锁应该就是synchronized（上文已经对其做了详细的介绍）<br />\n他是通过底层的monitorEnter 和monitorExit和ACC_SYNCHRONIZED来实现锁的获取和释放的<br />\n这里介绍的AbstractQueenSynchronized 同步器(AQS),是基与FIFO队列来实现的，通过state的状态，来实现acquire和release;state为0的表示该锁还没有被任何线程获取可以获取锁；state为1表示已经有线程已经获取了锁。</p>\n<p>源码分析AQS<br />\nAQS是基于FIFO队列实现的，所以队列必然是有一个个节点组成的，下面从节点开始讲解：</p>\n<pre><code class="lang-">//waitstatus 有下面几个状态\n/**\n\nCANCELLED =1 表示当前的线程被取消了\nSIGNAL =-1 表示当前节点的后继节点阻塞了，需要被唤醒\nCONDITION =-2 表示当前节点在等待Condition ，因为某个节点条件被阻塞\nPROPAGATE=-3 表示锁的下一次获取可以无条件的传播\n*/\nvolatile int waitStatus;\nstatic final int CANCELLED = 1;\nstatic final int SIGNAL = -1;\nstatic final int CONDITION = -2;\nstatic final int PROPAGATE = -3;\n介绍Node\n//头节点\nPrivate tansient volatile Node head；\n//尾结点\nPrivate transient volatile Node tail；\n//同步状态\nPrivate volatile int state;\n</code></pre>\n<p>*上面已经介绍完AQS几个重要的成员，下面开始通过一个demo，来分析ReentLock底层实习原理</p>\n<pre><code class="lang-">public class ReentLockTest {\n\npublic static void main(String[] args) {\n    ExecutorService executorService = Executors.newFixedThreadPool(3);\n    final ReentrantLock lock = new ReentrantLock();\n    for (int i = 0; i &lt; 2; i++) {\n        Runnable runnable = new Runnable() {\n            @Override\n            public void run() {\n                lock.lock(); // 第一步\n                try {\n                    TimeUnit.SECONDS.sleep(2);\n                } catch (InterruptedException e) {\n                    e.getStackTrace();\n                } finally {\n                    lock.unlock();\n                }\n            }\n        };\n        executorService.submit(runnable);\n    }\n    executorService.shutdown();\n  }}\n</code></pre>\n<p>从第一步开始查看lock方法</p>\n<pre><code class="lang-">public void lock() {\n    sync.lock();\n}\n</code></pre>\n<p>ReentLock中有一个抽象类Sync ，它继承了AQS，所以RenntLock的实现也是基于Sync来完成实现的，NonfairSync（非公平锁）和FairSync公平锁继承了Sync。</p>\n<p>公平锁：获取锁是有顺序的先来先到</p>\n<p>*非公平锁：每个线程抢占锁的顺序是不固定的（不能说是随机的，在读写锁源码中可以看到）</p>\n<p>图片5.png<br />\nRenntLock 我们平时用的最多的是非公平锁（并发率高），公平锁效率相比较低，下面介绍Nofair的lock方法</p>\n<pre><code class="lang-"> final void lock () {\n    //通过cas将AQS中state变量设置1\n        if (compareAndSetState(0, 1))\n            //等cas操作成功之后，将当前线程设置成排它线程，后面的线程无法在获取锁\n            setExclusiveOwnerThread(Thread.currentThread());\n        else\n            acquire(1);\n    }\n</code></pre>\n<p>前面的demo中启动了2个线程，假设A线程进来之后，调用compareAndSetState（0,1）方法成功，此时由于没有任何线程占有锁所以通过原子操作CAS，将state的状态由0修改为1，之后将该线程设置到AQS变量exclusiveOwnerThread中。此时线程B进入了lock方法，通过CAS操作，发现AQS中的state变量已经变成了1，设置失败于是就进入了else中的acquire方法。<br />\n也就是说非公平锁在线程第一次失败之后，会调用acquire方法进入队列中，然而公平锁是直接调用acquire方法<br />\nacquire方法调用父类AQS中的acuqire方法，源码如下：</p>\n<pre><code class="lang-"> public final void acquire(int arg) {\n        if (!tryAcquire(arg) &amp;&amp;\n    //static final Node EXCLUSIVE = null;\n        acquireQueued(addWaiter(Node.EXCLUSIVE), arg))\n        selfInterrupt();\n    }\n</code></pre>\n<p>下面看tryAcquire（arg）方法:</p>\n<pre><code class="lang-">    final boolean nonfairTryAcquire(int acquires) {\n    //获取当前线程（B线程）\n   final Thread current = Thread.currentThread();\n   //获取当前AQS中标志位state变量值， 0 表示没有被任何线程占有;1： 表示当前锁已经被某个线程拿走了 \n       int c = getState();\n       if (c == 0) {\n   //表示锁还没有任何线程拿走，当前线程可以去获取\n    if (compareAndSetState(0, acquires)) {\n   //当前线程获取锁成功，将AQS中exclusiveOwnerThread设置为当前线程\n   setExclusiveOwnerThread(current);\n      return true;\n    }\n} //如果是当前线程等于AQS中exclusiveOwnerThread线程表示的是当前线程已经获取锁，本次获取锁是重入\nelse if (current == getExclusiveOwnerThread()) {\n    //获取AQS中的变量，并加acquires（可以自由指定，默认是1）\n    int nextc = c + acquires;\n    if (nextc &lt; 0) // overflow\n        throw new Error(&quot;Maximum lock count exceeded&quot;);\n    setState(nextc);\n    return true;\n}\nreturn false;\n}\n</code></pre>\n<p>从上面可以看出如果线程B尝试获取锁失败之后，会调用acquireQueued方法，调用acquireQueued之前会先调用addWaiter方法</p>\n<pre><code class="lang-">    private Node addWaiter(Node mode) {\n        Node node = new Node(Thread.currentThread(), mode); //1\n        Node pred = tail;\n      if (pred != null) {\n            node.prev = pred;\n            if (compareAndSetTail(pred, node)) {\n            pred.next = node;\n           return node;\n    }\n}\nenq(node);\nreturn node;\n}\n</code></pre>\n<p>方法参数中的mode是Node节点类型，在这里表示独占的锁，用当前线程在构造一个Node对象，线程B进来之后，此时队列里面是空的，所以尾节点tail为空，走enq方法</p>\n<pre><code class="lang-">    private Node enq(final Node node) {\n        for (;;) {\n        Node t = tail; \n        if (t == null) { // Must initialize\n        if (compareAndSetHead(new Node()))\n            tail = head;\n    } else {\n        node.prev = t;\n        if (compareAndSetTail(t, node)) {\n            t.next = node;\n            return t;\n           }\n       }\n    }\n }\n</code></pre>\n<p>上面enq方法是一个循环，当前线程B进来之后将tail（此时可能为空）赋值给t变量，在判断t是否等于null(这里判断null是因为多线程，这时t也有可能不为空,目前这里只有A、B线程，不存在这种情况暂时不考虑）接下来调用compareAndSetHead，成功，head指向tail，如果失败 就重复尝试，直到成功为止，当head成功之后，进入else逻辑中，将后续的Node加入到队尾，如果compareAndSetTail 失败的话，通过for循环继续插入到队尾，最终所有没有成功获取到锁的线程全部加入到队列中。</p>\n<pre><code class="lang-"> final boolean acquireQueued(final Node node, int arg) {\n    boolean failed = true;\n    try {\n        boolean interrupted = false;\n        for (; ; ) {\n            final Node p = node.predecessor();\n            if (p == head &amp;&amp; tryAcquire(arg)) {\n                setHead(node);\n                p.next = null; // help GC\n                failed = false;\n                return interrupted;\n            }\n            if (shouldParkAfterFailedAcquire(p, node) &amp;&amp;\n                    parkAndCheckInterrupt())\n                interrupted = true;\n        }\n    } finally {\n        if (failed)\n            cancelAcquire(node);\n    }\n}\n</code></pre>\n<p>首先会判断node前驱节点是否为head，如果是证明当前线程就是下一个即将获取锁的线程，所以此时先尝试在在调用了tryAuquire方法，如果获取到了锁，那么就将之前的node（之前为head的node）设置为空，gc回收。</p>\n<p>如果不是head或者获取失败之后，那么久调用shouldParkAfterFailedAcquire方法</p>\n<pre><code class="lang-">   private static boolean shouldParkAfterFailedAcquire(Node pred, Node node) {\n      int ws = pred.waitStatus;\n      if (ws == Node.SIGNAL)\n          return true;\n      if (ws &gt; 0) {\n          do {\n              node.prev = pred = pred.prev;\n          } while (pred.waitStatus &gt; 0);\n          pred.next = node;\n      } else {\n          compareAndSetWaitStatus(pred, ws, Node.SIGNAL);\n      }\n      return false;\n}\n</code></pre>\n<p>该方法是判断这个节点是否需要挂起，在介绍这个方法之前先看一下前面讲的Node节点中除了当前线程，前驱节点，后去节点，还有一个重要的变量waitstatus 这个变量是来表示当前node是否需要竞争锁，某些情况下，有些线程是会放弃锁的竞争的，比如condition</p>\n<p>也就是说只有当node状态为SIGNAL情况下，当前节点才会被挂起，，假设当前的节点的WaitStatus就是SIGNAL，则调用parkAndCheckInterrupt方法，此时线程才被真正的挂起。</p>\n<p>在上面调用acquireQueued方法，线程被挂起之后，还是处在for循环中，所以当线程被唤醒的时候，会继续执行，此时tryAcquire成功后，获取锁，之后将节点删除，这样获取锁的Node队列就没有了。<br />\n后面继续读写锁分析以及总结。。。。</p>\n', '# 前言\n在编程中，很多人都会尝试使用多线程的方式去编程，但是却很难保证自己写出来的多线程程序的正确性，在多线程中如果涉及到对共享资源的并发读写，这时就会产生资源的争夺。而在资源争夺中，第一想到的就是使用锁 ,对共享资源进行数据保护。java中提供了2种基本也是最常用的锁，synchronized、Lock！但是这2种锁有什么特点？分别使用的场景?在使用过程中应该注意哪些？各自有哪些不足呢？\n\n本文将带着上面的问题并结合源码进行仔细分析，让你对锁有一个深入的了解。\n\n# synchronized 详解\n# 一、概念\nsynchronized 是java中的关键字，利用锁的机制来实现同步，来达到对共享资源保护。\n\n锁的机制有2种特质：\n1、互斥性：在同一时间只允许一个线程持有某个对象锁，通过这种特性来实现多线程中的协调机制。互斥性我们往往称作原子性\n2、可见性：确保在锁被释放之前，对共享变量所做的修改，对其余的线程是可见的(也就是说在获得锁的时候应获得最新的共享变量值)，否则对于另外一个线程在操作共享变量是自己在本地缓存的副本上，这样就会引发数据的不一致。\n\n# 二、对象锁和类锁\n在使用Synchronized之前，先了解什么是对象锁和类锁\n1、对象锁\n在java中,每个对象都会有一个monitor对象，这个对象其实就是java对象锁，通常也被称作为"内置锁"或"对象锁"，类的对象有多个，所有对象锁也有多个，相互之间互不干涉。\n2、类锁\n在java中，针对每一个类都有一个帧，可以称作为"类锁"，类锁实际也是通过对象锁实现的，即类的Class对象锁，每一个类有且仅有一个Class对象(JVM加载类的时候产生)，所有每一个类只有一个类锁。\n\n# 三、修饰方法\n1、修饰实例方法：作用于当前实例加锁，在进入同步代码方法时先获取当前实例锁\n2、修饰静态方法：作用于当前类对象锁，在进入同步代码方法时先获取当前对象锁（类.class）\n\n修饰实例方法:\n顾名思义就是修饰类中的实例方法，并且默认是当前对象作为锁的对象，而一个对象只有一把锁，所以同一时刻只能有一个线程执行被同步的方法，等到线程执行完方法后，其他线程才能继续执行被同步的方法。正确实例代码如下：\n```\npublic class SynchronizedTest implements Runnable {\n      public static int count = 0;\n    @Override\n      public void run() {\n          for (int i = 1; i <= 1000000; i++) {\n            add();\n          }\n      }\n  \n      public synchronized void add() {\n          ++count;\n      }\n\n      public static void main(String[] args) throws Exception {\n          SynchronizedTest test = new SynchronizedTest();\n          Thread t1 = new Thread(test);\n          Thread t2 = new Thread(test);\n          t1.start();\n          t2.start();\n          t1.join();\n          t2.join();\n         System.out.println(count); //2000000\n}\n}\n```\n错误代码：对同一共享资源使用不同实例锁\n```\npublic class SynchronizedTest implements Runnable {\n\nprivate Object object;\n\npublic SynchronizedTest(Object object) {\n    this.object = object;\n}\n\npublic static int count = 0;\n\n@Override\npublic void run() {\n\n    synchronized (object) {\n        for (int i = 1; i <= 1000000; i++) {\n            add();\n        }\n    }\n}\n\npublic static  void add() {\n    ++count;\n}\n\npublic static void main(String[] args) throws Exception {\n    Object object1 = new Object();\n    Object object2 = new Object();\n    SynchronizedTest firstLock = new SynchronizedTest(object1);\n    SynchronizedTest secondLock = new SynchronizedTest(object2);\n    Thread t1 = new Thread(firstLock);\n    Thread t2 = new Thread(secondLock);\n    t1.start();\n    t2.start();\n    t1.join();\n    t2.join();\n    System.out.println(count);//小于 20000000\n}\n}\n```\n运行程序后，会发现结果永远小于2000000，说明synchronized没有起到同步的作用了，说明修饰实例方法只能作用实例对象，不能作用到类对象\n\n修饰静态方法:\n```\npublic class SynchronizedTest implements Runnable {\n\npublic static int count = 0;\n\n@Override\npublic void run() {\n    for (int i = 1; i <= 100000; i++) {\n        add();\n    }\n}\n\npublic static synchronized void add() {\n    ++count;\n}\n\npublic static void main(String[] args) throws Exception {\n    SynchronizedTest firstLock = new SynchronizedTest();\n    SynchronizedTest secondLock = new SynchronizedTest();\n    Thread t1 = new Thread(firstLock);\n    Thread t2 = new Thread(secondLock);\n    t1.start();\n    t2.start();\n    t1.join();\n    t2.join();\n    System.out.println(count);=2000000\n}\n}\n```\n作用与静态方法的时候，不管实例化多少个实例对象，结果用于等2000000，说明锁对象是当前类.class,有且仅有一把锁，最终结果和实际结果一致！\n\n修饰代码块：正确案例\n```\nppublic class SynchronizedTest implements Runnable {\n\nprivate Object object;\n\npublic SynchronizedTest(Object object) {\n    this.object = object;\n}\n\npublic static int count = 0;\n\n@Override\npublic void run() {\n\n    synchronized (object) {\n        for (int i = 1; i <= 1000000; i++) {\n            add();\n        }\n    }\n}\npublic static void add() {\n    ++count;\n}\npublic static void main(String[] args) throws Exception {\n    Object object = new Object();\n    SynchronizedTest firstLock = new SynchronizedTest(object);\n    SynchronizedTest secondLock = new SynchronizedTest(object);\n    Thread t1 = new Thread(firstLock);\n    Thread t2 = new Thread(secondLock);\n    t1.start();\n    t2.start();\n    t1.join();\n    t2.join();\n    System.out.println(count);//= 20000000\n}\n}\n```\n错误案例：\n```\npublic class SynchronizedTest implements Runnable {\nprivate Object object;\n\npublic SynchronizedTest(Object object) {\n    this.object = object;\n}\n\npublic static int count = 0;\n\n@Override\npublic void run() {\n    synchronized (object) {\n        for (int i = 1; i <= 1000000; i++) {\n            add();\n        }\n    }\n}\npublic static void add() {\n    ++count;\n}\npublic static void main(String[] args) throws Exception {\n    Object object1 = new Object();\n    Object object2 = new Object();\n    SynchronizedTest firstLock = new SynchronizedTest(object1);\n    SynchronizedTest secondLock = new SynchronizedTest(object2);\n    Thread t1 = new Thread(firstLock);\n    Thread t2 = new Thread(secondLock);\n    t1.start();\n    t2.start();\n    t1.join();\n    t2.join();\n    System.out.println(count);//小于 20000000\n}\n}\n```\n代码块使用加Synchronized的时候，使用同一把锁，其他的线程就必须等待，这样也就保证了每次只有一个线程执行被同步的代码块。不是同一把同锁，无法达到共享资源同步结果\n\n# 四、synchronized底层原理\n在java虚拟机中的同步是基于进入和退出管程（Monitor）对象实现的,同步有显示同步(有明确的monitorenter和moniterexit)和隐士同步(ACC_SYNCHRONIZED)\n\n### 1、代码块底层原理\n下面是一段被synchronized修饰 的同步代码块，在代码块中操作共享变量：\n```\npublic class SynchronizedBlockTest {\n\npublic int j = 0;\n\npublic void excuteSynTask() {\n    synchronized (this) {\n        j++;\n    }\n}\n}\n```\n通过javap -c反编译出来如下：\n```\n    Compiled from"SynchronizedBlockTest.java"\n    public class com.example.thread.SynchroniedTest.SynchronizedBlockTest{\n    public int j;\n    public com.example.thread.SynchroniedTest.SynchronizedBlockTest();\n    Code:\n    0:aload_0\n    1:invokespecial #1                  // Method java/lang/Object."<init>":()V\n    4:aload_0\n    5:iconst_0\n    6:putfield      #2                  // Field j:I\n    9:return\n\n    public void excuteSynTask();\n            Code:\n            0:aload_0\n            1:dup\n            2:astore_1\n            3:monitorenter //进入监视器（进入同步方法）\n            4:aload_0\n            5:dup\n            6:getfield      #2                  // Field j:I\n            9:iconst_1\n            10:iadd\n            11:putfield      #2                  // Field j:I\n            14:aload_1\n            15:monitorexit //退出监视器（退出同步方法）\n            16:goto 24\n            19:astore_2\n            20:aload_1\n            21:monitorexit //退出同步方法\n            22:aload_2\n            23:athrow\n            24:return\n            Exception table:\n            from to target type\n            4 16 19any\n            19 22 19any\n            }\n```\n从上面字节码可以看出同步代码块实现使用的`monitorenter` 和`monnitorexit`指令，其中`monitorenter`指令指向同步代码块起始的位置，`monitorexit`指令则指明同步代码块结束的位置，当执行`monitorenter`指令的时候，当前线程将试图获取`objectref`（即对象锁）所对应的`moniter`持有权,当`objectref`的`monitor`进入计数器为 0，那么此线程就可以成功取得monitor，并且将计数器的值设置为1,获取锁成功。如果当前线程已经拥有objectref的monitor的特有权，那么它可以重入这个monitor，重入时的计算器值也会被执行，执行线程将释放monitor(锁)并设置计数器值为0，其他线程将有机会持有monitor，值得注意的是编译器将会确保无论方法通过何种方式完成，方法中调用过的每条 monitorenter 指令都有执行其对应 monitorexit 指令，而无论这个方法是正常结束还是异常结束。为了保证在方法异常完成时 monitorenter 和 monitorexit 指令依然可以正确配对执行，编译器会自动产生一个异常处理器，这个异常处理器声明可处理所有的异常，它的目的就是用来执行 monitorexit 指令。从字节码中也可以看出多了一个monitorexit指令，它就是异常结束时被执行的释放monitor 的指令。\n\n### 2、synchronized方法底层原理\n方法级别的同步是隐士的，即无需通过字节码指令来控制。JVM可以从方法常量池中的方法表结构中的ACC_SYNCHRONIZED访问标志来区分一个方法是否是同步方法.当方法调用的时候，调用指令将会检查方法中的ACC_SYNCHRONIZED 访问是否被标志了，如果设置了，执行线程将会先持有monitor，然后在执行方法，最后在方法完成的时候释放monitor。在方法执行的期间，执行线程持有monitor，其他任何线程无法在获得同一个monitor。如果线程在执行同步方法的时候抛出了异常，并且在方法内部无法处理此异常，那么这个同步方法锁持有的monitor将在异常抛到同步方法之外时将会自动释放。\n\n    public com.example.thread.SynchroniedTest.SynchronizedBlockTest();\n            Code:\n            0:aload_0\n            1:invokespecial #1                  // Method java/lang/Object."<init>":()V\n            4:aload_0\n            5:iconst_0\n            6:putfield      #2                  // Field j:I\n            9:return\n\n    public synchronized void excuteSynTask();\n            flags:ACC_PUBLIC,ACC_SYNCHRONIZED\n          Code:\n          0:aload_0\n          1:dup\n          2:getfield      #2                  // Field j:I\n          5:iconst_1\n          6:iadd\n          7:putfield      #2                  // Field j:I\n        10:return\n从字节码中可以看出，synchronized修饰的方法并没有monitorenter指令和monitorexit指令，取得代之的 确实是ACC_SYNCHRONIZED标识，该标识指明了该方法是一个同步方法，JVM通过该 ACC_SYNCHRONIZED访问标志来辨别一个方法是否声明为同步方法，从而执行相应的同步调用。这便是synchronized锁在同步代码块和同步方法上实现的基本原理。同时我们还必须注意到的是在java早期版本中，synchronized是属于重量级锁，效率低下，因为监视器是依赖于底层的操作系统来实现的，但是在操作系统实现线程之间的切换时需要从用户态转换到核心态，这个转态之间的转换是需要相对比较长的时间，时间成本相对比较高，这个也是早期版本中synchronized效率低下的原因。然而在java6之后官方从JVM层面对synchronized有了较大的优化，所以现在的synchonize锁效率也优化了很多。在java6之后，为了减少获得锁和释放锁带来的性能消耗，引入了轻量级锁和偏向锁，接下来Java官方在JVM层面synchronized锁的优化。\n\n### 3、JAVA虚拟机对synchronized的优化\n锁的状态总共优化总共有四种，无锁状态、偏向锁、轻量级锁和重量级锁。随着锁的竞争，锁可以从偏向锁升级到轻量级锁，在升级到重量级锁，但是锁的升级只能是单向的，也就是说只能是低到高升级，不会出现锁的降级，关于重量级锁,前面已经讲述过了，下面介绍的剩下几种锁，\n\n#### 偏向锁\n偏向锁是在java6之后才加入的新锁，他是针对加锁操作的优化手段，在大多数情况下，锁不仅存在多线程竞争，而且总是由同一线程多次获得，因此为了减少同一线程获取锁的代价而引入的偏向锁，偏向锁的核心思想是，如果一个线程获得了锁，那么就进入了偏向模式，此时Mark word 的结构也就变为了偏向锁结构，当这个线程再次请求锁的时候，就不需要再做任何同步操作了，即获取锁的过程，就省去了大量的有关锁的申请操作了，从而就提高了程序的性能。所以，对于没有锁的竞争的场合，偏向锁有很好的优化效果，毕竟这样既有可能连续多次是同一个线程重复的去申请相同的锁，但是对于锁竞争比较激烈的场合，偏向锁就失效了，因为这样的场合极有可能每次申请锁的线程都是不相同的，因此这种场合下不应该使用偏向锁，否则会得不偿失，需要注意的是，偏向锁失败后，并不会立即膨胀为重量级锁，而是先升级为轻量级锁。\n\n#### 轻量级锁\n假如偏向锁失败，虚拟机并不会立即升级为重量级锁，他还会尝试使用一种称为轻量级锁的优化手段，此时Mark Word的结构也会变为轻量级锁结构，轻量级锁能够提升程序的依据是“对绝大部分的锁，在整个同步周期内都不存在竞争”。\n\n#### 自旋锁\n当上面的轻量级锁失败之后，虚拟机为了避免线程真实的在操作系统层面上被挂起，这个时候可以利用自旋锁的优化手段。在大多数情况下，线程持有锁的时间都不会太长，如果直接挂起操作系统层面的线程可能会得不偿失，毕竟操作系统实现线程之间转换需要从用户态转化为核心态，这个状态之间的转化需要较长的时间，时间的成本是想多比较高的，因此自旋锁会假设在不久的将来当前的线程就可以获得锁，因此虚拟机会让当前想要获取的线程做几个空的循环，一般不会太久，在经过一段时间的循环之后，如果得到了锁，就可以进入到了临界区。如果还不能获取到锁，那么就会将线程在操作系统层面上挂起，这就是自旋锁的优化方式，这种方式确实也是可以提升效率的，最后没有办法就只能升级为重量级锁。\n\n#### 锁消除\n消除锁是虚拟机另外一种锁的优化，这种优化更加的彻底，在java虚拟机在JIT编译时（可以简单理解为当某段代码即将第一次执行时，也叫及时编译 ）\n\n通过对运行上下的扫描，去除不可能存在资源竞争的锁，同过这种方式消除没有必要的锁，可以节省毫无意义的请求锁的时间，对于StringBuffer的append方法是一个同步方法，但是在add方法中的StringBuffer属于一个局部变量，并且不会被其余的线程锁使用，因此StringBuffer不可能存在资源竞争的背景，JVM会自动将其锁消除。\n```\n    public class StringBufferRemoveLock {\n         public void add(String str, String str2) {\n         StringBuffer sb = new StringBuffer();\n        sb.append(str).append(str2);\n    }\n\npublic static void main(String[] args) {\n    StringBufferRemoveLock stringBufferRemoveLock = new StringBufferRemoveLock();\n    for (int i = 0; i < 10000; i++) {\n        stringBufferRemoveLock.add("abc", "" + i);\n    }\n}\n}\n}\n```\n### 4、线程中断与synchronized\n中断锁表达的意思是，在线程运行期间大断他，在java中，提供了下面三个有关线程中断的方法：\n\n在讲解中断与Synchronized时先了解下面interrupt isInterrupted，interrupted方法的基本用法：\n\n/ 中断线程(此线程并不一定是当前线程，而是指调用该方法的Thread实例所代表的线程)这个其实只是给线程打了一个中断标志，线程任然会继续运行\nThread.interrupt();\n\n// 判断线程是否被中断，并不会清除中断状态\nThread.isInterrupt();\n\n//表示的线程是否被中断并清除当前线程的中断状态\nThread.interrupted();\n案例分析\n\n图片1.png\n从结果可以看出在调用了interrupt()方法的后，线程仍然在继续运行，并未停止，但是这个时候已经给线程设置了中断标志，两个isInterrupt方法都会的输出true；\n\n对上面的案例在做一下变动：\n\n图片2.png\n上面可以看出第一次调用isInterrupted方法的时候返回结果是true\n\n第一次和第二次调用interrupted方法返回结果是false 这个和之前解释interrupted不一致，应该一个是true一个是false才正确。 这其实有一个坑，interrputed方方法测试的是当前线程是否被中断，注意是当前线程!!\n\n上面的当前线程其实就是main线程，而mythread.interrupt()调用的是mythread线程。所以这里调用mythread.interrupted()其调用的是main.interrupted\n\ninterrupted源码分析：\n\n图片3.png\n从源码中可以看出调用的是currentThread线程，true表示的是是否清除中断标志\n\n请看下面的案例：\n\n图片4.png\n实际结果和预料之中是一致的。\n\n注意：\n\n若线程在阻塞状态时，调用了它的interrupt()方法，那么它的“中断状态”会被清除并且会收到一个InterruptedException异常。\n\n例如，线程通过wait()，sleep()进入阻塞状态，此时通过interrupt()中断该线程；调用interrupt()会立即将线程的中断标记设为“true”，但是由于线程处于阻塞状态，所以该“中断标记”会立即被清除为“false”，同时，会产生一个InterruptedException的异常。\n\n中断与synchronized\n```\npublic class SynchronizedBlock implements Runnable {\n\npublic synchronized void test() {\n    System.out.println("开始调用test()方法");\n    while (true) // Never releases lock\n        Thread.yield(); //将执行权交给其他线程执行\n}\n\npublic SynchronizedBlock() {\n\n    new Thread(new Runnable() {\n        @Override\n        public void run() {\n            test();\n        }\n    }).start();\n}\n\n@Override\npublic void run() {\n    while (true) {\n        System.out.println("开始执行----");\n        if (Thread.interrupted()) {\n            System.out.println("中断线程");\n        } else {\n            test();\n        }\n    }\n}\n\n\npublic static void main(String[] args) throws InterruptedException {\n    SynchronizedBlock synchronizedBlock = new SynchronizedBlock();\n    Thread thread = new Thread(synchronizedBlock);\n    thread.start();\n    TimeUnit.SECONDS.sleep(1);\n    thread.interrupt();\n}\n}\n```\n运行结果:\n开始调用test()方法\n开始执行----\n\n通过上面的结果发现 控制台输出结果并没有：中断线程，因为interrupt对Synchronized修饰的方法，代码块不会响应中断。但是后文lock锁 对interrupt可以响应中断。\n\nLock\n在jdk1.5 以后，增加了Juc并发包且提供了Lock接口用来实现锁的功能，他除了与synchronized关键字类似的同步功能，还提供了比synchronized更加灵活的实现。多线程下可以精确控制线程，且在jdk1.5 并发效率比synchornized更高的并发率，但是这也会带来一些缺点，下文将一步步去分析。\n\nLock本质上是一个接口(位于源码包中的java.util.concurrentLocks中)它包含以下几个方法\n\n//尝试获取锁，获取锁成功则立马返回，否则阻塞当前线程\nvoid lock();\n\n//尝试获取锁，线程在成功获取锁之后被中断。则放弃获取锁并且抛出异常\nVoid lockInterruptibly() throws InterruptException;\n\n//尝试获取锁，获取成成功之后，就返回true，否则就返回false\nBoolean tryLock();\n\n//尝试获取锁，若在规定的时间内获取到锁，立马就返回true，否则就返回false，未获取到锁之前被中断就抛出异常\nBoolean tryLock(long time,TimeUnit unit) throws InterruptException;\n\n//释放锁\nVoid unlock();\n\n//返回当前锁的条件变量，通过条件变量可以实现类似notify和wait()a的功能，一个锁可以有多个条件变量\nCondition newCondition();\n\nLock里面有三个实现类，第一个是ReentrantLock ，另外2个是ReentrantReadWriteLock类中ReadLock和WriteLock。\n\n使用方法：多线程下访问共享之源时，访问前需要加上锁，访问结束的时候在解开锁，解锁条件代码必须放在finally中，不然会出现死锁\n```\n    ReentLock lock = new ReentLock();\n    lock.lock();\n    try {\n    } finally {\n        lock.lock();\n    }\n```\n注意：加锁必须位于对资源访问的try外部，特别是使用lockInterruptibly方法锁的时候就必须这样子去做，这是为了防止线程在获取锁的时候被中断了，不需要也没有必要去释放锁。\n```\nReentrantLock reentrantLock = new ReentrantLock();\n    try {\n        reentrantLock.lockInterruptibly();\n        try {\n            //access the resource protected by this lock\n        } finally {\n            reentrantLock.unlock();\n          }\n    } catch (InterruptedException exception) {\n    }\n```\n### ReentLock内部源码分析\n概念\nReentLock 是基于AbstractQueendSynchronized来实现的，所以在了解ReentLock之前先简单的说一下AQS\n我们最熟悉的同步锁应该就是synchronized（上文已经对其做了详细的介绍）\n他是通过底层的monitorEnter 和monitorExit和ACC_SYNCHRONIZED来实现锁的获取和释放的\n这里介绍的AbstractQueenSynchronized 同步器(AQS),是基与FIFO队列来实现的，通过state的状态，来实现acquire和release;state为0的表示该锁还没有被任何线程获取可以获取锁；state为1表示已经有线程已经获取了锁。\n\n源码分析AQS\nAQS是基于FIFO队列实现的，所以队列必然是有一个个节点组成的，下面从节点开始讲解：\n```\n//waitstatus 有下面几个状态\n/**\n\nCANCELLED =1 表示当前的线程被取消了\nSIGNAL =-1 表示当前节点的后继节点阻塞了，需要被唤醒\nCONDITION =-2 表示当前节点在等待Condition ，因为某个节点条件被阻塞\nPROPAGATE=-3 表示锁的下一次获取可以无条件的传播\n*/\nvolatile int waitStatus;\nstatic final int CANCELLED = 1;\nstatic final int SIGNAL = -1;\nstatic final int CONDITION = -2;\nstatic final int PROPAGATE = -3;\n介绍Node\n//头节点\nPrivate tansient volatile Node head；\n//尾结点\nPrivate transient volatile Node tail；\n//同步状态\nPrivate volatile int state;\n```\n*上面已经介绍完AQS几个重要的成员，下面开始通过一个demo，来分析ReentLock底层实习原理\n```\npublic class ReentLockTest {\n\npublic static void main(String[] args) {\n    ExecutorService executorService = Executors.newFixedThreadPool(3);\n    final ReentrantLock lock = new ReentrantLock();\n    for (int i = 0; i < 2; i++) {\n        Runnable runnable = new Runnable() {\n            @Override\n            public void run() {\n                lock.lock(); // 第一步\n                try {\n                    TimeUnit.SECONDS.sleep(2);\n                } catch (InterruptedException e) {\n                    e.getStackTrace();\n                } finally {\n                    lock.unlock();\n                }\n            }\n        };\n        executorService.submit(runnable);\n    }\n    executorService.shutdown();\n  }}\n```\n从第一步开始查看lock方法\n```\npublic void lock() {\n    sync.lock();\n}\n```\nReentLock中有一个抽象类Sync ，它继承了AQS，所以RenntLock的实现也是基于Sync来完成实现的，NonfairSync（非公平锁）和FairSync公平锁继承了Sync。\n\n公平锁：获取锁是有顺序的先来先到\n\n*非公平锁：每个线程抢占锁的顺序是不固定的（不能说是随机的，在读写锁源码中可以看到）\n\n\n图片5.png\nRenntLock 我们平时用的最多的是非公平锁（并发率高），公平锁效率相比较低，下面介绍Nofair的lock方法\n```\n final void lock () {\n    //通过cas将AQS中state变量设置1\n        if (compareAndSetState(0, 1))\n            //等cas操作成功之后，将当前线程设置成排它线程，后面的线程无法在获取锁\n            setExclusiveOwnerThread(Thread.currentThread());\n        else\n            acquire(1);\n    }\n```\n前面的demo中启动了2个线程，假设A线程进来之后，调用compareAndSetState（0,1）方法成功，此时由于没有任何线程占有锁所以通过原子操作CAS，将state的状态由0修改为1，之后将该线程设置到AQS变量exclusiveOwnerThread中。此时线程B进入了lock方法，通过CAS操作，发现AQS中的state变量已经变成了1，设置失败于是就进入了else中的acquire方法。\n也就是说非公平锁在线程第一次失败之后，会调用acquire方法进入队列中，然而公平锁是直接调用acquire方法\nacquire方法调用父类AQS中的acuqire方法，源码如下：\n```\n public final void acquire(int arg) {\n        if (!tryAcquire(arg) &&\n    //static final Node EXCLUSIVE = null;\n        acquireQueued(addWaiter(Node.EXCLUSIVE), arg))\n        selfInterrupt();\n    }\n```\n下面看tryAcquire（arg）方法:\n```\n    final boolean nonfairTryAcquire(int acquires) {\n    //获取当前线程（B线程）\n   final Thread current = Thread.currentThread();\n   //获取当前AQS中标志位state变量值， 0 表示没有被任何线程占有;1： 表示当前锁已经被某个线程拿走了 \n       int c = getState();\n       if (c == 0) {\n   //表示锁还没有任何线程拿走，当前线程可以去获取\n    if (compareAndSetState(0, acquires)) {\n   //当前线程获取锁成功，将AQS中exclusiveOwnerThread设置为当前线程\n   setExclusiveOwnerThread(current);\n      return true;\n    }\n} //如果是当前线程等于AQS中exclusiveOwnerThread线程表示的是当前线程已经获取锁，本次获取锁是重入\nelse if (current == getExclusiveOwnerThread()) {\n    //获取AQS中的变量，并加acquires（可以自由指定，默认是1）\n    int nextc = c + acquires;\n    if (nextc < 0) // overflow\n        throw new Error("Maximum lock count exceeded");\n    setState(nextc);\n    return true;\n}\nreturn false;\n}\n```\n从上面可以看出如果线程B尝试获取锁失败之后，会调用acquireQueued方法，调用acquireQueued之前会先调用addWaiter方法\n```\n    private Node addWaiter(Node mode) {\n        Node node = new Node(Thread.currentThread(), mode); //1\n        Node pred = tail;\n      if (pred != null) {\n            node.prev = pred;\n            if (compareAndSetTail(pred, node)) {\n            pred.next = node;\n           return node;\n    }\n}\nenq(node);\nreturn node;\n}\n```\n方法参数中的mode是Node节点类型，在这里表示独占的锁，用当前线程在构造一个Node对象，线程B进来之后，此时队列里面是空的，所以尾节点tail为空，走enq方法\n```\n    private Node enq(final Node node) {\n        for (;;) {\n        Node t = tail; \n        if (t == null) { // Must initialize\n        if (compareAndSetHead(new Node()))\n            tail = head;\n    } else {\n        node.prev = t;\n        if (compareAndSetTail(t, node)) {\n            t.next = node;\n            return t;\n           }\n       }\n    }\n }\n```\n上面enq方法是一个循环，当前线程B进来之后将tail（此时可能为空）赋值给t变量，在判断t是否等于null(这里判断null是因为多线程，这时t也有可能不为空,目前这里只有A、B线程，不存在这种情况暂时不考虑）接下来调用compareAndSetHead，成功，head指向tail，如果失败 就重复尝试，直到成功为止，当head成功之后，进入else逻辑中，将后续的Node加入到队尾，如果compareAndSetTail 失败的话，通过for循环继续插入到队尾，最终所有没有成功获取到锁的线程全部加入到队列中。\n```\n final boolean acquireQueued(final Node node, int arg) {\n    boolean failed = true;\n    try {\n        boolean interrupted = false;\n        for (; ; ) {\n            final Node p = node.predecessor();\n            if (p == head && tryAcquire(arg)) {\n                setHead(node);\n                p.next = null; // help GC\n                failed = false;\n                return interrupted;\n            }\n            if (shouldParkAfterFailedAcquire(p, node) &&\n                    parkAndCheckInterrupt())\n                interrupted = true;\n        }\n    } finally {\n        if (failed)\n            cancelAcquire(node);\n    }\n}\n```\n首先会判断node前驱节点是否为head，如果是证明当前线程就是下一个即将获取锁的线程，所以此时先尝试在在调用了tryAuquire方法，如果获取到了锁，那么就将之前的node（之前为head的node）设置为空，gc回收。\n\n如果不是head或者获取失败之后，那么久调用shouldParkAfterFailedAcquire方法\n```\n   private static boolean shouldParkAfterFailedAcquire(Node pred, Node node) {\n      int ws = pred.waitStatus;\n      if (ws == Node.SIGNAL)\n          return true;\n      if (ws > 0) {\n          do {\n              node.prev = pred = pred.prev;\n          } while (pred.waitStatus > 0);\n          pred.next = node;\n      } else {\n          compareAndSetWaitStatus(pred, ws, Node.SIGNAL);\n      }\n      return false;\n}\n```\n该方法是判断这个节点是否需要挂起，在介绍这个方法之前先看一下前面讲的Node节点中除了当前线程，前驱节点，后去节点，还有一个重要的变量waitstatus 这个变量是来表示当前node是否需要竞争锁，某些情况下，有些线程是会放弃锁的竞争的，比如condition\n\n也就是说只有当node状态为SIGNAL情况下，当前节点才会被挂起，，假设当前的节点的WaitStatus就是SIGNAL，则调用parkAndCheckInterrupt方法，此时线程才被真正的挂起。\n\n在上面调用acquireQueued方法，线程被挂起之后，还是处在for循环中，所以当线程被唤醒的时候，会继续执行，此时tryAcquire成功后，获取锁，之后将节点删除，这样获取锁的Node队列就没有了。\n后面继续读写锁分析以及总结。。。。\n\n', 6, 6, 1, 2, '2020-05-14 22:29:32', '2020-05-14 22:20:41', '2020-05-20 14:43:21'),
+	(29, 'Mysql索引', '索引在MySQL中也叫是一种“键”，是存储引擎用于快速找到记录的一种数据结构。索引对于良好的性能非常关键，尤其是当表中的数据量越来越大时，索引对于性能的影响愈发重要。\n\n索引优化应该是对查询性能优化最有效的手段了。索引能够轻易将查询性能提高好几个数量级。\n\n索引相当于字典的音序表，如果要查某个字，如果不使用音序表，则需要从几百页中逐页去查。', NULL, '<h3><a id="1__0"></a>1 功能</h3>\n<p>索引的功能就是加速查找<br />\nmysql中的primary key，unique，联合唯一也都是索引，这些索引除了加速查找以外，还有约束的功能</p>\n<h3><a id="2_MySQL_3"></a>2 MySQL常用的索引</h3>\n<p>普通索引INDEX：加速查找</p>\n<ul>\n<li>\n<p>唯一索引：</p>\n<p>主键索引PRIMARY KEY：加速查找+约束（不为空、不能重复）<br />\n唯一索引UNIQUE:加速查找+约束（不能重复）</p>\n</li>\n<li>\n<p>联合索引：</p>\n<p>PRIMARY KEY(id,name):联合主键索引<br />\nUNIQUE(id,name):联合唯一索引<br />\nINDEX(id,name):联合普通索引</p>\n</li>\n</ul>\n<h3><a id="3__16"></a>3 各个索引应用场景</h3>\n<p>举个例子来说，比如你在为某商场做一个会员卡的系统。</p>\n<pre><code>这个系统有一个会员表\n有下列字段：\n会员编号 INT\n会员姓名 VARCHAR(10)\n会员身份证号码 VARCHAR(18)\n会员电话 VARCHAR(10)\n会员住址 VARCHAR(50)\n会员备注信息 TEXT\n\n那么这个 会员编号，作为主键，使用 PRIMARY\n会员姓名 如果要建索引的话，那么就是普通的 INDEX\n会员身份证号码 如果要建索引的话，那么可以选择 UNIQUE （唯一的，不允许重复）\n</code></pre>\n<h4><a id="FULLTEXT_33"></a>除此之外还有全文索引，即FULLTEXT</h4>\n<p>会员备注信息 ， 如果需要建索引的话，可以选择全文搜索。<br />\n用于搜索很长一篇文章的时候，效果最好。<br />\n用在比较短的文本，如果就一两行字的，普通的 INDEX 也可以。<br />\n但其实对于全文搜索，我们并不会使用MySQL自带的该索引，而是会选择第三方软件如Sphinx，专门来做全文搜索。</p>\n<h3><a id="4_hashbtree_40"></a>4 索引的两大类型hash与btree#</h3>\n<p>我们可以在创建上述索引的时候，为其指定索引类型，分两类：</p>\n<pre><code>hash类型的索引：查询单条快，范围查询慢\nbtree类型的索引：b+树，层数越多，数据量指数级增长（我们就用它，因为innodb默认支持它）\n不同的存储引擎支持的索引类型也不一样：\n\n    InnoDB 支持事务，支持行级别锁定，支持 B-tree、Full-text 等索引，不支持 Hash 索引；\n    MyISAM 不支持事务，支持表级别锁定，支持 B-tree、Full-text 等索引，不支持 Hash 索引；\nMemory 不支持事务，支持表级别锁定，支持 B-tree、Hash 等索引，不支持 Full-text 索引；\nNDB 支持事务，支持行级别锁定，支持 Hash 索引，不支持 B-tree、Full-text 等索引；\nArchive 不支持事务，支持表级别锁定，不支持 B-tree、Hash、Full-text 等索引；\n</code></pre>\n<h3><a id="5__53"></a>5 创建/删除索引的语法#</h3>\n<h4><a id="_55"></a>方法一：创建表时</h4>\n<pre><code>　　CREATE TABLE 表名 (\n            字段名1  数据类型 [完整性约束条件…],\n            字段名2  数据类型 [完整性约束条件…],\n            [UNIQUE | FULLTEXT | SPATIAL ]   INDEX | KEY\n            [索引名]  (字段名[(长度)]  [ASC |DESC]) \n            );\n</code></pre>\n<h4><a id="CREATE_64"></a>方法二：CREATE在已存在的表上创建索引</h4>\n<pre><code>    CREATE  [UNIQUE | FULLTEXT | SPATIAL ]  INDEX  索引名 \n                 ON 表名 (字段名[(长度)]  [ASC |DESC]) ;\n</code></pre>\n<h4><a id="ALTER_TABLE_69"></a>方法三：ALTER TABLE在已存在的表上创建索引</h4>\n<pre><code>    ALTER TABLE 表名 ADD  [UNIQUE | FULLTEXT | SPATIAL ] INDEX\n                         索引名 (字段名[(长度)]  [ASC |DESC]) ;\n</code></pre>\n<h4><a id="DROP_INDEX__ON__73"></a>删除索引：DROP INDEX 索引名 ON 表名字;</h4>\n<h3><a id="6__75"></a>6 示例#</h3>\n<h4><a id="_77"></a>方式一</h4>\n<pre><code class="lang-">create table t1(\n    id int,\n    name char,\n    age int,\n    sex enum(\'male\',\'female\'),\n    unique key uni_id(id),\n    index ix_name(name) # index没有key\n);\n\ncreate table t1(\n    id int,\n    name char,\n    age int,\n    sex enum(\'male\',\'female\'),\n    unique key uni_id(id),\n    index(name) # index没有key\n);\n</code></pre>\n<h4><a id="_98"></a>方式二</h4>\n<pre><code class="lang-">create index ix_age on t1(age);\n</code></pre>\n<h4><a id="_103"></a>方式三</h4>\n<pre><code class="lang-">alter table t1 add index ix_sex(sex);\nalter table t1 add index(sex);\n</code></pre>\n<h4><a id="_109"></a>查看</h4>\n<pre><code class="lang-">mysql&gt; show create table t1;\n| t1    | CREATE TABLE `t1` (\n  `id` int(11) DEFAULT NULL,\n  `name` char(1) DEFAULT NULL,\n  `age` int(11) DEFAULT NULL,\n  `sex` enum(\'male\',\'female\') DEFAULT NULL,\n  UNIQUE KEY `uni_id` (`id`),\n  KEY `ix_name` (`name`),\n  KEY `ix_age` (`age`),\n  KEY `ix_sex` (`sex`)\n) ENGINE=InnoDB DEFAULT CHARSET=latin1\n</code></pre>\n', '### 1 功能\n索引的功能就是加速查找\nmysql中的primary key，unique，联合唯一也都是索引，这些索引除了加速查找以外，还有约束的功能\n### 2 MySQL常用的索引\n普通索引INDEX：加速查找\n\n- 唯一索引：\n\n   主键索引PRIMARY KEY：加速查找+约束（不为空、不能重复）\n   唯一索引UNIQUE:加速查找+约束（不能重复）\n- 联合索引：\n\n   PRIMARY KEY(id,name):联合主键索引\n   UNIQUE(id,name):联合唯一索引\n   INDEX(id,name):联合普通索引\n\n### 3 各个索引应用场景\n\n举个例子来说，比如你在为某商场做一个会员卡的系统。\n\n    这个系统有一个会员表\n    有下列字段：\n    会员编号 INT\n    会员姓名 VARCHAR(10)\n    会员身份证号码 VARCHAR(18)\n    会员电话 VARCHAR(10)\n    会员住址 VARCHAR(50)\n    会员备注信息 TEXT\n\n    那么这个 会员编号，作为主键，使用 PRIMARY\n    会员姓名 如果要建索引的话，那么就是普通的 INDEX\n    会员身份证号码 如果要建索引的话，那么可以选择 UNIQUE （唯一的，不允许重复）\n\n#### 除此之外还有全文索引，即FULLTEXT\n会员备注信息 ， 如果需要建索引的话，可以选择全文搜索。\n用于搜索很长一篇文章的时候，效果最好。\n用在比较短的文本，如果就一两行字的，普通的 INDEX 也可以。\n但其实对于全文搜索，我们并不会使用MySQL自带的该索引，而是会选择第三方软件如Sphinx，专门来做全文搜索。\n\n\n### 4 索引的两大类型hash与btree#\n我们可以在创建上述索引的时候，为其指定索引类型，分两类：\n\n    hash类型的索引：查询单条快，范围查询慢\n    btree类型的索引：b+树，层数越多，数据量指数级增长（我们就用它，因为innodb默认支持它）\n    不同的存储引擎支持的索引类型也不一样：\n\n        InnoDB 支持事务，支持行级别锁定，支持 B-tree、Full-text 等索引，不支持 Hash 索引；\n        MyISAM 不支持事务，支持表级别锁定，支持 B-tree、Full-text 等索引，不支持 Hash 索引；\n	Memory 不支持事务，支持表级别锁定，支持 B-tree、Hash 等索引，不支持 Full-text 索引；\n	NDB 支持事务，支持行级别锁定，支持 Hash 索引，不支持 B-tree、Full-text 等索引；\n	Archive 不支持事务，支持表级别锁定，不支持 B-tree、Hash、Full-text 等索引；\n\n### 5 创建/删除索引的语法#\n\n#### 方法一：创建表时\n    　　CREATE TABLE 表名 (\n                字段名1  数据类型 [完整性约束条件…],\n                字段名2  数据类型 [完整性约束条件…],\n                [UNIQUE | FULLTEXT | SPATIAL ]   INDEX | KEY\n                [索引名]  (字段名[(长度)]  [ASC |DESC]) \n                );\n\n\n#### 方法二：CREATE在已存在的表上创建索引\n        CREATE  [UNIQUE | FULLTEXT | SPATIAL ]  INDEX  索引名 \n                     ON 表名 (字段名[(长度)]  [ASC |DESC]) ;\n\n\n#### 方法三：ALTER TABLE在已存在的表上创建索引\n        ALTER TABLE 表名 ADD  [UNIQUE | FULLTEXT | SPATIAL ] INDEX\n                             索引名 (字段名[(长度)]  [ASC |DESC]) ;\n                             \n#### 删除索引：DROP INDEX 索引名 ON 表名字;\n\n### 6 示例#\n\n#### 方式一\n```\ncreate table t1(\n    id int,\n    name char,\n    age int,\n    sex enum(\'male\',\'female\'),\n    unique key uni_id(id),\n    index ix_name(name) # index没有key\n);\n\ncreate table t1(\n    id int,\n    name char,\n    age int,\n    sex enum(\'male\',\'female\'),\n    unique key uni_id(id),\n    index(name) # index没有key\n);\n```\n\n#### 方式二\n```\ncreate index ix_age on t1(age);\n```\n\n#### 方式三\n```\nalter table t1 add index ix_sex(sex);\nalter table t1 add index(sex);\n```\n\n#### 查看\n```\nmysql> show create table t1;\n| t1    | CREATE TABLE `t1` (\n  `id` int(11) DEFAULT NULL,\n  `name` char(1) DEFAULT NULL,\n  `age` int(11) DEFAULT NULL,\n  `sex` enum(\'male\',\'female\') DEFAULT NULL,\n  UNIQUE KEY `uni_id` (`id`),\n  KEY `ix_name` (`name`),\n  KEY `ix_age` (`age`),\n  KEY `ix_sex` (`sex`)\n) ENGINE=InnoDB DEFAULT CHARSET=latin1\n```', 5, 4, 1, 10, '2020-05-20 14:32:31', '2020-05-20 14:32:26', '2020-05-20 17:21:42');
+/*!40000 ALTER TABLE `t_blog` ENABLE KEYS */;
 
 -- 导出  表 blog.t_class 结构
-CREATE TABLE IF NOT EXISTS `t_class`
-(
-    `id`          bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '分类id',
-    `parent_id`   bigint(20)   NOT NULL DEFAULT '0' COMMENT '父分类id',
-    `class_name`  varchar(200) NOT NULL COMMENT '分类名称',
-    `status`      int(11)      NOT NULL DEFAULT '0' COMMENT '状态(1:启用，0:停用)',
-    `create_time` datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time` datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 6
-  DEFAULT CHARSET = utf8 COMMENT ='分类表';
+CREATE TABLE IF NOT EXISTS `t_class` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '分类id',
+  `parent_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '父分类id',
+  `class_name` varchar(200) NOT NULL COMMENT '分类名称',
+  `status` int(11) NOT NULL DEFAULT '0' COMMENT '状态(1:启用，0:停用)',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='分类表';
 
--- 正在导出表  blog.t_class 的数据：~5 rows (大约)
-DELETE
-FROM `t_class`;
-/*!40000 ALTER TABLE `t_class`
-    DISABLE KEYS */;
-INSERT INTO `t_class` (`id`, `parent_id`, `class_name`, `status`, `create_time`, `update_time`)
-VALUES (1, 0, 'Spring', 1, '2020-01-14 16:16:07', '2020-05-12 11:52:15'),
-       (2, 1, 'Spring Aop', 1, '2020-01-14 16:16:21', '2020-05-12 11:52:21'),
-       (3, 0, 'Redis', 1, '2020-01-14 17:17:37', '2020-05-12 11:52:07'),
-       (4, 0, 'Mysql', 0, '2020-05-12 11:52:29', '2020-05-12 14:10:50'),
-       (5, 4, 'Mysql索引', 1, '2020-05-12 14:05:36', '2020-05-12 14:10:58');
-/*!40000 ALTER TABLE `t_class`
-    ENABLE KEYS */;
+-- 正在导出表  blog.t_class 的数据：~6 rows (大约)
+DELETE FROM `t_class`;
+/*!40000 ALTER TABLE `t_class` DISABLE KEYS */;
+INSERT INTO `t_class` (`id`, `parent_id`, `class_name`, `status`, `create_time`, `update_time`) VALUES
+	(1, 0, 'Spring', 1, '2020-01-14 16:16:07', '2020-05-12 11:52:15'),
+	(2, 1, 'Spring Aop', 1, '2020-01-14 16:16:21', '2020-05-12 11:52:21'),
+	(3, 0, 'Redis', 1, '2020-01-14 17:17:37', '2020-05-12 11:52:07'),
+	(4, 0, 'Mysql', 0, '2020-05-12 11:52:29', '2020-05-12 14:10:50'),
+	(5, 4, 'Mysql索引', 1, '2020-05-12 14:05:36', '2020-05-12 14:10:58'),
+	(6, 0, 'JAVA', 1, '2020-05-20 14:24:32', '2020-05-20 14:24:32');
+/*!40000 ALTER TABLE `t_class` ENABLE KEYS */;
 
 -- 导出  表 blog.t_comment 结构
-CREATE TABLE IF NOT EXISTS `t_comment`
-(
-    `id`           bigint(20)    NOT NULL AUTO_INCREMENT,
-    `blog_id`      bigint(20)    NOT NULL DEFAULT '-1' COMMENT '博客id',
-    `comment_type` tinyint(1)    NOT NULL COMMENT '评论类型（1：博客评论 2：友情链接 3：留言板）',
-    `content`      varchar(1000) NOT NULL COMMENT '评论内容',
-    `user_id`      bigint(20)    NOT NULL COMMENT '评论用户id',
-    `create_time`  timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time`  timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    PRIMARY KEY (`id`),
-    KEY `index_blog_id` (`blog_id`)
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 37
-  DEFAULT CHARSET = utf8 COMMENT ='评论表';
+CREATE TABLE IF NOT EXISTS `t_comment` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `blog_id` bigint(20) NOT NULL DEFAULT '-1' COMMENT '博客id',
+  `comment_type` tinyint(1) NOT NULL COMMENT '评论类型（1：博客评论 2：友情链接 3：留言板）',
+  `content` varchar(1000) NOT NULL COMMENT '评论内容',
+  `user_id` bigint(20) NOT NULL COMMENT '评论用户id',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `index_blog_id` (`blog_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8 COMMENT='评论表';
 
 -- 正在导出表  blog.t_comment 的数据：~33 rows (大约)
-DELETE
-FROM `t_comment`;
-/*!40000 ALTER TABLE `t_comment`
-    DISABLE KEYS */;
-INSERT INTO `t_comment` (`id`, `blog_id`, `comment_type`, `content`, `user_id`, `create_time`, `update_time`)
-VALUES (1, 5, 1, '111111', 19, '2020-01-15 17:22:44', '2020-01-15 17:28:34'),
-       (2, 5, 1, '111111', 19, '2020-01-15 17:22:44', '2020-01-15 17:28:35'),
-       (3, 5, 1, '111111', 19, '2020-01-15 17:23:15', '2020-01-15 17:28:38'),
-       (4, 5, 1, '2222', 19, '2020-01-15 17:26:51', '2020-01-15 17:28:40'),
-       (5, 5, 1, '3333', 19, '2020-01-15 17:28:47', '2020-01-15 17:28:47'),
-       (6, 5, 1, '22222', 19, '2020-01-15 17:29:34', '2020-01-15 17:29:34'),
-       (7, 3, 1, '11111', 19, '2020-01-16 09:15:24', '2020-01-16 09:15:24'),
-       (8, 13, 1, '1111', 19, '2020-01-16 10:06:29', '2020-01-16 10:06:29'),
-       (9, 13, 1, '2321321321321321SSS', 19, '2020-01-16 11:40:20', '2020-01-16 11:40:20'),
-       (10, 13, 1, '121212', 19, '2020-01-16 13:56:52', '2020-01-16 13:56:52'),
-       (11, 13, 1, '121212', 19, '2020-01-16 13:56:59', '2020-01-16 13:56:59'),
-       (12, 13, 1, '3', 19, '2020-01-16 13:57:02', '2020-01-16 13:57:02'),
-       (13, 13, 1, '4', 19, '2020-01-16 13:57:04', '2020-01-16 13:57:04'),
-       (14, 13, 1, '5', 19, '2020-01-16 13:57:05', '2020-01-16 13:57:05'),
-       (15, 13, 1, '6', 19, '2020-01-16 13:57:07', '2020-01-16 13:57:07'),
-       (16, 13, 1, '7', 19, '2020-01-16 13:57:08', '2020-01-16 13:57:08'),
-       (17, 13, 1, '8', 19, '2020-01-16 13:57:10', '2020-01-16 13:57:10'),
-       (18, 13, 1, '9', 19, '2020-01-16 13:57:12', '2020-01-16 13:57:12'),
-       (19, 13, 1, '10[可爱][可怜][挖鼻][吃惊]', 19, '2020-01-16 13:59:03', '2020-01-16 13:59:03'),
-       (20, 13, 1, '11', 19, '2020-01-16 13:59:26', '2020-01-16 13:59:26'),
-       (21, 13, 1, '12', 19, '2020-01-16 13:59:38', '2020-01-16 13:59:38'),
-       (22, 4, 1, '1111', 19, '2020-01-16 14:37:12', '2020-01-16 14:37:12'),
-       (23, 10, 1, '111', 19, '2020-01-16 14:49:50', '2020-01-16 14:49:50'),
-       (24, 10, 1, '222222', -1, '2020-01-16 14:54:24', '2020-01-16 14:54:24'),
-       (25, -1, 3, '111', -1, '2020-01-16 15:02:29', '2020-01-16 15:02:29'),
-       (26, -1, 4, '222', -1, '2020-01-16 15:03:55', '2020-01-16 15:03:55'),
-       (27, 5, 1, '[嘻嘻]', -1, '2020-01-16 16:51:55', '2020-01-16 16:51:55'),
-       (28, 5, 1, '[可怜]', -1, '2020-01-16 17:08:34', '2020-01-16 17:08:34'),
-       (29, 5, 1, '[害羞]', -1, '2020-01-16 17:08:40', '2020-01-16 17:08:40'),
-       (30, 5, 1, '[吃惊]', -1, '2020-01-16 17:08:51', '2020-01-16 17:08:51'),
-       (31, 5, 1, '555', -1, '2020-01-16 18:01:55', '2020-01-16 18:01:55'),
-       (32, 5, 1, '6666', -1, '2020-01-16 18:01:57', '2020-01-16 18:01:57'),
-       (33, 5, 1, '777', -1, '2020-01-16 18:01:58', '2020-01-16 18:01:58'),
-       (34, -1, 3, '[左哼哼][嘘][衰][吐]', -1, '2020-01-17 11:25:47', '2020-01-17 11:25:47'),
-       (35, 6, 1, '[嘻嘻]', 19, '2020-01-17 11:40:37', '2020-01-17 11:40:37'),
-       (36, 10, 1, '[微笑]', -1, '2020-01-17 11:41:15', '2020-01-17 11:41:15');
-/*!40000 ALTER TABLE `t_comment`
-    ENABLE KEYS */;
+DELETE FROM `t_comment`;
+/*!40000 ALTER TABLE `t_comment` DISABLE KEYS */;
+INSERT INTO `t_comment` (`id`, `blog_id`, `comment_type`, `content`, `user_id`, `create_time`, `update_time`) VALUES
+	(1, 5, 1, '111111', 19, '2020-01-15 17:22:44', '2020-01-15 17:28:34'),
+	(2, 5, 1, '111111', 19, '2020-01-15 17:22:44', '2020-01-15 17:28:35'),
+	(3, 5, 1, '111111', 19, '2020-01-15 17:23:15', '2020-01-15 17:28:38'),
+	(4, 5, 1, '2222', 19, '2020-01-15 17:26:51', '2020-01-15 17:28:40'),
+	(5, 5, 1, '3333', 19, '2020-01-15 17:28:47', '2020-01-15 17:28:47'),
+	(6, 5, 1, '22222', 19, '2020-01-15 17:29:34', '2020-01-15 17:29:34'),
+	(7, 3, 1, '11111', 19, '2020-01-16 09:15:24', '2020-01-16 09:15:24'),
+	(8, 13, 1, '1111', 19, '2020-01-16 10:06:29', '2020-01-16 10:06:29'),
+	(9, 13, 1, '2321321321321321SSS', 19, '2020-01-16 11:40:20', '2020-01-16 11:40:20'),
+	(10, 13, 1, '121212', 19, '2020-01-16 13:56:52', '2020-01-16 13:56:52'),
+	(11, 13, 1, '121212', 19, '2020-01-16 13:56:59', '2020-01-16 13:56:59'),
+	(12, 13, 1, '3', 19, '2020-01-16 13:57:02', '2020-01-16 13:57:02'),
+	(13, 13, 1, '4', 19, '2020-01-16 13:57:04', '2020-01-16 13:57:04'),
+	(14, 13, 1, '5', 19, '2020-01-16 13:57:05', '2020-01-16 13:57:05'),
+	(15, 13, 1, '6', 19, '2020-01-16 13:57:07', '2020-01-16 13:57:07'),
+	(16, 13, 1, '7', 19, '2020-01-16 13:57:08', '2020-01-16 13:57:08'),
+	(17, 13, 1, '8', 19, '2020-01-16 13:57:10', '2020-01-16 13:57:10'),
+	(18, 13, 1, '9', 19, '2020-01-16 13:57:12', '2020-01-16 13:57:12'),
+	(19, 13, 1, '10[可爱][可怜][挖鼻][吃惊]', 19, '2020-01-16 13:59:03', '2020-01-16 13:59:03'),
+	(20, 13, 1, '11', 19, '2020-01-16 13:59:26', '2020-01-16 13:59:26'),
+	(21, 13, 1, '12', 19, '2020-01-16 13:59:38', '2020-01-16 13:59:38'),
+	(22, 4, 1, '1111', 19, '2020-01-16 14:37:12', '2020-01-16 14:37:12'),
+	(23, 10, 1, '111', 19, '2020-01-16 14:49:50', '2020-01-16 14:49:50'),
+	(24, 10, 1, '222222', -1, '2020-01-16 14:54:24', '2020-01-16 14:54:24'),
+	(25, -1, 3, '111', -1, '2020-01-16 15:02:29', '2020-01-16 15:02:29'),
+	(26, -1, 4, '222', -1, '2020-01-16 15:03:55', '2020-01-16 15:03:55'),
+	(27, 5, 1, '[嘻嘻]', -1, '2020-01-16 16:51:55', '2020-01-16 16:51:55'),
+	(28, 5, 1, '[可怜]', -1, '2020-01-16 17:08:34', '2020-01-16 17:08:34'),
+	(29, 5, 1, '[害羞]', -1, '2020-01-16 17:08:40', '2020-01-16 17:08:40'),
+	(30, 5, 1, '[吃惊]', -1, '2020-01-16 17:08:51', '2020-01-16 17:08:51'),
+	(31, 5, 1, '555', -1, '2020-01-16 18:01:55', '2020-01-16 18:01:55'),
+	(32, 5, 1, '6666', -1, '2020-01-16 18:01:57', '2020-01-16 18:01:57'),
+	(33, 5, 1, '777', -1, '2020-01-16 18:01:58', '2020-01-16 18:01:58'),
+	(34, -1, 3, '[左哼哼][嘘][衰][吐]', -1, '2020-01-17 11:25:47', '2020-01-17 11:25:47'),
+	(35, 6, 1, '[嘻嘻]', 19, '2020-01-17 11:40:37', '2020-01-17 11:40:37'),
+	(36, 10, 1, '[微笑]', -1, '2020-01-17 11:41:15', '2020-01-17 11:41:15'),
+	(37, 14, 1, '啦啦啦[嘻嘻]', -1, '2020-05-13 10:27:38', '2020-05-13 10:27:38'),
+	(38, 14, 1, '[嘻嘻]', -1, '2020-05-13 10:27:57', '2020-05-13 10:27:57'),
+	(39, 14, 1, '[哈欠]', -1, '2020-05-13 10:40:19', '2020-05-13 10:40:19');
+/*!40000 ALTER TABLE `t_comment` ENABLE KEYS */;
 
 -- 导出  表 blog.t_like 结构
-CREATE TABLE IF NOT EXISTS `t_like`
-(
-    `id`             bigint(20) NOT NULL AUTO_INCREMENT,
-    `blog_id`        bigint(20) NOT NULL COMMENT '博客id',
-    `user_id`        bigint(20) NOT NULL COMMENT '用户id',
-    `like_status`    tinyint(1) NOT NULL DEFAULT '0' COMMENT '点赞状态(1:有效赞；0：取消赞)',
-    `collect_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '收藏状态(1:已收藏；0：为收藏)',
-    `create_time`    timestamp  NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time`    timestamp  NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    PRIMARY KEY (`id`),
-    KEY `index_blog_id` (`blog_id`)
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 6
-  DEFAULT CHARSET = utf8 COMMENT ='点赞表';
+CREATE TABLE IF NOT EXISTS `t_like` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `blog_id` bigint(20) NOT NULL COMMENT '博客id',
+  `user_id` bigint(20) NOT NULL COMMENT '用户id',
+  `like_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '点赞状态(1:有效赞；0：取消赞)',
+  `collect_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '收藏状态(1:已收藏；0：为收藏)',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `index_blog_id` (`blog_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='点赞表';
 
--- 正在导出表  blog.t_like 的数据：~4 rows (大约)
-DELETE
-FROM `t_like`;
-/*!40000 ALTER TABLE `t_like`
-    DISABLE KEYS */;
-INSERT INTO `t_like` (`id`, `blog_id`, `user_id`, `like_status`, `collect_status`, `create_time`, `update_time`)
-VALUES (1, 2, 19, 1, 0, '2020-01-15 14:34:47', '2020-01-15 14:34:47'),
-       (2, 1, 19, 0, 0, '2020-01-16 18:23:01', '2020-01-17 10:44:57'),
-       (3, 5, 19, 1, 1, '2020-01-17 11:24:43', '2020-01-17 11:24:44'),
-       (4, 4, 19, 1, 0, '2020-01-17 11:36:51', '2020-01-17 11:40:19'),
-       (5, 6, 19, 0, 1, '2020-01-17 11:40:29', '2020-01-17 11:40:29');
-/*!40000 ALTER TABLE `t_like`
-    ENABLE KEYS */;
+-- 正在导出表  blog.t_like 的数据：~5 rows (大约)
+DELETE FROM `t_like`;
+/*!40000 ALTER TABLE `t_like` DISABLE KEYS */;
+INSERT INTO `t_like` (`id`, `blog_id`, `user_id`, `like_status`, `collect_status`, `create_time`, `update_time`) VALUES
+	(1, 2, 19, 1, 0, '2020-01-15 14:34:47', '2020-01-15 14:34:47'),
+	(2, 1, 19, 0, 0, '2020-01-16 18:23:01', '2020-01-17 10:44:57'),
+	(3, 5, 19, 1, 1, '2020-01-17 11:24:43', '2020-01-17 11:24:44'),
+	(4, 4, 19, 1, 0, '2020-01-17 11:36:51', '2020-01-17 11:40:19'),
+	(5, 6, 19, 0, 1, '2020-01-17 11:40:29', '2020-01-17 11:40:29'),
+	(6, 29, 19, 1, 1, '2020-05-20 16:52:41', '2020-05-20 16:52:42');
+/*!40000 ALTER TABLE `t_like` ENABLE KEYS */;
 
 -- 导出  表 blog.t_reply 结构
-CREATE TABLE IF NOT EXISTS `t_reply`
-(
-    `id`           bigint(20)    NOT NULL AUTO_INCREMENT,
-    `comment_id`   bigint(20)    NOT NULL COMMENT '评论id',
-    `reply_type`   tinyint(1)    NOT NULL COMMENT '回复类型(1:评论的回复，2: 回复的回复)',
-    `content`      varchar(1000) NOT NULL COMMENT '回复内容',
-    `reply_id`     bigint(20)    NOT NULL COMMENT '回复目标id',
-    `from_user_id` bigint(20)    NOT NULL COMMENT '回复用户id',
-    `to_user_id`   bigint(20)    NOT NULL COMMENT '目标用户id',
-    `create_time`  timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time`  timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 7
-  DEFAULT CHARSET = utf8 COMMENT ='回复表';
+CREATE TABLE IF NOT EXISTS `t_reply` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `comment_id` bigint(20) NOT NULL COMMENT '评论id',
+  `reply_type` tinyint(1) NOT NULL COMMENT '回复类型(1:评论的回复，2: 回复的回复)',
+  `content` varchar(1000) NOT NULL COMMENT '回复内容',
+  `reply_id` bigint(20) NOT NULL COMMENT '回复目标id',
+  `from_user_id` bigint(20) NOT NULL COMMENT '回复用户id',
+  `to_user_id` bigint(20) NOT NULL COMMENT '目标用户id',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='回复表';
 
 -- 正在导出表  blog.t_reply 的数据：~6 rows (大约)
-DELETE
-FROM `t_reply`;
-/*!40000 ALTER TABLE `t_reply`
-    DISABLE KEYS */;
-INSERT INTO `t_reply` (`id`, `comment_id`, `reply_type`, `content`, `reply_id`, `from_user_id`, `to_user_id`,
-                       `create_time`, `update_time`)
-VALUES (1, 8, 1, '22222', 8, 19, 19, '2020-01-16 10:14:07', '2020-01-16 10:14:07'),
-       (2, 8, 2, '3333', 1, 19, 19, '2020-01-16 10:18:55', '2020-01-16 10:18:55'),
-       (3, 8, 1, 'TEST', 8, 19, 19, '2020-01-16 11:41:09', '2020-01-16 11:41:09'),
-       (4, 8, 2, '[嘻嘻]', 1, 19, 19, '2020-01-16 11:44:35', '2020-01-16 11:44:35'),
-       (5, 8, 2, '[可爱]', 2, 19, 19, '2020-01-16 11:51:59', '2020-01-16 11:51:59'),
-       (6, 1, 1, '1111', 1, 19, 19, '2020-01-16 14:05:17', '2020-01-16 14:05:17');
-/*!40000 ALTER TABLE `t_reply`
-    ENABLE KEYS */;
+DELETE FROM `t_reply`;
+/*!40000 ALTER TABLE `t_reply` DISABLE KEYS */;
+INSERT INTO `t_reply` (`id`, `comment_id`, `reply_type`, `content`, `reply_id`, `from_user_id`, `to_user_id`, `create_time`, `update_time`) VALUES
+	(1, 8, 1, '22222', 8, 19, 19, '2020-01-16 10:14:07', '2020-01-16 10:14:07'),
+	(2, 8, 2, '3333', 1, 19, 19, '2020-01-16 10:18:55', '2020-01-16 10:18:55'),
+	(3, 8, 1, 'TEST', 8, 19, 19, '2020-01-16 11:41:09', '2020-01-16 11:41:09'),
+	(4, 8, 2, '[嘻嘻]', 1, 19, 19, '2020-01-16 11:44:35', '2020-01-16 11:44:35'),
+	(5, 8, 2, '[可爱]', 2, 19, 19, '2020-01-16 11:51:59', '2020-01-16 11:51:59'),
+	(6, 1, 1, '1111', 1, 19, 19, '2020-01-16 14:05:17', '2020-01-16 14:05:17');
+/*!40000 ALTER TABLE `t_reply` ENABLE KEYS */;
+
+-- 导出  表 blog.t_sys_menu 结构
+CREATE TABLE IF NOT EXISTS `t_sys_menu` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `parent_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '父菜单id，一级菜单为0',
+  `menu_name` varchar(50) NOT NULL COMMENT '菜单名称',
+  `menu_url` varchar(200) NOT NULL DEFAULT '' COMMENT '菜单url',
+  `menu_perms` varchar(100) NOT NULL DEFAULT '' COMMENT '授权如:sys:user:view',
+  `menu_type` int(11) NOT NULL COMMENT '类型 (1,目录;2,菜单;3,按钮)',
+  `menu_icons` varchar(50) NOT NULL DEFAULT '' COMMENT '菜单图标',
+  `menu_order` int(11) NOT NULL DEFAULT '100' COMMENT '排序',
+  `menu_status` int(11) NOT NULL DEFAULT '1' COMMENT '状态(0,禁用;1,启用)',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COMMENT='菜单表';
+
+-- 正在导出表  blog.t_sys_menu 的数据：~18 rows (大约)
+DELETE FROM `t_sys_menu`;
+/*!40000 ALTER TABLE `t_sys_menu` DISABLE KEYS */;
+INSERT INTO `t_sys_menu` (`id`, `parent_id`, `menu_name`, `menu_url`, `menu_perms`, `menu_type`, `menu_icons`, `menu_order`, `menu_status`, `create_time`, `update_time`) VALUES
+	(1, 0, '系统管理', '', '', 1, 'el-icon-s-tools', 1, 1, '2020-05-21 12:17:30', '2020-05-21 12:17:30'),
+	(2, 1, '菜单管理', '/sys_menu', '', 2, 'el-icon-menu', 3, 1, '2020-05-21 12:19:53', '2020-05-21 14:17:17'),
+	(3, 2, '查询', '', 'blog:sys_menu:view', 3, '', 1, 1, '2020-05-21 12:20:21', '2020-05-21 12:29:38'),
+	(4, 2, '新增', '', 'blog:sys_menu:add', 3, '', 2, 1, '2020-05-21 12:20:21', '2020-05-21 12:29:40'),
+	(5, 2, '修改', '', 'blog:sys_menu:edit', 3, '', 3, 1, '2020-05-21 12:20:39', '2020-05-21 12:29:42'),
+	(6, 2, '删除', '', 'blog:sys_menu:delete', 3, '', 4, 1, '2020-05-21 12:20:39', '2020-05-21 12:29:45'),
+	(7, 1, '用户管理', '/sys_user', '', 2, 'el-icon-user', 1, 1, '2020-05-21 12:37:10', '2020-05-21 14:06:56'),
+	(8, 7, '查询', '', 'blog:sys_user:view', 3, '', 1, 1, '2020-05-21 12:43:05', '2020-05-21 12:43:05'),
+	(9, 7, '新增', '', 'blog:sys_user:add', 3, '', 2, 1, '2020-05-21 12:43:05', '2020-05-21 12:43:05'),
+	(10, 7, '修改', '', 'blog:sys_user:edit', 3, '', 3, 1, '2020-05-21 12:43:05', '2020-05-21 12:43:05'),
+	(11, 7, '删除', '', 'blog:sys_user:delete', 3, '', 4, 1, '2020-05-21 12:43:05', '2020-05-21 12:43:05'),
+	(12, 7, '重置密码', '', 'blog:sys_user:pwd', 3, '', 5, 1, '2020-05-21 12:43:05', '2020-05-21 12:43:05'),
+	(13, 1, '角色管理', '/sys_role', '', 2, 'el-icon-user', 2, 1, '2020-05-21 12:44:19', '2020-05-21 14:13:36'),
+	(14, 13, '查询', '', 'blog:sys_role:view', 3, '', 1, 1, '2020-05-21 12:45:07', '2020-05-21 12:45:07'),
+	(15, 13, '新增', '', 'blog:sys_role:add', 3, '', 2, 1, '2020-05-21 12:45:07', '2020-05-21 12:45:07'),
+	(16, 13, '修改', '', 'blog:sys_role:edit', 3, '', 3, 1, '2020-05-21 12:45:07', '2020-05-21 12:45:07'),
+	(17, 13, '删除', '', 'blog:sys_role:delete', 3, '', 4, 1, '2020-05-21 12:45:08', '2020-05-21 12:45:08'),
+	(18, 0, '首页', '/index', '', 1, 'el-icon-s-home', 0, 1, '2020-05-21 16:24:40', '2020-05-21 18:22:44');
+/*!40000 ALTER TABLE `t_sys_menu` ENABLE KEYS */;
+
+-- 导出  表 blog.t_sys_role 结构
+CREATE TABLE IF NOT EXISTS `t_sys_role` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `role_name` varchar(100) NOT NULL DEFAULT '' COMMENT '角色名称',
+  `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
+  `role_status` int(11) NOT NULL DEFAULT '1' COMMENT '状态(0,禁用;1,启用)',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='角色表';
+
+-- 正在导出表  blog.t_sys_role 的数据：~1 rows (大约)
+DELETE FROM `t_sys_role`;
+/*!40000 ALTER TABLE `t_sys_role` DISABLE KEYS */;
+INSERT INTO `t_sys_role` (`id`, `role_name`, `remark`, `role_status`, `create_time`, `update_time`) VALUES
+	(1, '测试', '', 1, '2020-05-21 16:21:14', '2020-05-21 16:21:14');
+/*!40000 ALTER TABLE `t_sys_role` ENABLE KEYS */;
+
+-- 导出  表 blog.t_sys_role_menu 结构
+CREATE TABLE IF NOT EXISTS `t_sys_role_menu` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `role_id` bigint(20) NOT NULL COMMENT '角色id',
+  `menu_id` bigint(20) NOT NULL COMMENT '菜单id',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='角色菜单表';
+
+-- 正在导出表  blog.t_sys_role_menu 的数据：~7 rows (大约)
+DELETE FROM `t_sys_role_menu`;
+/*!40000 ALTER TABLE `t_sys_role_menu` DISABLE KEYS */;
+INSERT INTO `t_sys_role_menu` (`id`, `role_id`, `menu_id`, `create_time`, `update_time`) VALUES
+	(1, 1, 1, '2020-05-21 16:21:14', '2020-05-21 16:21:14'),
+	(2, 1, 7, '2020-05-21 16:21:14', '2020-05-21 16:21:14'),
+	(3, 1, 8, '2020-05-21 16:21:14', '2020-05-21 16:21:14'),
+	(4, 1, 9, '2020-05-21 16:21:14', '2020-05-21 16:21:14'),
+	(5, 1, 10, '2020-05-21 16:21:14', '2020-05-21 16:21:14'),
+	(6, 1, 11, '2020-05-21 16:21:14', '2020-05-21 16:21:14'),
+	(7, 1, 12, '2020-05-21 16:21:14', '2020-05-21 16:21:14');
+/*!40000 ALTER TABLE `t_sys_role_menu` ENABLE KEYS */;
+
+-- 导出  表 blog.t_sys_user 结构
+CREATE TABLE IF NOT EXISTS `t_sys_user` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `account` varchar(64) NOT NULL COMMENT '账户',
+  `user_name` varchar(64) NOT NULL COMMENT '用户名称',
+  `password` varchar(128) NOT NULL COMMENT '密码',
+  `user_status` int(11) NOT NULL DEFAULT '1' COMMENT '状态(0,禁用;1,启用)',
+  `admin_flag` int(11) NOT NULL DEFAULT '0' COMMENT '是否管理员(0,否;1,是)',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='系统用户表';
+
+-- 正在导出表  blog.t_sys_user 的数据：~1 rows (大约)
+DELETE FROM `t_sys_user`;
+/*!40000 ALTER TABLE `t_sys_user` DISABLE KEYS */;
+INSERT INTO `t_sys_user` (`id`, `account`, `user_name`, `password`, `user_status`, `admin_flag`, `create_time`, `update_time`) VALUES
+	(1, 'liuzw', 'liuzw', 'e10adc3949ba59abbe56e057f20f883e', 1, 1, '2019-08-08 10:20:55', '2019-08-12 13:43:36'),
+	(2, 'test', 'test', 'e10adc3949ba59abbe56e057f20f883e', 1, 0, '2020-05-21 16:21:34', '2020-05-21 16:21:34');
+/*!40000 ALTER TABLE `t_sys_user` ENABLE KEYS */;
+
+-- 导出  表 blog.t_sys_user_role 结构
+CREATE TABLE IF NOT EXISTS `t_sys_user_role` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) NOT NULL COMMENT '用户id',
+  `role_id` bigint(20) NOT NULL COMMENT '角色id',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='用户角色表';
+
+-- 正在导出表  blog.t_sys_user_role 的数据：~1 rows (大约)
+DELETE FROM `t_sys_user_role`;
+/*!40000 ALTER TABLE `t_sys_user_role` DISABLE KEYS */;
+INSERT INTO `t_sys_user_role` (`id`, `user_id`, `role_id`, `create_time`, `update_time`) VALUES
+	(1, 2, 1, '2020-05-21 16:21:34', '2020-05-21 16:21:34');
+/*!40000 ALTER TABLE `t_sys_user_role` ENABLE KEYS */;
 
 -- 导出  表 blog.t_user 结构
-CREATE TABLE IF NOT EXISTS `t_user`
-(
-    `id`                   bigint(20)   NOT NULL AUTO_INCREMENT,
-    `username`             varchar(50)  NOT NULL COMMENT '用户名/昵称',
-    `email`                varchar(100) NOT NULL DEFAULT '' COMMENT '邮箱',
-    `password`             varchar(100) NOT NULL COMMENT '密码',
-    `sex`                  tinyint(1)   NOT NULL DEFAULT '1' COMMENT '性别  0：女   1：男',
-    `tags`                 varchar(200) NOT NULL DEFAULT '' COMMENT '标签',
-    `status`               tinyint(1)   NOT NULL DEFAULT '0' COMMENT '状态(0:未激活;1:已激活)',
-    `show_flag`            tinyint(1)   NOT NULL DEFAULT '0' COMMENT '是否展示友联(0:否;1:是)',
-    `head_photo`           varchar(500) NOT NULL DEFAULT '' COMMENT '头像',
-    `website_name`         varchar(200) NOT NULL DEFAULT '' COMMENT '网站名称',
-    `website_address`      varchar(300) NOT NULL DEFAULT '' COMMENT '网站地址',
-    `website_introduction` varchar(500) NOT NULL DEFAULT '' COMMENT '网站简介',
-    `website_logo`         varchar(500) NOT NULL DEFAULT '' COMMENT '网站logo',
-    `activation_code`      varchar(200)          DEFAULT NULL COMMENT '激活码',
-    `create_time`          timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time`          timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    PRIMARY KEY (`id`),
-    KEY `index_email` (`email`)
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 20
-  DEFAULT CHARSET = utf8 COMMENT ='用户表';
+CREATE TABLE IF NOT EXISTS `t_user` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) NOT NULL COMMENT '用户名/昵称',
+  `email` varchar(100) NOT NULL DEFAULT '' COMMENT '邮箱',
+  `password` varchar(100) NOT NULL COMMENT '密码',
+  `sex` tinyint(1) NOT NULL DEFAULT '1' COMMENT '性别  0：女   1：男',
+  `tags` varchar(200) NOT NULL DEFAULT '' COMMENT '标签',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态(0:未激活;1:已激活)',
+  `show_flag` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否展示友联(0:否;1:是)',
+  `head_photo` varchar(500) NOT NULL DEFAULT '' COMMENT '头像',
+  `website_name` varchar(200) NOT NULL DEFAULT '' COMMENT '网站名称',
+  `website_address` varchar(300) NOT NULL DEFAULT '' COMMENT '网站地址',
+  `website_introduction` varchar(500) NOT NULL DEFAULT '' COMMENT '网站简介',
+  `website_logo` varchar(500) NOT NULL DEFAULT '' COMMENT '网站logo',
+  `activation_code` varchar(200) DEFAULT NULL COMMENT '激活码',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `index_email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
--- 正在导出表  blog.t_user 的数据：~1 rows (大约)
-DELETE
-FROM `t_user`;
-/*!40000 ALTER TABLE `t_user`
-    DISABLE KEYS */;
-INSERT INTO `t_user` (`id`, `username`, `email`, `password`, `sex`, `tags`, `status`, `show_flag`, `head_photo`,
-                      `website_name`, `website_address`, `website_introduction`, `website_logo`, `activation_code`,
-                      `create_time`, `update_time`)
-VALUES (19, 'liuzw', 'liuzewei@zhilingsd.com', 'e10adc3949ba59abbe56e057f20f883e', 1, '码农,萌萌哒,技术宅', 1, 1, '', 'liuzw',
-        'www.liuzw.com', 'www.liuzw.com', '', '0b1c1958cf144c07a3219c02ab9b6ce1', '2020-01-14 15:20:04',
-        '2020-01-20 15:52:52');
-/*!40000 ALTER TABLE `t_user`
-    ENABLE KEYS */;
+-- 正在导出表  blog.t_user 的数据：~3 rows (大约)
+DELETE FROM `t_user`;
+/*!40000 ALTER TABLE `t_user` DISABLE KEYS */;
+INSERT INTO `t_user` (`id`, `username`, `email`, `password`, `sex`, `tags`, `status`, `show_flag`, `head_photo`, `website_name`, `website_address`, `website_introduction`, `website_logo`, `activation_code`, `create_time`, `update_time`) VALUES
+	(19, 'liuzw', 'liuzewei@zhilingsd.com', 'e10adc3949ba59abbe56e057f20f883e', 1, '码农,萌萌哒,技术宅', 1, 1, '', 'liuzw', 'www.liuzw.com', 'www.liuzw.com', '', '0b1c1958cf144c07a3219c02ab9b6ce1', '2020-01-14 15:20:04', '2020-01-20 15:52:52'),
+	(21, '928402767@qq.com', '928402767@qq.com', 'e10adc3949ba59abbe56e057f20f883e', 1, '码农,技术宅', 1, 1, '6cc79c20c87e48e4b085c27bec07f2ef.png', '测试一下百度', 'https://www.baidu.com', '测试一下百度', '857eb7e74d874b3b9ca4e723326335fe.png', '34381fd6a36e4cf5bb499ee3ff1d68b8', '2020-05-13 10:21:01', '2020-05-13 17:03:00');
+/*!40000 ALTER TABLE `t_user` ENABLE KEYS */;
 
-/*!40101 SET SQL_MODE = IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS = IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
-/*!40101 SET CHARACTER_SET_CLIENT = @OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

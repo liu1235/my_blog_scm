@@ -5,37 +5,41 @@ import com.blog.framework.bo.BlogLikeOrCollectBo;
 import com.blog.framework.bo.BlogQueryBo;
 import com.blog.framework.bo.BlogReleaseBo;
 import com.blog.framework.common.PageBean;
-import com.blog.framework.common.constants.RedisConstants;
 import com.blog.framework.common.enums.BlogStatusEnum;
 import com.blog.framework.common.enums.StatusEnum;
 import com.blog.framework.common.exception.LoginException;
+import com.blog.framework.common.exception.ServiceException;
 import com.blog.framework.common.utils.CopyDataUtil;
 import com.blog.framework.common.utils.DateUtil;
-import com.blog.framework.common.utils.JsonUtil;
-import com.blog.framework.dao.*;
-import com.blog.framework.dto.blog.BlogQueryDto;
+import com.blog.framework.dao.BlogDao;
+import com.blog.framework.dao.ClassDao;
+import com.blog.framework.dao.CommentDao;
+import com.blog.framework.dao.LikeDao;
+import com.blog.framework.dao.UserDao;
 import com.blog.framework.dto.blog.manage.BlogAddDto;
 import com.blog.framework.dto.blog.manage.BlogManageQueryDto;
 import com.blog.framework.dto.blog.manage.BlogUpdateDto;
-import com.blog.framework.model.*;
+import com.blog.framework.model.BlogModel;
+import com.blog.framework.model.ClassModel;
+import com.blog.framework.model.CommentModel;
+import com.blog.framework.model.LikeModel;
+import com.blog.framework.model.UserModel;
 import com.blog.framework.service.BlogService;
 import com.blog.framework.service.TokenService;
 import com.blog.framework.vo.LikeCountVO;
 import com.blog.framework.vo.LikeVO;
 import com.blog.framework.vo.blog.BlogArchiveVO;
 import com.blog.framework.vo.blog.BlogDetailVO;
-import com.blog.framework.vo.blog.manage.BlogListVO;
 import com.blog.framework.vo.blog.BlogTopCommentVo;
 import com.blog.framework.vo.blog.BlogTopVO;
 import com.blog.framework.vo.blog.BlogVO;
+import com.blog.framework.vo.blog.manage.BlogListVO;
 import com.blog.framework.vo.blog.manage.BlogManageDetailVO;
 import com.blog.framework.vo.comment.CommentCountVo;
 import com.blog.framework.vo.user.UserLoginVo;
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +47,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -86,7 +89,7 @@ public class BlogServiceImpl implements BlogService {
             return new PageBean<>();
         }
         list.forEach(v ->
-            v.setStatusName(BlogStatusEnum.getMsg(v.getStatus()))
+                v.setStatusName(BlogStatusEnum.getMsg(v.getStatus()))
         );
 
         return PageBean.createPageBean(list);
@@ -95,7 +98,7 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public BlogManageDetailVO detailBlog(Long id) {
         //获取详情
-        BlogModel blogModel = blogDao.detail(id);
+        BlogModel blogModel = blogDao.detailBlog(id);
         if (blogModel == null) {
             return null;
         }
@@ -152,16 +155,16 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public List<BlogTopVO> topBlogList() {
-        //首先从redis中获取数据
-        String json = redisService.get(RedisConstants.REDIS_BLOG_TOP);
-        if (StringUtils.isNotBlank(json)) {
-            return JsonUtil.toList(json, BlogTopVO.class);
-        }
+//        //首先从redis中获取数据
+//        String json = redisService.get(RedisConstants.REDIS_BLOG_TOP);
+//        if (StringUtils.isNotBlank(json)) {
+//            return JsonUtil.toList(json, BlogTopVO.class);
+//        }
         //从数据库获取
         List<BlogTopVO> vos = blogDao.topBlogList();
         if (CollectionUtils.isNotEmpty(vos)) {
             //存到redis中
-            redisService.set(RedisConstants.REDIS_BLOG_TOP, vos, 12, TimeUnit.HOURS);
+//            redisService.set(RedisConstants.REDIS_BLOG_TOP, vos, 12, TimeUnit.HOURS);
             return vos;
         }
         return null;
@@ -170,34 +173,34 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public List<BlogArchiveVO> archive() {
         List<BlogArchiveVO> voList = new ArrayList<>();
-        //先从redis中获取数据
-        Map<String, String> map = redisService.getHash(RedisConstants.REDIS_BLOG_ARCHIVE);
-        //如果redis没有 则从数据库获取数据
-        if (MapUtils.isEmpty(map)) {
-            List<BlogArchiveVO> list = blogDao.archive();
-            if (CollectionUtils.isEmpty(list)) {
-                return Collections.emptyList();
-            }
-            list.forEach(v -> v.setReleaseTime(DateUtil.convertStringDate(DateUtil.DATE_TIME, v.getReleaseTime())));
-            Map<String, List<BlogArchiveVO>> listMap = list.stream()
-                    .collect(Collectors.groupingBy(v -> v.getReleaseTime().substring(0, 4)));
-            //存到redis
-            redisService.setHash(RedisConstants.REDIS_BLOG_ARCHIVE, listMap, 2, TimeUnit.HOURS);
-
-            List<Map.Entry<String, List<BlogArchiveVO>>> entries = listMap.entrySet()
-                    .stream()
-                    .sorted(Map.Entry.<String, List<BlogArchiveVO>>comparingByKey().reversed())
-                    .collect(Collectors.toList());
-            for (Map.Entry<String, List<BlogArchiveVO>> entry : entries) {
-                voList.add(BlogArchiveVO.builder().releaseTime(entry.getKey()).build());
-                voList.addAll(entry.getValue());
-            }
-        } else {
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-                voList.add(BlogArchiveVO.builder().releaseTime(entry.getKey()).build());
-                voList.addAll(JsonUtil.toList(entry.getValue(), BlogArchiveVO.class));
-            }
+//        //先从redis中获取数据
+//        Map<String, String> map = redisService.getHash(RedisConstants.REDIS_BLOG_ARCHIVE);
+//        //如果redis没有 则从数据库获取数据
+//        if (MapUtils.isEmpty(map)) {
+        List<BlogArchiveVO> list = blogDao.archive();
+        if (CollectionUtils.isEmpty(list)) {
+            return Collections.emptyList();
         }
+        list.forEach(v -> v.setReleaseTime(DateUtil.convertStringDate(DateUtil.DATE_TIME, v.getReleaseTime())));
+        Map<String, List<BlogArchiveVO>> listMap = list.stream()
+                .collect(Collectors.groupingBy(v -> v.getReleaseTime().substring(0, 4)));
+        //存到redis
+//            redisService.setHash(RedisConstants.REDIS_BLOG_ARCHIVE, listMap, 2, TimeUnit.HOURS);
+
+        List<Map.Entry<String, List<BlogArchiveVO>>> entries = listMap.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, List<BlogArchiveVO>>comparingByKey().reversed())
+                .collect(Collectors.toList());
+        for (Map.Entry<String, List<BlogArchiveVO>> entry : entries) {
+            voList.add(BlogArchiveVO.builder().releaseTime(entry.getKey()).build());
+            voList.addAll(entry.getValue());
+        }
+//        } else {
+//            for (Map.Entry<String, String> entry : map.entrySet()) {
+//                voList.add(BlogArchiveVO.builder().releaseTime(entry.getKey()).build());
+//                voList.addAll(JsonUtil.toList(entry.getValue(), BlogArchiveVO.class));
+//            }
+//        }
         return voList;
     }
 
@@ -265,6 +268,9 @@ public class BlogServiceImpl implements BlogService {
         //获取详情
         BlogModel blogModel = blogDao.detail(id);
 
+        if (blogModel == null) {
+           throw new ServiceException("未获取到博客数据");
+        }
         BlogVO blogVO = CopyDataUtil.copyObject(blogModel, BlogVO.class);
         //博客id
         Long blogId = blogVO.getId();

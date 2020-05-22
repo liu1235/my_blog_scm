@@ -2,9 +2,15 @@ server:
   port: 9000
 spring:
   mail:
+    port: 465
     host: smtp.qq.com
     username: 670115782@qq.com
     password: nvjyqdkscropbfha
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/blog?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2B8
     username: root
@@ -53,12 +59,8 @@ pagehelper:
 
 
 #激活地址
-activation-address: http://localhost:8080/#/msg?urlState=urlInvalid&param={1}
+activation-address: http://192.168.10.170:6090/#/msg?urlState=urlInvalid&param={1}
 
-#管理员账号密码
-admin:
-  username: admin
-  password: liu133297
 
 file:
   uploadPath: E:\temp\file\

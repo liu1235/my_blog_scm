@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
@@ -79,8 +80,10 @@ public class FileController {
                 response.getOutputStream().write(b, 0, len);
             }
             inStream.close();
+        } catch (FileNotFoundException e1) {
+            log.error("-----获取不到文件-----");
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("-----下载文件异常-----", e);
         }
     }
 }

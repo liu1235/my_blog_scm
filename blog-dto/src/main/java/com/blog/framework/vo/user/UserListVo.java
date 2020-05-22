@@ -1,4 +1,4 @@
-package com.blog.framework.dto.user;
+package com.blog.framework.vo.user;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -6,13 +6,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
 /**
- * 更新用户信息
+ * 用户信息
  *
  * @author liuzw
  * @date 2019-04-29
@@ -21,21 +19,30 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDto implements Serializable {
+public class UserListVo implements Serializable {
 
-    private static final long serialVersionUID = -8659004786382288843L;
+    private static final long serialVersionUID = 5169096858442774241L;
+    /**
+     * id
+     */
+    @ApiModelProperty(value = "id")
+    private Long id;
+
+    /**
+     * 邮箱
+     */
+    @ApiModelProperty(value = "邮箱")
+    private String email;
 
     /**
      * 用户名
      */
-    @NotBlank(message = "用户名不能为空")
     @ApiModelProperty(value = "用户名")
     private String userName;
 
     /**
      * 性别(0：女;1：男)
      */
-    @NotNull(message = "性别不能为空")
     @ApiModelProperty(value = "性别")
     private Integer sex;
 

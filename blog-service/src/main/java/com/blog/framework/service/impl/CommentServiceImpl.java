@@ -61,8 +61,9 @@ public class CommentServiceImpl implements CommentService {
         //获取对博客的评论
         List<CommentModel> commentList = commentDao.list(dto);
         if (CollectionUtils.isEmpty(commentList)) {
-            return CommentVo.builder().count(0L)
-                    .detail(new PageBean<>())
+            return CommentVo.builder()
+                    .count(0L)
+                    .detail(null)
                     .build();
         }
         List<CommentVo.Detail> list = CopyDataUtil.copyList(commentList, CommentVo.Detail.class);

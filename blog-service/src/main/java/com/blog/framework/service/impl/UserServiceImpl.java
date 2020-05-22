@@ -1,5 +1,6 @@
 package com.blog.framework.service.impl;
 
+import com.blog.framework.common.PageBean;
 import com.blog.framework.common.enums.ResultDataEnum;
 import com.blog.framework.common.enums.UserStatusEnum;
 import com.blog.framework.common.exception.LoginException;
@@ -9,15 +10,18 @@ import com.blog.framework.common.utils.EncryptMd5Util;
 import com.blog.framework.dao.UserDao;
 import com.blog.framework.dto.MailDto;
 import com.blog.framework.dto.user.UserActivationDto;
-import com.blog.framework.dto.user.UserDto;
+import com.blog.framework.dto.user.UserAddDto;
+import com.blog.framework.dto.user.UserQueryDto;
 import com.blog.framework.dto.user.UserRegisterDto;
 import com.blog.framework.model.UserModel;
 import com.blog.framework.service.MailService;
 import com.blog.framework.service.TokenService;
 import com.blog.framework.service.UserService;
 import com.blog.framework.vo.user.FriendsLinkVo;
+import com.blog.framework.vo.user.UserListVo;
 import com.blog.framework.vo.user.UserLoginVo;
 import com.blog.framework.vo.user.UserVo;
+import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -55,12 +59,19 @@ public class UserServiceImpl implements UserService {
     private TokenService tokenService;
 
     @Override
-    public UserVo detail() {
-        UserLoginVo userInfo = tokenService.getUserInfo();
-        if (userInfo == null) {
-            throw new LoginException();
-        }
-        UserModel userModel = userDao.selectByPrimaryKey(userInfo.getUserId());
+    public PageBean<UserListVo> list(UserQueryDto dto) {
+        PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
+        UserModel build = UserModel.builder()
+                .userName(dto.getUserName())
+                .email(dto.getEmail())
+                .build();
+        List<UserModel> list = userDao.select(build);
+        return PageBean.createPageBean(list, UserListVo.class);
+    }
+
+    @Override
+    public UserVo detail(Long id) {
+        UserModel userModel = userDao.selectByPrimaryKey(id);
         UserVo userVo = CopyDataUtil.copyObject(userModel, UserVo.class);
         if (StringUtils.isNotBlank(userModel.getTags())) {
             userVo.setTags(Arrays.asList(userModel.getTags().split(",")));
@@ -69,15 +80,29 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean update(UserDto userDto) {
+    public Boolean delete(Long id) {
+        return userDao.delete(id);
+    }
+
+    @Override
+    public UserVo detail() {
         UserLoginVo userInfo = tokenService.getUserInfo();
         if (userInfo == null) {
             throw new LoginException();
         }
-        UserModel userModel = CopyDataUtil.copyObject(userDto, UserModel.class);
+        return detail(userInfo.getUserId());
+    }
+
+    @Override
+    public Boolean update(UserAddDto userAddDto) {
+        UserLoginVo userInfo = tokenService.getUserInfo();
+        if (userInfo == null) {
+            throw new LoginException();
+        }
+        UserModel userModel = CopyDataUtil.copyObject(userAddDto, UserModel.class);
         userModel.setId(userInfo.getUserId());
-        if (CollectionUtils.isNotEmpty(userDto.getTags())) {
-            userModel.setTags(StringUtils.join(userDto.getTags(), ","));
+        if (CollectionUtils.isNotEmpty(userAddDto.getTags())) {
+            userModel.setTags(StringUtils.join(userAddDto.getTags(), ","));
         }
         return userDao.updateUserInfo(userModel);
     }

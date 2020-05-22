@@ -4,6 +4,7 @@ import com.blog.framework.dao.UserDao;
 import com.blog.framework.mapper.UserMapper;
 import com.blog.framework.model.UserModel;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import tk.mybatis.mapper.entity.Example;
@@ -24,6 +25,19 @@ public class UserDaoImpl implements UserDao {
     @Autowired
     private UserMapper userMapper;
 
+
+    @Override
+    public List<UserModel> select(UserModel userModel) {
+        Example example = new Example(UserModel.class);
+        Example.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(userModel.getUserName())) {
+            criteria.andLike("userName", userModel.getUserName() + "%");
+        }
+        if (StringUtils.isNotBlank(userModel.getEmail())) {
+            criteria.andLike("email", userModel.getEmail() + "%");
+        }
+        return userMapper.selectByExample(example);
+    }
 
     @Override
     public UserModel selectByEmail(String email) {
@@ -63,6 +77,13 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<UserModel> friendsLink() {
-        return userMapper.selectAll();
+        return userMapper.select(UserModel.builder()
+                .showFlag(1)
+                .build());
+    }
+
+    @Override
+    public Boolean delete(Long id) {
+        return userMapper.deleteByPrimaryKey(id) > 0;
     }
 }

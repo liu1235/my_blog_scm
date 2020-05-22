@@ -4,6 +4,7 @@ import com.blog.framework.common.constants.BaseConstants;
 import com.blog.framework.common.constants.RedisConstants;
 import com.blog.framework.common.exception.LoginException;
 import com.blog.framework.service.TokenService;
+import com.blog.framework.vo.sys.user.SysUserLoginVo;
 import com.blog.framework.vo.user.UserLoginVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -30,7 +31,7 @@ public class TokenServiceImpl implements TokenService {
     private RedisService redisService;
 
     @Override
-    public void saveUserInfo(String token, UserLoginVo userInfo) {
+    public void saveUserInfo(String token, Object userInfo) {
         redisService.set(getTokenKey(token), userInfo, expireTime, TimeUnit.MINUTES);
     }
 
@@ -54,8 +55,23 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
+    public Boolean checkTokenExists() {
+        String token = getToken();
+        if (StringUtils.isNotBlank(token)) {
+            return redisService.hasKey(getTokenKey(token));
+        } else {
+            return false;
+        }
+    }
+
+    @Override
     public UserLoginVo getUserInfo() {
         return getUserInfo(getToken());
+    }
+
+    @Override
+    public SysUserLoginVo getSysUserInfo() {
+        return getSysUserInfo(getToken());
     }
 
     /**
@@ -89,6 +105,22 @@ public class TokenServiceImpl implements TokenService {
         }
         return null;
     }
+
+    /**
+     * 获取系统用户信息
+     *
+     * @param token token
+     * @return UserInfo
+     */
+    private SysUserLoginVo getSysUserInfo(String token) {
+        String keyName = getTokenKey(token);
+        if (StringUtils.isNotBlank(token) && redisService.hasKey(keyName)) {
+            return redisService.get(keyName, SysUserLoginVo.class);
+        }
+        return null;
+    }
+
+
 
     /**
      * 返回redis key

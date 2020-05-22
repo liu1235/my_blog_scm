@@ -3,6 +3,7 @@ package com.blog.framework.dao.impl;
 import com.blog.framework.bo.BlogLikeOrCollectBo;
 import com.blog.framework.bo.BlogQueryBo;
 import com.blog.framework.bo.BlogReleaseBo;
+import com.blog.framework.common.enums.BlogStatusEnum;
 import com.blog.framework.dao.BlogDao;
 import com.blog.framework.dto.blog.BlogQueryDto;
 import com.blog.framework.dto.blog.manage.BlogManageQueryDto;
@@ -46,6 +47,11 @@ public class BlogDaoImpl implements BlogDao {
     }
 
     @Override
+    public BlogModel detailBlog(Long id) {
+        return blogMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
     public List<BlogVO> list(BlogQueryBo bo) {
         bo.setClassIds(getClassIds(bo.getClassId()));
         return blogMapper.list(bo);
@@ -67,9 +73,14 @@ public class BlogDaoImpl implements BlogDao {
         return blogMapper.getLikeOrCollectBlogList(bo);
     }
 
+
+
     @Override
     public BlogModel detail(Long id) {
-        return blogMapper.selectByPrimaryKey(id);
+        return blogMapper.selectOne(BlogModel.builder()
+                .id(id)
+                .status(BlogStatusEnum.PUBLISHED.getCode())
+                .build());
     }
 
     @Override
@@ -109,6 +120,11 @@ public class BlogDaoImpl implements BlogDao {
     @Override
     public Boolean updateReadCount(Long id) {
         return blogMapper.updateReadCount(id) > 0;
+    }
+
+    @Override
+    public Integer count(BlogManageQueryDto bo) {
+        return blogMapper.selectCount(BlogModel.builder().classId(bo.getClassId()).build());
     }
 
 
