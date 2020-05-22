@@ -49,8 +49,9 @@ public class PermissionsAop {
 
     @Around("point()")
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
+        SysUserLoginVo sysUserInfo = tokenService.getSysUserInfo();
         //首先检验是否登录
-        if (checkLogin()) {
+        if (checkLogin(sysUserInfo)) {
             return ResultData.createErrorResult(ResultDataEnum.UN_LOGIN.getCode(), ResultDataEnum.UN_LOGIN.getMsg());
         }
         Signature signature = pjp.getSignature();
@@ -59,7 +60,7 @@ public class PermissionsAop {
         //获取方法上 @Permissions 注解
         Permissions permissions = targetMethod.getAnnotation(Permissions.class);
         //判断该账户有没有该方法的操作权限
-        if (checkPermissions(permissions.permissions())) {
+        if (checkPermissions(permissions.permissions(), sysUserInfo)) {
             return pjp.proceed();
         }
         ApiOperation apiOperation = targetMethod.getAnnotation(ApiOperation.class);
@@ -72,11 +73,10 @@ public class PermissionsAop {
      *
      * @return Boolean
      */
-    private Boolean checkLogin() {
+    private Boolean checkLogin(SysUserLoginVo sysUserInfo) {
         long s = System.currentTimeMillis();
-        SysUserLoginVo sysUserInfo = tokenService.getSysUserInfo();
         Boolean flag = sysUserInfo == null;
-        log.info("---------checkLogin [{}] 验证耗时{}ms----------", flag, (System.currentTimeMillis() - s));
+        log.info("---------checkLogin [{}] 验证耗时{}ms----------", !flag, (System.currentTimeMillis() - s));
         return flag;
     }
 
@@ -85,9 +85,8 @@ public class PermissionsAop {
      *
      * @return Boolean
      */
-    private Boolean checkPermissions(String perms) {
+    private Boolean checkPermissions(String perms, SysUserLoginVo sysUserInfo) {
         long s = System.currentTimeMillis();
-        SysUserLoginVo sysUserInfo = tokenService.getSysUserInfo();
         List<String> permsList = sysUserInfo.getPermsList();
         if (CollectionUtils.isEmpty(permsList)) {
             return false;
