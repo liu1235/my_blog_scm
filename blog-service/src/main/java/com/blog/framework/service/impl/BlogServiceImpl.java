@@ -108,12 +108,16 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public Boolean add(BlogAddDto addDto) {
         BlogModel insertModel = CopyDataUtil.copyObject(addDto, BlogModel.class);
+        ClassModel classModel = classDao.selectById(addDto.getClassId());
+        insertModel.setParentClassId(classModel.getParentId() == 0 ? classModel.getId() : classModel.getParentId());
         return blogDao.insert(insertModel);
     }
 
     @Override
     public Boolean edit(BlogUpdateDto updateDto) {
         BlogModel updateModel = CopyDataUtil.copyObject(updateDto, BlogModel.class);
+        ClassModel classModel = classDao.selectById(updateDto.getClassId());
+        updateModel.setParentClassId(classModel.getParentId() == 0 ? classModel.getId() : classModel.getParentId());
         return blogDao.update(updateModel);
     }
 

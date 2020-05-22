@@ -65,6 +65,12 @@ public class BlogModel {
     private Long classId;
 
     /**
+     * 博客类别
+     */
+    @Column(name = "parent_class_id")
+    private Long parentClassId;
+
+    /**
      * 是否发布(1:是, 0:否)
      */
     @Column(name = "status")
